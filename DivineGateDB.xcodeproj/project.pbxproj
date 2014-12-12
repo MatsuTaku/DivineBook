@@ -1,0 +1,420 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F1C6D20C1A3B680500E68897 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20B1A3B680500E68897 /* AppDelegate.swift */; };
+		F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20D1A3B680500E68897 /* ViewController.swift */; };
+		F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D20F1A3B680500E68897 /* Main.storyboard */; };
+		F1C6D2131A3B680500E68897 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D2121A3B680500E68897 /* Images.xcassets */; };
+		F1C6D2161A3B680500E68897 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D2141A3B680500E68897 /* LaunchScreen.xib */; };
+		F1C6D2221A3B680500E68897 /* DivineGateDBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D2211A3B680500E68897 /* DivineGateDBTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1C6D21C1A3B680500E68897 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1C6D1FE1A3B680500E68897 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F1C6D2051A3B680500E68897;
+			remoteInfo = DivineGateDB;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F1C6D2061A3B680500E68897 /* DivineGateDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivineGateDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1C6D20A1A3B680500E68897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1C6D20B1A3B680500E68897 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F1C6D20D1A3B680500E68897 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F1C6D2101A3B680500E68897 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F1C6D2121A3B680500E68897 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		F1C6D2151A3B680500E68897 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		F1C6D21B1A3B680500E68897 /* DivineGateDBTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivineGateDBTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1C6D2201A3B680500E68897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F1C6D2211A3B680500E68897 /* DivineGateDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivineGateDBTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1C6D2031A3B680500E68897 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1C6D2181A3B680500E68897 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F1C6D1FD1A3B680500E68897 = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2081A3B680500E68897 /* DivineGateDB */,
+				F1C6D21E1A3B680500E68897 /* DivineGateDBTests */,
+				F1C6D2071A3B680500E68897 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F1C6D2071A3B680500E68897 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2061A3B680500E68897 /* DivineGateDB.app */,
+				F1C6D21B1A3B680500E68897 /* DivineGateDBTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F1C6D2081A3B680500E68897 /* DivineGateDB */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D20B1A3B680500E68897 /* AppDelegate.swift */,
+				F1C6D20D1A3B680500E68897 /* ViewController.swift */,
+				F1C6D20F1A3B680500E68897 /* Main.storyboard */,
+				F1C6D2121A3B680500E68897 /* Images.xcassets */,
+				F1C6D2141A3B680500E68897 /* LaunchScreen.xib */,
+				F1C6D2091A3B680500E68897 /* Supporting Files */,
+			);
+			path = DivineGateDB;
+			sourceTree = "<group>";
+		};
+		F1C6D2091A3B680500E68897 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D20A1A3B680500E68897 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F1C6D21E1A3B680500E68897 /* DivineGateDBTests */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2211A3B680500E68897 /* DivineGateDBTests.swift */,
+				F1C6D21F1A3B680500E68897 /* Supporting Files */,
+			);
+			path = DivineGateDBTests;
+			sourceTree = "<group>";
+		};
+		F1C6D21F1A3B680500E68897 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2201A3B680500E68897 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1C6D2051A3B680500E68897 /* DivineGateDB */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1C6D2251A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDB" */;
+			buildPhases = (
+				F1C6D2021A3B680500E68897 /* Sources */,
+				F1C6D2031A3B680500E68897 /* Frameworks */,
+				F1C6D2041A3B680500E68897 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DivineGateDB;
+			productName = DivineGateDB;
+			productReference = F1C6D2061A3B680500E68897 /* DivineGateDB.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F1C6D21A1A3B680500E68897 /* DivineGateDBTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1C6D2281A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDBTests" */;
+			buildPhases = (
+				F1C6D2171A3B680500E68897 /* Sources */,
+				F1C6D2181A3B680500E68897 /* Frameworks */,
+				F1C6D2191A3B680500E68897 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1C6D21D1A3B680500E68897 /* PBXTargetDependency */,
+			);
+			name = DivineGateDBTests;
+			productName = DivineGateDBTests;
+			productReference = F1C6D21B1A3B680500E68897 /* DivineGateDBTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F1C6D1FE1A3B680500E68897 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = TakumaMatsumoto;
+				TargetAttributes = {
+					F1C6D2051A3B680500E68897 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+					F1C6D21A1A3B680500E68897 = {
+						CreatedOnToolsVersion = 6.1;
+						TestTargetID = F1C6D2051A3B680500E68897;
+					};
+				};
+			};
+			buildConfigurationList = F1C6D2011A3B680500E68897 /* Build configuration list for PBXProject "DivineGateDB" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F1C6D1FD1A3B680500E68897;
+			productRefGroup = F1C6D2071A3B680500E68897 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1C6D2051A3B680500E68897 /* DivineGateDB */,
+				F1C6D21A1A3B680500E68897 /* DivineGateDBTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1C6D2041A3B680500E68897 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */,
+				F1C6D2161A3B680500E68897 /* LaunchScreen.xib in Resources */,
+				F1C6D2131A3B680500E68897 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1C6D2191A3B680500E68897 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1C6D2021A3B680500E68897 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */,
+				F1C6D20C1A3B680500E68897 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1C6D2171A3B680500E68897 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1C6D2221A3B680500E68897 /* DivineGateDBTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F1C6D21D1A3B680500E68897 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F1C6D2051A3B680500E68897 /* DivineGateDB */;
+			targetProxy = F1C6D21C1A3B680500E68897 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		F1C6D20F1A3B680500E68897 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1C6D2101A3B680500E68897 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F1C6D2141A3B680500E68897 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1C6D2151A3B680500E68897 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F1C6D2231A3B680500E68897 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		F1C6D2241A3B680500E68897 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F1C6D2261A3B680500E68897 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DivineGateDB/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F1C6D2271A3B680500E68897 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DivineGateDB/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		F1C6D2291A3B680500E68897 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = DivineGateDBTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DivineGateDB.app/DivineGateDB";
+			};
+			name = Debug;
+		};
+		F1C6D22A1A3B680500E68897 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = DivineGateDBTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DivineGateDB.app/DivineGateDB";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1C6D2011A3B680500E68897 /* Build configuration list for PBXProject "DivineGateDB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1C6D2231A3B680500E68897 /* Debug */,
+				F1C6D2241A3B680500E68897 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1C6D2251A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDB" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1C6D2261A3B680500E68897 /* Debug */,
+				F1C6D2271A3B680500E68897 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		F1C6D2281A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDBTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1C6D2291A3B680500E68897 /* Debug */,
+				F1C6D22A1A3B680500E68897 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F1C6D1FE1A3B680500E68897 /* Project object */;
+}
