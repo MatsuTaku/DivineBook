@@ -33,7 +33,7 @@ class UnitsCell: UITableViewCell {
     
     func setCell(unit: UnitsData, atIndexPath indexPath: NSIndexPath)
     {
-        number?.text = NSString(format: "%03d", unit.num)
+        number?.text = String(unit.num)
         name?.text = unit.name
         race?.text = unit.race
         cost?.text = NSString(format: "COST %d", unit.cost)

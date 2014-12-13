@@ -19,6 +19,8 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Do any additional setup after loading the view.
         
+        println("\(self.view.bounds.height) : \(tableView.bounds.height)")
+        
         tableView.dataSource = self
         tableView.delegate = self
         

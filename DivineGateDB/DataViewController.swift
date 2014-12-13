@@ -24,7 +24,7 @@ class DataViewController: UIViewController {
         let viewController = self.viewControllerForSegmentedIndex(segmentedControlData.selectedSegmentIndex)
         self.addChildViewController(viewController)
         
-        viewController.view.frame = self.contentView.bounds
+        viewController.view.bounds = self.contentView.bounds
         self.contentView.addSubview(viewController.view)
         self.currentViewController = viewController
     }
@@ -51,7 +51,7 @@ class DataViewController: UIViewController {
         self.addChildViewController(viewController)
         
         self.currentViewController.view.removeFromSuperview()
-        viewController.view.frame = self.contentView.bounds
+        viewController.view.bounds = self.contentView.bounds
         self.contentView.addSubview(viewController.view)
         
         self.currentViewController.didMoveToParentViewController(self)
