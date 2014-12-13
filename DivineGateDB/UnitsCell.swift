@@ -15,7 +15,6 @@ class UnitsCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var rare: UILabel!
     @IBOutlet weak var race: UILabel!
-    @IBOutlet weak var cost: UILabel!
     @IBOutlet weak var level: UILabel!
     @IBOutlet weak var hp: UILabel!
     @IBOutlet weak var atk: UILabel!
@@ -33,22 +32,40 @@ class UnitsCell: UITableViewCell {
     
     func setCell(unit: UnitsData, atIndexPath indexPath: NSIndexPath)
     {
-        number?.text = String(unit.num)
+        if unit.num != 0 {
+            number?.text = NSString(format: "No. %d", unit.num)
+        } else {
+            number?.text = "????"
+        }
         name?.text = unit.name
         race?.text = unit.race
-        cost?.text = NSString(format: "COST %d", unit.cost)
         var Rare = "★"
         let star = "★"
-        for _ in 1..<unit.rare {
-            Rare += star
-        }
-        rare?.text = Rare
-        
-        if number?.text != nil {
-            println("No.\(unit.num) rare:\(Rare)   race:\(unit.race)   cost:\(unit.cost)  [\(unit.name)]")
+        if unit.rare != 0 {
+            for _ in 1..<unit.rare {
+                Rare += star
+            }
+            rare?.text = Rare
         } else {
-            println("didn't inclused \(indexPath.row)")
+            rare?.text = "???"
         }
+        if unit.lv != 0 {
+            level?.text = NSString(format: "Lv. %d", unit.lv)
+        } else {
+            level?.text = "Lv. ??"
+        }
+        if unit.hp != 0 {
+            hp?.text = NSString(format: "HP %d", unit.hp)
+        } else {
+            hp?.text = "HP ??"
+        }
+        if unit.atk != 0 {
+            atk?.text = NSString(format: "ATK %d", unit.atk)
+        } else {
+            atk?.text = "ATK ??"
+        }
+        
+        println("No.\(unit.num)   [\(unit.name)]")
     }
     
 }

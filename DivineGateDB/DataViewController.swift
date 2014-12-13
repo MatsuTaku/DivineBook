@@ -50,13 +50,16 @@ class DataViewController: UIViewController {
         let viewController = self.viewControllerForSegmentedIndex(segmentedControlData.selectedSegmentIndex)
         self.addChildViewController(viewController)
         
-        self.currentViewController.view.removeFromSuperview()
-        viewController.view.bounds = self.contentView.bounds
-        self.contentView.addSubview(viewController.view)
-        
-        self.currentViewController.didMoveToParentViewController(self)
-        self.currentViewController.removeFromParentViewController()
-        self.currentViewController = viewController
+        self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.1, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
+                self.currentViewController.view.removeFromSuperview()
+                viewController.view.bounds = self.contentView.bounds
+                self.contentView.addSubview(viewController.view)
+            }, completion: {(Bool) -> Void in
+                self.currentViewController.didMoveToParentViewController(self)
+                self.currentViewController.removeFromParentViewController()
+                self.currentViewController = viewController
+                self.reloadInputViews()
+            })
     }
     
     // MARK: - selectedViewController method

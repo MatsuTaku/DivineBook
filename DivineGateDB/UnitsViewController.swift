@@ -19,8 +19,6 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
 
         // Do any additional setup after loading the view.
         
-        println("\(self.view.bounds.height) : \(tableView.bounds.height)")
-        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -31,13 +29,17 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.bounds = self.view.bounds
         
         // ダミーデータ
-        let listName: [String] = ["アカネ", "アオト", "ミドリ", "クロウリー"]
-        let listType: [Int] = [0, 1, 2, 4]
-        let listRare: [Int] = [3, 3, 3, 6]
-        let listRace: [String] = ["人間", "人間", "人間", "人間"]
-        let listCost: [Int] = [2, 2, 2, 40]
+        let listNumber: [Int] = [1, 2, 3, 1011, 894]
+        let listName: [String] = ["アカネ", "アオト", "ミドリ", "教祖クロウリー", "炎咎甲士アカネ"]
+        let listType: [Int] = [0, 1, 2, 4, 0]
+        let listRare: [Int] = [3, 3, 3, 6, 7]
+        let listRace: [String] = ["人間", "人間", "人間", "人間", "人間"]
+        let listCost: [Int] = [2, 2, 2, 40, 30]
+        let listLevel: [Int] = [5, 5, 5, 99, 99]
+        let listHP: [Int] = [152, 167, 162, 3850, 2371]
+        let listATK: [Int] = [77, 69, 62, 2850, 2208]
         for i in 0..<listName.count {
-            listUnit.append(UnitsData(num: i + 1, name: listName[i], type: listType[i], rare: listRare[i], race: listRace[i], cost: listCost[i]))
+            listUnit.append(UnitsData(num: listNumber[i], name: listName[i], type: listType[i], rare: listRare[i], race: listRace[i], cost: listCost[i], lv: listLevel[i], hp: listHP[i], atk: listATK[i]))
         }
 
     }
