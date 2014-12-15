@@ -22,6 +22,11 @@
 		F1C6D23E1A3B71A400E68897 /* ASViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D23D1A3B71A400E68897 /* ASViewController.swift */; };
 		F1C6D2401A3B71AB00E68897 /* NSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */; };
 		F1C6D2421A3B71B900E68897 /* PSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D2411A3B71B900E68897 /* PSViewController.swift */; };
+		F1FDAF871A3DB298001427E4 /* LSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF861A3DB298001427E4 /* LSData.swift */; };
+		F1FDAF891A3DB2AD001427E4 /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF881A3DB2AD001427E4 /* NSData.swift */; };
+		F1FDAF8C1A3DB36C001427E4 /* NSCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF8A1A3DB36C001427E4 /* NSCell.swift */; };
+		F1FDAF8D1A3DB36C001427E4 /* NSCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1FDAF8B1A3DB36C001427E4 /* NSCell.xib */; };
+		F1FDAF931A3DB845001427E4 /* UnitStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +59,11 @@
 		F1C6D23D1A3B71A400E68897 /* ASViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASViewController.swift; sourceTree = "<group>"; };
 		F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewController.swift; sourceTree = "<group>"; };
 		F1C6D2411A3B71B900E68897 /* PSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSViewController.swift; sourceTree = "<group>"; };
+		F1FDAF861A3DB298001427E4 /* LSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSData.swift; sourceTree = "<group>"; };
+		F1FDAF881A3DB2AD001427E4 /* NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSData.swift; sourceTree = "<group>"; };
+		F1FDAF8A1A3DB36C001427E4 /* NSCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCell.swift; sourceTree = "<group>"; };
+		F1FDAF8B1A3DB36C001427E4 /* NSCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NSCell.xib; sourceTree = "<group>"; };
+		F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitStatusViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +156,8 @@
 			children = (
 				F1C6D2331A3B6C3F00E68897 /* UnitsCell.swift */,
 				F1C6D2341A3B6C3F00E68897 /* UnitsCell.xib */,
+				F1FDAF8A1A3DB36C001427E4 /* NSCell.swift */,
+				F1FDAF8B1A3DB36C001427E4 /* NSCell.xib */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -154,6 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				F1C6D22F1A3B6C0900E68897 /* UnitsData.swift */,
+				F1FDAF861A3DB298001427E4 /* LSData.swift */,
+				F1FDAF881A3DB2AD001427E4 /* NSData.swift */,
 			);
 			name = DataSource;
 			sourceTree = "<group>";
@@ -163,6 +177,7 @@
 			children = (
 				F1C6D2371A3B6C5D00E68897 /* DataViewController.swift */,
 				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
+				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
 				F1C6D23B1A3B719A00E68897 /* LSViewController.swift */,
 				F1C6D23D1A3B71A400E68897 /* ASViewController.swift */,
 				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
@@ -252,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */,
+				F1FDAF8D1A3DB36C001427E4 /* NSCell.xib in Resources */,
 				F1C6D2361A3B6C3F00E68897 /* UnitsCell.xib in Resources */,
 				F1C6D2161A3B680500E68897 /* LaunchScreen.xib in Resources */,
 				F1C6D2131A3B680500E68897 /* Images.xcassets in Resources */,
@@ -274,13 +290,17 @@
 			files = (
 				F1C6D2301A3B6C0900E68897 /* UnitsData.swift in Sources */,
 				F1C6D2351A3B6C3F00E68897 /* UnitsCell.swift in Sources */,
+				F1FDAF931A3DB845001427E4 /* UnitStatusViewController.swift in Sources */,
 				F1C6D2381A3B6C5D00E68897 /* DataViewController.swift in Sources */,
+				F1FDAF871A3DB298001427E4 /* LSData.swift in Sources */,
 				F1C6D23C1A3B719A00E68897 /* LSViewController.swift in Sources */,
 				F1C6D2401A3B71AB00E68897 /* NSViewController.swift in Sources */,
 				F1C6D23E1A3B71A400E68897 /* ASViewController.swift in Sources */,
+				F1FDAF8C1A3DB36C001427E4 /* NSCell.swift in Sources */,
 				F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */,
 				F1C6D2421A3B71B900E68897 /* PSViewController.swift in Sources */,
 				F1C6D23A1A3B6C7900E68897 /* UnitsViewController.swift in Sources */,
+				F1FDAF891A3DB2AD001427E4 /* NSData.swift in Sources */,
 				F1C6D20C1A3B680500E68897 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,6 +493,7 @@
 				F1C6D2271A3B680500E68897 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F1C6D2281A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDBTests" */ = {
 			isa = XCConfigurationList;
@@ -481,6 +502,7 @@
 				F1C6D22A1A3B680500E68897 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

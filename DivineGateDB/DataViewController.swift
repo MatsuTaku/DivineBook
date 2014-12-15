@@ -24,7 +24,7 @@ class DataViewController: UIViewController {
         let viewController = self.viewControllerForSegmentedIndex(segmentedControlData.selectedSegmentIndex)
         self.addChildViewController(viewController)
         
-        viewController.view.bounds = self.contentView.bounds
+        viewController.view.frame = self.contentView.frame
         self.contentView.addSubview(viewController.view)
         self.currentViewController = viewController
     }
@@ -51,14 +51,14 @@ class DataViewController: UIViewController {
         self.addChildViewController(viewController)
         
         self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.1, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
-                self.currentViewController.view.removeFromSuperview()
-                viewController.view.bounds = self.contentView.bounds
-                self.contentView.addSubview(viewController.view)
+            self.currentViewController.view.removeFromSuperview()
+            viewController.view.frame = self.contentView.frame
+            self.contentView.addSubview(viewController.view)
             }, completion: {(Bool) -> Void in
-                self.currentViewController.didMoveToParentViewController(self)
-                self.currentViewController.removeFromParentViewController()
-                self.currentViewController = viewController
-                self.reloadInputViews()
+            self.currentViewController.didMoveToParentViewController(self)
+            self.currentViewController.removeFromParentViewController()
+            self.currentViewController = viewController
+                println(self.currentViewController)
             })
     }
     

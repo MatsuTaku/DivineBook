@@ -27,6 +27,9 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.bounds = self.view.bounds
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
+        tableView.contentInset.top = stuBarHeight + navBarHeight!
         
         // ダミーデータ
         let listNumber: [Int] = [1, 2, 3, 1011, 894]
@@ -43,7 +46,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
 
     }
-
+    
+    override func viewWillAppear(animated: Bool) {
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -79,6 +85,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     // MARK: - UITableViewDelegate method
+    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
         var bounds = cell.bounds

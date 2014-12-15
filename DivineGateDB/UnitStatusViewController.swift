@@ -1,27 +1,19 @@
 //
-//  LSViewController.swift
+//  UnitStatusViewController.swift
 //  DivineGateDB
 //
-//  Created by 松本拓真 on 12/13/14.
+//  Created by 松本拓真 on 12/14/14.
 //  Copyright (c) 2014 TakumaMatsumoto. All rights reserved.
 //
 
 import UIKit
 
-class LSViewController: UIViewController{
-    
-    @IBOutlet weak var tableView: UITableView!
+class UnitStatusViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.bounds = self.view.bounds
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        tableView.contentInset.top = stuBarHeight + navBarHeight!
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,8 +31,5 @@ class LSViewController: UIViewController{
         // Pass the selected object to the new view controller.
     }
     */
-    
-    
-    // MARK: - UITableViewDataSource
 
 }

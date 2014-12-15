@@ -135,7 +135,7 @@
                     <constraint firstItem="kcT-7b-nMm" firstAttribute="centerY" secondItem="qgV-h6-ap3" secondAttribute="centerY" id="zat-QX-tZn"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" red="0.10766782407407408" green="0.043344907407407408" blue="0.098611111111111108" alpha="0.5" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="0.5" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="atk" destination="0fF-yx-xrU" id="rak-7Z-PL4"/>
                 <outlet property="hp" destination="QG3-7M-FGM" id="PC8-CA-S7J"/>

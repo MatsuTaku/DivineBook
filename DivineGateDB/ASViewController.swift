@@ -9,11 +9,20 @@
 import UIKit
 
 class ASViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.bounds = self.view.bounds
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
+        tableView.contentInset.top = stuBarHeight + navBarHeight!
     }
 
     override func didReceiveMemoryWarning() {

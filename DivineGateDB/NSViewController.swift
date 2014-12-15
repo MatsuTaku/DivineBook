@@ -9,12 +9,25 @@
 
 import UIKit
 
-class NSViewController: UIViewController {
+class NSViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var listNS = [NSData]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.bounds = self.view.bounds
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
+        tableView.contentInset.top = stuBarHeight + navBarHeight!
+        
+        tableView.dataSource = self
+        tableView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,5 +45,18 @@ class NSViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    // MARK: - UITableViewDataSource
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return listNS.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
+        cell.setCell(listNS[indexPath.row], atIndexPath: indexPath)
+        return cell
+    }
 
 }
