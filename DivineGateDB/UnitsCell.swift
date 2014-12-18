@@ -64,8 +64,6 @@ class UnitsCell: UITableViewCell {
         } else {
             atk?.text = "ATK ??"
         }
-        
-        println("No.\(unit.num)   [\(unit.name)]")
     }
     
 }

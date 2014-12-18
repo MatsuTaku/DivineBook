@@ -49,15 +49,16 @@ class DataViewController: UIViewController {
     @IBAction func changeSegmentedIndex(sender: UISegmentedControl) {
         let viewController = self.viewControllerForSegmentedIndex(segmentedControlData.selectedSegmentIndex)
         self.addChildViewController(viewController)
-        
-        self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.1, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: { () -> Void in
-            self.currentViewController.view.removeFromSuperview()
-            viewController.view.frame = self.contentView.frame
-            self.contentView.addSubview(viewController.view)
+        // Animation
+        self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.2, options: UIViewAnimationOptions.TransitionCrossDissolve,
+            animations: { () -> Void in
+                self.currentViewController.view.removeFromSuperview()
+                viewController.view.frame = self.contentView.frame
+                self.contentView.addSubview(viewController.view)
             }, completion: {(Bool) -> Void in
-            self.currentViewController.didMoveToParentViewController(self)
-            self.currentViewController.removeFromParentViewController()
-            self.currentViewController = viewController
+                self.currentViewController.didMoveToParentViewController(self)
+                self.currentViewController.removeFromParentViewController()
+                self.currentViewController = viewController
                 println(self.currentViewController)
             })
     }
@@ -66,6 +67,7 @@ class DataViewController: UIViewController {
     
     func viewControllerForSegmentedIndex(index: NSInteger) -> UIViewController
     {
+        // 切り替えるViewの指定
         var vc: UIViewController?
         switch index {
         case 0 :

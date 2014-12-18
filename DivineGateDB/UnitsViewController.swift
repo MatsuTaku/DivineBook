@@ -31,19 +31,27 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
         tableView.contentInset.top = stuBarHeight + navBarHeight!
         
-        // ダミーデータ
-        let listNumber: [Int] = [1, 2, 3, 1011, 894]
-        let listName: [String] = ["アカネ", "アオト", "ミドリ", "教祖クロウリー", "炎咎甲士アカネ"]
-        let listType: [Int] = [0, 1, 2, 4, 0]
-        let listRare: [Int] = [3, 3, 3, 6, 7]
-        let listRace: [String] = ["人間", "人間", "人間", "人間", "人間"]
-        let listCost: [Int] = [2, 2, 2, 40, 30]
-        let listLevel: [Int] = [5, 5, 5, 99, 99]
-        let listHP: [Int] = [152, 167, 162, 3850, 2371]
-        let listATK: [Int] = [77, 69, 62, 2850, 2208]
+        /*
+         *ダミーデータ
+         */
+        let listNumber = [1, 2, 3, 1011, 894]
+        let listName = ["アカネ", "アオト", "ミドリ", "教祖クロウリー", "炎咎甲士アカネ"]
+        let listType = [0, 1, 2, 4, 0]
+        let listRare = [3, 3, 3, 6, 7]
+        let listRace = ["人間", "人間", "人間", "人間", "人間"]
+        let listCost = [2, 2, 2, 40, 30]
+        let listLevel = [5, 5, 5, 99, 99]
+        let listHP = [152, 167, 162, 3850, 2371]
+        let listATK = [77, 69, 62, 2850, 2208]
         for i in 0..<listName.count {
-            listUnit.append(UnitsData(num: listNumber[i], name: listName[i], type: listType[i], rare: listRare[i], race: listRace[i], cost: listCost[i], lv: listLevel[i], hp: listHP[i], atk: listATK[i]))
+            let unit = (UnitsData(num: listNumber[i], name: listName[i], type: listType[i], rare: listRare[i], race: listRace[i], cost: listCost[i], lv: listLevel[i], hp: listHP[i], atk: listATK[i]))
+            listUnit.append(unit)
         }
+
+        
+        let userDefault = NSUserDefaults.standardUserDefaults()
+        let data = NSKeyedArchiver.archivedDataWithRootObject(listUnit)
+        userDefault.setObject(data, forKey: "Unit")
 
     }
     
@@ -79,6 +87,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     {
         var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
         cell.setCell(listUnit[indexPath.row], atIndexPath: indexPath)
+//        let userDefault = NSUserDefaults.standardUserDefaults()
+//        let data = userDefault.objectForKey("Unit") as NSData
+//        var unit = NSKeyedUnarchiver.unarchiveObjectWithData(data) as [UnitsData]
+//        cell.setCell(unit[indexPath.row], atIndexPath: indexPath)
         return cell
     }
     

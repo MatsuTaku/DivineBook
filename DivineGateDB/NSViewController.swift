@@ -14,6 +14,8 @@ class NSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     @IBOutlet weak var tableView: UITableView!
     
     var listNS = [NSData]()
+    
+    var list: [String] = ["a", "b", "c", "d"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,10 @@ class NSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        let nib = UINib(nibName: "NSCell", bundle: nil)
+        tableView.registerNib(nib, forCellReuseIdentifier: "NSCell")
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -50,13 +56,29 @@ class NSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     // MARK: - UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listNS.count
+        return list.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
-        cell.setCell(listNS[indexPath.row], atIndexPath: indexPath)
+//        cell.setCell(listNS[indexPath.row], atIndexPath: indexPath)
+        
         return cell
+    }
+    
+    
+    
+    // MARK: - UITableViewDelegate method
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
+        var bounds = cell.bounds
+        bounds.size.width = tableView.bounds.width
+        cell.bounds = bounds
+        
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+        return cell.contentView.bounds.height
     }
 
 }

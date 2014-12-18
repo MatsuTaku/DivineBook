@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="55" id="KGk-i7-Jjw" customClass="UnitsCell" customModule="DivineGateDB" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="55" id="KGk-i7-Jjw" customClass="UnitsCell" customModule="DivineGateDB" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -42,7 +42,7 @@
                             <constraint firstAttribute="height" constant="40" id="lGX-Nz-7MT"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="60"/>
-                        <color key="textColor" red="1" green="1" blue="1" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="1" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -51,23 +51,23 @@
                         </variation>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ユニット名アカネアオトミドリ" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qgV-h6-ap3">
-                        <rect key="frame" x="57" y="19" width="238" height="17"/>
+                        <rect key="frame" x="61" y="19" width="238" height="17"/>
                         <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No. 0000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bkm-8Q-sJN">
-                        <rect key="frame" x="57" y="5" width="77" height="12"/>
+                        <rect key="frame" x="61" y="5" width="77" height="12"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="12" id="4wb-Ys-IWk"/>
                             <constraint firstAttribute="width" constant="77" id="Byg-J3-bD4"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="11"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lv. 00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2tf-df-rlF">
-                        <rect key="frame" x="57" y="36" width="55" height="14"/>
+                        <rect key="frame" x="61" y="36" width="55" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="yR2-aU-YHm"/>
                             <constraint firstAttribute="width" constant="55" id="yZY-nf-ZVf"/>
@@ -77,7 +77,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HP 0000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QG3-7M-FGM">
-                        <rect key="frame" x="120" y="36" width="55" height="14"/>
+                        <rect key="frame" x="124" y="36" width="55" height="14"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="14" id="A3W-n8-NbM"/>
                             <constraint firstAttribute="width" constant="55" id="JSm-f4-eY5"/>
@@ -87,7 +87,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ATK 0000" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0fF-yx-xrU">
-                        <rect key="frame" x="189" y="36" width="55" height="14"/>
+                        <rect key="frame" x="193" y="36" width="55" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="55" id="eLE-rw-EPy"/>
                             <constraint firstAttribute="height" constant="14" id="fVv-IS-E38"/>
@@ -97,7 +97,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="種族" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TZQ-St-03C">
-                        <rect key="frame" x="142" y="5" width="33" height="14"/>
+                        <rect key="frame" x="146" y="5" width="33" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="33" id="4KY-zA-Hto"/>
                             <constraint firstAttribute="height" constant="14" id="d5d-IW-6x0"/>
@@ -112,11 +112,12 @@
                     <constraint firstItem="bkm-8Q-sJN" firstAttribute="leading" secondItem="kcT-7b-nMm" secondAttribute="trailing" constant="4" id="8SR-KB-dJB"/>
                     <constraint firstItem="QG3-7M-FGM" firstAttribute="bottom" secondItem="2tf-df-rlF" secondAttribute="bottom" id="98i-Ne-rFc"/>
                     <constraint firstItem="jcB-im-fvl" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="99K-wi-wdj"/>
-                    <constraint firstItem="qgV-h6-ap3" firstAttribute="leading" secondItem="kcT-7b-nMm" secondAttribute="trailing" constant="4" id="AVx-cn-wAO"/>
+                    <constraint firstItem="qgV-h6-ap3" firstAttribute="leading" secondItem="kcT-7b-nMm" secondAttribute="trailing" constant="8" id="AVx-cn-wAO"/>
                     <constraint firstItem="kcT-7b-nMm" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="B0g-sy-GrD"/>
                     <constraint firstItem="QG3-7M-FGM" firstAttribute="leading" secondItem="2tf-df-rlF" secondAttribute="trailing" constant="8" id="ETV-OY-OOQ"/>
                     <constraint firstItem="TZQ-St-03C" firstAttribute="top" secondItem="bkm-8Q-sJN" secondAttribute="top" id="Fhu-6e-RPs"/>
                     <constraint firstItem="QG3-7M-FGM" firstAttribute="bottom" secondItem="0fF-yx-xrU" secondAttribute="bottom" id="IFy-Uf-0bh"/>
+                    <constraint firstItem="qgV-h6-ap3" firstAttribute="leading" secondItem="bkm-8Q-sJN" secondAttribute="leading" id="Iok-eQ-UkL"/>
                     <constraint firstItem="vqH-1k-QXU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="J3T-8h-0yC"/>
                     <constraint firstItem="0fF-yx-xrU" firstAttribute="leading" secondItem="QG3-7M-FGM" secondAttribute="trailing" constant="14" id="JhZ-zx-17a"/>
                     <constraint firstItem="TZQ-St-03C" firstAttribute="leading" secondItem="bkm-8Q-sJN" secondAttribute="trailing" constant="8" id="L5c-jk-qIR"/>
@@ -130,10 +131,17 @@
                     <constraint firstAttribute="bottomMargin" secondItem="GFl-EP-he8" secondAttribute="bottom" constant="-8" id="jua-sR-jKJ"/>
                     <constraint firstItem="jcB-im-fvl" firstAttribute="leading" secondItem="kcT-7b-nMm" secondAttribute="trailing" constant="4" id="kqx-hy-Iuf"/>
                     <constraint firstItem="vqH-1k-QXU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="mr7-xp-fsS"/>
+                    <constraint firstItem="qgV-h6-ap3" firstAttribute="leading" secondItem="2tf-df-rlF" secondAttribute="leading" id="nZY-WD-Azo"/>
                     <constraint firstAttribute="trailingMargin" secondItem="GFl-EP-he8" secondAttribute="trailing" constant="-8" id="qGI-8q-q2t"/>
                     <constraint firstItem="GFl-EP-he8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="vgh-Dw-ecW"/>
                     <constraint firstItem="kcT-7b-nMm" firstAttribute="centerY" secondItem="qgV-h6-ap3" secondAttribute="centerY" id="zat-QX-tZn"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="8SR-KB-dJB"/>
+                        <exclude reference="0vG-j6-AHP"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="0.5" colorSpace="calibratedRGB"/>
             <connections>

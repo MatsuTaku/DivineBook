@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UnitsData: NSObject {
+class UnitsData: NSObject, NSCoding {
     
     var num: Int = 0
     var name: String = "????"
@@ -30,6 +30,30 @@ class UnitsData: NSObject {
         self.lv = lv
         self.hp = hp
         self.atk = atk
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(num, forKey: "num")
+        aCoder.encodeObject(name, forKey: "name")
+        aCoder.encodeObject(type, forKey: "type")
+        aCoder.encodeObject(rare, forKey: "rare")
+        aCoder.encodeObject(race, forKey: "race")
+        aCoder.encodeObject(cost, forKey: "cost")
+        aCoder.encodeObject(lv, forKey: "lv")
+        aCoder.encodeObject(hp, forKey: "hp")
+        aCoder.encodeObject(atk, forKey: "atk")
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        num = aDecoder.decodeObjectForKey("num") as Int
+        name = aDecoder.decodeObjectForKey("name") as String
+        type = aDecoder.decodeObjectForKey("type") as Int
+        rare = aDecoder.decodeObjectForKey("rare") as Int
+        race = aDecoder.decodeObjectForKey("race") as String
+        cost = aDecoder.decodeObjectForKey("cost") as Int
+        lv = aDecoder.decodeObjectForKey("lv") as Int
+        hp = aDecoder.decodeObjectForKey("hp") as Int
+        atk = aDecoder.decodeObjectForKey("atk") as Int
     }
    
 }
