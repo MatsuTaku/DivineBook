@@ -84,6 +84,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F142BB221A57E5EA00AA01E2 /* DataView */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2371A3B6C5D00E68897 /* DataViewController.swift */,
+				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
+				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
+				F1C6D23B1A3B719A00E68897 /* LSViewController.swift */,
+				F1C6D23D1A3B71A400E68897 /* ASViewController.swift */,
+				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
+				F1C6D2411A3B71B900E68897 /* PSViewController.swift */,
+			);
+			name = DataView;
+			sourceTree = "<group>";
+		};
 		F1C6D1FD1A3B680500E68897 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				F1C6D22B1A3B684D00E68897 /* Data */,
+				F1C6D22E1A3B6BCF00E68897 /* ViewController */,
 				F1C6D20B1A3B680500E68897 /* AppDelegate.swift */,
 				F1C6D20D1A3B680500E68897 /* ViewController.swift */,
 				F1C6D20F1A3B680500E68897 /* Main.storyboard */,
@@ -146,7 +161,6 @@
 			children = (
 				F1C6D22D1A3B6BB700E68897 /* DataSource */,
 				F1C6D22C1A3B6BB000E68897 /* Cell */,
-				F1C6D22E1A3B6BCF00E68897 /* ViewController */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -175,13 +189,7 @@
 		F1C6D22E1A3B6BCF00E68897 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				F1C6D2371A3B6C5D00E68897 /* DataViewController.swift */,
-				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
-				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
-				F1C6D23B1A3B719A00E68897 /* LSViewController.swift */,
-				F1C6D23D1A3B71A400E68897 /* ASViewController.swift */,
-				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
-				F1C6D2411A3B71B900E68897 /* PSViewController.swift */,
+				F142BB221A57E5EA00AA01E2 /* DataView */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";

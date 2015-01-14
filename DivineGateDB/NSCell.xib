@@ -240,7 +240,6 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="0.5" colorSpace="calibratedRGB"/>
             <connections>
-                <outlet property="damage" destination="yBo-ML-d78" id="h6X-ha-elQ"/>
                 <outlet property="detail" destination="TGw-ZB-XxD" id="Gjg-AA-gBk"/>
                 <outlet property="engy1" destination="yfk-Tj-jjf" id="wgU-aF-45V"/>
                 <outlet property="engy2" destination="TtL-9s-9sQ" id="wkf-B2-VJ6"/>
@@ -249,7 +248,9 @@
                 <outlet property="engy5" destination="eST-Ed-hWQ" id="2Mr-1e-mov"/>
                 <outlet property="icon" destination="iqD-GR-meQ" id="71x-Fx-mni"/>
                 <outlet property="name" destination="htU-KF-nFJ" id="EM5-ad-J1H"/>
+                <outlet property="type" destination="wVc-KW-f9a" id="VvA-2x-Aal"/>
                 <outlet property="unit" destination="bb8-GX-WtX" id="scv-zZ-iw5"/>
+                <outlet property="value" destination="yBo-ML-d78" id="4gA-w4-xVz"/>
             </connections>
             <point key="canvasLocation" x="421" y="378"/>
         </tableViewCell>

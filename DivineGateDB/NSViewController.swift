@@ -26,7 +26,8 @@ class NSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         tableView.bounds = self.view.bounds
         let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
         let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        tableView.contentInset.top = stuBarHeight + navBarHeight!
+        let toolBarHeight: CGFloat? = self.navigationController?.toolbar.frame.size.height
+        tableView.contentInset.top = stuBarHeight + navBarHeight! + toolBarHeight!
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -61,7 +62,7 @@ class NSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
-//        cell.setCell(listNS[indexPath.row], atIndexPath: indexPath)
+        cell.setCell(listNS[indexPath.row], atIndexPath: indexPath)
         
         return cell
     }

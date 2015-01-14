@@ -19,7 +19,8 @@ class NSCell: UITableViewCell {
     @IBOutlet weak var detail: UILabel!
     @IBOutlet weak var icon: UIImageView!
     @IBOutlet weak var unit: UILabel!
-    @IBOutlet weak var damage: UILabel!
+    @IBOutlet weak var type: UILabel!
+    @IBOutlet weak var value: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -33,7 +34,7 @@ class NSCell: UITableViewCell {
     }
     
     func setCell(NS: NSData, atIndexPath indexPath: NSIndexPath) {
-        
+        self.name.text  = NS.name
     }
     
 }
