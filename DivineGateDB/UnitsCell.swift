@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import CoreData
 
 class UnitsCell: UITableViewCell {
-
+    
     @IBOutlet weak var icon: UIImageView!
     @IBOutlet weak var number: UILabel!
     @IBOutlet weak var name: UILabel!
@@ -19,51 +20,42 @@ class UnitsCell: UITableViewCell {
     @IBOutlet weak var hp: UILabel!
     @IBOutlet weak var atk: UILabel!
     
+    
+    let elementColor: [UIColor?] = [nil,                    // 0
+        UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 1),   // 1 炎
+        UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 1),   // 2 水
+        UIColor(red: 0.5, green: 1, blue: 0.5, alpha: 1),   // 3 風
+        UIColor(red: 1, green: 1, blue: 0.5, alpha: 1),     // 4 光
+        UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1),   // 5 闇
+        UIColor(red: 1, green: 1, blue: 1, alpha: 1),       // 6 無
+    ]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
-    func setCell(unit: UnitsData, atIndexPath indexPath: NSIndexPath)
+    func setCell(unit: UnitsData)
     {
-        if unit.num != 0 {
-            number?.text = NSString(format: "No. %d", unit.num)
-        } else {
-            number?.text = "????"
-        }
-        name?.text = unit.name
-        race?.text = unit.race
-        var Rare = "★"
+        number.text = NSString(format: "No. %d", unit.unit)
+        name.text = unit.name
+        race.text = unit.race
+        var string = ""
         let star = "★"
-        if unit.rare != 0 {
-            for _ in 1..<unit.rare {
-                Rare += star
-            }
-            rare?.text = Rare
-        } else {
-            rare?.text = "???"
+        for _ in 0..<unit.rare {
+            string += star
         }
-        if unit.lv != 0 {
-            level?.text = NSString(format: "Lv. %d", unit.lv)
-        } else {
-            level?.text = "Lv. ??"
-        }
-        if unit.hp != 0 {
-            hp?.text = NSString(format: "HP %d", unit.hp)
-        } else {
-            hp?.text = "HP ??"
-        }
-        if unit.atk != 0 {
-            atk?.text = NSString(format: "ATK %d", unit.atk)
-        } else {
-            atk?.text = "ATK ??"
-        }
+        rare.text = string
+        rare.textColor = elementColor[unit.element]
+        level.text = NSString(format: "Lv. %d", unit.lv)
+        hp.text = NSString(format: "HP %.0f", unit.hp)
+        atk.text = NSString(format: "ATK %.0f", unit.atk)
     }
     
 }

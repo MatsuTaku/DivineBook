@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ASViewController: UIViewController {
     
@@ -22,8 +23,8 @@ class ASViewController: UIViewController {
         tableView.bounds = self.view.bounds
         let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
         let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        let toolBarHeight: CGFloat? = self.navigationController?.toolbar.frame.size.height
-        tableView.contentInset.top = stuBarHeight + navBarHeight! + toolBarHeight!
+        tableView.contentInset.top = stuBarHeight + navBarHeight! * 2
+        tableView.scrollIndicatorInsets.top = stuBarHeight + navBarHeight! * 2
     }
 
     override func didReceiveMemoryWarning() {

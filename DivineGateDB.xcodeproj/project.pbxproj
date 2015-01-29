@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F13D16E31A6FC9FF00FD67A4 /* dark.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16DC1A6FC9FF00FD67A4 /* dark.png */; };
+		F13D16E41A6FC9FF00FD67A4 /* flame.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16DD1A6FC9FF00FD67A4 /* flame.png */; };
+		F13D16E51A6FC9FF00FD67A4 /* light.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16DE1A6FC9FF00FD67A4 /* light.png */; };
+		F13D16E61A6FC9FF00FD67A4 /* hart.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16DF1A6FC9FF00FD67A4 /* hart.png */; };
+		F13D16E71A6FC9FF00FD67A4 /* water.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16E01A6FC9FF00FD67A4 /* water.png */; };
+		F13D16E81A6FC9FF00FD67A4 /* wind.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16E11A6FC9FF00FD67A4 /* wind.png */; };
+		F13D16E91A6FC9FF00FD67A4 /* none.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D16E21A6FC9FF00FD67A4 /* none.png */; };
+		F13D16ED1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F13D16EB1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld */; };
+		F13D17201A78209B00FD67A4 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = F13D171F1A78209B00FD67A4 /* empty.png */; };
 		F1C6D20C1A3B680500E68897 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20B1A3B680500E68897 /* AppDelegate.swift */; };
 		F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20D1A3B680500E68897 /* ViewController.swift */; };
 		F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D20F1A3B680500E68897 /* Main.storyboard */; };
@@ -22,7 +31,6 @@
 		F1C6D23E1A3B71A400E68897 /* ASViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D23D1A3B71A400E68897 /* ASViewController.swift */; };
 		F1C6D2401A3B71AB00E68897 /* NSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */; };
 		F1C6D2421A3B71B900E68897 /* PSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D2411A3B71B900E68897 /* PSViewController.swift */; };
-		F1FDAF871A3DB298001427E4 /* LSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF861A3DB298001427E4 /* LSData.swift */; };
 		F1FDAF891A3DB2AD001427E4 /* NSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF881A3DB2AD001427E4 /* NSData.swift */; };
 		F1FDAF8C1A3DB36C001427E4 /* NSCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FDAF8A1A3DB36C001427E4 /* NSCell.swift */; };
 		F1FDAF8D1A3DB36C001427E4 /* NSCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1FDAF8B1A3DB36C001427E4 /* NSCell.xib */; };
@@ -40,6 +48,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F13D16DC1A6FC9FF00FD67A4 /* dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dark.png; sourceTree = "<group>"; };
+		F13D16DD1A6FC9FF00FD67A4 /* flame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flame.png; sourceTree = "<group>"; };
+		F13D16DE1A6FC9FF00FD67A4 /* light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = light.png; sourceTree = "<group>"; };
+		F13D16DF1A6FC9FF00FD67A4 /* hart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hart.png; sourceTree = "<group>"; };
+		F13D16E01A6FC9FF00FD67A4 /* water.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = water.png; sourceTree = "<group>"; };
+		F13D16E11A6FC9FF00FD67A4 /* wind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wind.png; sourceTree = "<group>"; };
+		F13D16E21A6FC9FF00FD67A4 /* none.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = none.png; sourceTree = "<group>"; };
+		F13D16EC1A7125EA00FD67A4 /* DivineGateDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DivineGateDB.xcdatamodel; sourceTree = "<group>"; };
+		F13D171F1A78209B00FD67A4 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
+		F1A66B241A7A94D800FF7F8E /* DivineGateDB-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DivineGateDB-Bridging-Header.h"; sourceTree = "<group>"; };
 		F1C6D2061A3B680500E68897 /* DivineGateDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivineGateDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1C6D20A1A3B680500E68897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1C6D20B1A3B680500E68897 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,7 +77,6 @@
 		F1C6D23D1A3B71A400E68897 /* ASViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASViewController.swift; sourceTree = "<group>"; };
 		F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewController.swift; sourceTree = "<group>"; };
 		F1C6D2411A3B71B900E68897 /* PSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSViewController.swift; sourceTree = "<group>"; };
-		F1FDAF861A3DB298001427E4 /* LSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSData.swift; sourceTree = "<group>"; };
 		F1FDAF881A3DB2AD001427E4 /* NSData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSData.swift; sourceTree = "<group>"; };
 		F1FDAF8A1A3DB36C001427E4 /* NSCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSCell.swift; sourceTree = "<group>"; };
 		F1FDAF8B1A3DB36C001427E4 /* NSCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NSCell.xib; sourceTree = "<group>"; };
@@ -84,16 +101,79 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F13D16D61A6AAD7700FD67A4 /* Units */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
+				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
+			);
+			name = Units;
+			sourceTree = "<group>";
+		};
+		F13D16D71A6AAD8200FD67A4 /* NS */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
+			);
+			name = NS;
+			sourceTree = "<group>";
+		};
+		F13D16D81A6AAD8800FD67A4 /* AS */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D23D1A3B71A400E68897 /* ASViewController.swift */,
+			);
+			name = AS;
+			sourceTree = "<group>";
+		};
+		F13D16D91A6AAD8F00FD67A4 /* PS */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D2411A3B71B900E68897 /* PSViewController.swift */,
+			);
+			name = PS;
+			sourceTree = "<group>";
+		};
+		F13D16DA1A6AAD9300FD67A4 /* LS */ = {
+			isa = PBXGroup;
+			children = (
+				F1C6D23B1A3B719A00E68897 /* LSViewController.swift */,
+			);
+			name = LS;
+			sourceTree = "<group>";
+		};
+		F13D16DB1A6FC48300FD67A4 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				F13D16EA1A6FCF7F00FD67A4 /* energy_panel */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+		F13D16EA1A6FCF7F00FD67A4 /* energy_panel */ = {
+			isa = PBXGroup;
+			children = (
+				F13D171F1A78209B00FD67A4 /* empty.png */,
+				F13D16DD1A6FC9FF00FD67A4 /* flame.png */,
+				F13D16E01A6FC9FF00FD67A4 /* water.png */,
+				F13D16E11A6FC9FF00FD67A4 /* wind.png */,
+				F13D16DE1A6FC9FF00FD67A4 /* light.png */,
+				F13D16DC1A6FC9FF00FD67A4 /* dark.png */,
+				F13D16E21A6FC9FF00FD67A4 /* none.png */,
+				F13D16DF1A6FC9FF00FD67A4 /* hart.png */,
+			);
+			name = energy_panel;
+			sourceTree = "<group>";
+		};
 		F142BB221A57E5EA00AA01E2 /* DataView */ = {
 			isa = PBXGroup;
 			children = (
 				F1C6D2371A3B6C5D00E68897 /* DataViewController.swift */,
-				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
-				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
-				F1C6D23B1A3B719A00E68897 /* LSViewController.swift */,
-				F1C6D23D1A3B71A400E68897 /* ASViewController.swift */,
-				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
-				F1C6D2411A3B71B900E68897 /* PSViewController.swift */,
+				F13D16D61A6AAD7700FD67A4 /* Units */,
+				F13D16D71A6AAD8200FD67A4 /* NS */,
+				F13D16D91A6AAD8F00FD67A4 /* PS */,
+				F13D16DA1A6AAD9300FD67A4 /* LS */,
+				F13D16D81A6AAD8800FD67A4 /* AS */,
 			);
 			name = DataView;
 			sourceTree = "<group>";
@@ -121,12 +201,15 @@
 			children = (
 				F1C6D22B1A3B684D00E68897 /* Data */,
 				F1C6D22E1A3B6BCF00E68897 /* ViewController */,
+				F13D16DB1A6FC48300FD67A4 /* Images */,
 				F1C6D20B1A3B680500E68897 /* AppDelegate.swift */,
 				F1C6D20D1A3B680500E68897 /* ViewController.swift */,
 				F1C6D20F1A3B680500E68897 /* Main.storyboard */,
 				F1C6D2121A3B680500E68897 /* Images.xcassets */,
 				F1C6D2141A3B680500E68897 /* LaunchScreen.xib */,
 				F1C6D2091A3B680500E68897 /* Supporting Files */,
+				F13D16EB1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld */,
+				F1A66B241A7A94D800FF7F8E /* DivineGateDB-Bridging-Header.h */,
 			);
 			path = DivineGateDB;
 			sourceTree = "<group>";
@@ -180,7 +263,6 @@
 			isa = PBXGroup;
 			children = (
 				F1C6D22F1A3B6C0900E68897 /* UnitsData.swift */,
-				F1FDAF861A3DB298001427E4 /* LSData.swift */,
 				F1FDAF881A3DB2AD001427E4 /* NSData.swift */,
 			);
 			name = DataSource;
@@ -274,10 +356,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F13D16E81A6FC9FF00FD67A4 /* wind.png in Resources */,
 				F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */,
+				F13D16E51A6FC9FF00FD67A4 /* light.png in Resources */,
+				F13D17201A78209B00FD67A4 /* empty.png in Resources */,
 				F1FDAF8D1A3DB36C001427E4 /* NSCell.xib in Resources */,
 				F1C6D2361A3B6C3F00E68897 /* UnitsCell.xib in Resources */,
+				F13D16E41A6FC9FF00FD67A4 /* flame.png in Resources */,
+				F13D16E31A6FC9FF00FD67A4 /* dark.png in Resources */,
+				F13D16E61A6FC9FF00FD67A4 /* hart.png in Resources */,
 				F1C6D2161A3B680500E68897 /* LaunchScreen.xib in Resources */,
+				F13D16E91A6FC9FF00FD67A4 /* none.png in Resources */,
+				F13D16E71A6FC9FF00FD67A4 /* water.png in Resources */,
 				F1C6D2131A3B680500E68897 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,9 +390,9 @@
 				F1C6D2351A3B6C3F00E68897 /* UnitsCell.swift in Sources */,
 				F1FDAF931A3DB845001427E4 /* UnitStatusViewController.swift in Sources */,
 				F1C6D2381A3B6C5D00E68897 /* DataViewController.swift in Sources */,
-				F1FDAF871A3DB298001427E4 /* LSData.swift in Sources */,
 				F1C6D23C1A3B719A00E68897 /* LSViewController.swift in Sources */,
 				F1C6D2401A3B71AB00E68897 /* NSViewController.swift in Sources */,
+				F13D16ED1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld in Sources */,
 				F1C6D23E1A3B71A400E68897 /* ASViewController.swift in Sources */,
 				F1FDAF8C1A3DB36C001427E4 /* NSCell.swift in Sources */,
 				F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */,
@@ -432,9 +522,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = DivineGateDB/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DivineGateDB/DivineGateDB-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -442,9 +535,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = DivineGateDB/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "DivineGateDB/DivineGateDB-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -513,6 +608,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F13D16EB1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F13D16EC1A7125EA00FD67A4 /* DivineGateDB.xcdatamodel */,
+			);
+			currentVersion = F13D16EC1A7125EA00FD67A4 /* DivineGateDB.xcdatamodel */;
+			path = DivineGateDB.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F1C6D1FE1A3B680500E68897 /* Project object */;
 }

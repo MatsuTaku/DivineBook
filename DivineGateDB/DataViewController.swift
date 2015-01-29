@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DataViewController: UIViewController, UISearchBarDelegate {
+class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var segmentedControlData: UISegmentedControl!
     @IBOutlet var contentView: UIView!
@@ -29,6 +29,9 @@ class DataViewController: UIViewController, UISearchBarDelegate {
         self.changeView(viewController)
         currentViewController = viewController
         println(currentViewController)
+        
+        segmentedControlData.bounds.size.width = self.view.bounds.size.width
+        
     }
     
     func changeView(viewController: UIViewController) {
@@ -53,19 +56,16 @@ class DataViewController: UIViewController, UISearchBarDelegate {
     func animationOfChangingViewController(toViewController viewController: UIViewController)
     {
         self.addChildViewController(viewController)
-        self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.25, options: UIViewAnimationOptions.TransitionCrossDissolve,
+        self.transitionFromViewController(currentViewController, toViewController: viewController, duration: 0.15, options: UIViewAnimationOptions.TransitionCrossDissolve,
             animations: {() in
                 self.currentViewController.view.removeFromSuperview()
                 self.changeView(viewController)
-                println("Animations did end.")
             }, completion: {Bool in
                 self.currentViewController.removeFromParentViewController()
                 viewController.didMoveToParentViewController(self)
                 self.currentViewController = viewController
                 println(self.currentViewController)
-                println("Completion did end.")
             })
-        println("ViewControllerDidChanged!")
     }
     
     
@@ -86,20 +86,20 @@ class DataViewController: UIViewController, UISearchBarDelegate {
     */
     
     
-    // MARK: - selectedViewController method
+    // MARK: - selectedViewController
     
     func viewControllerForSegmentedIndex(index: NSInteger) -> UIViewController
     {
         // 切り替えるViewの指定
         var vc: UIViewController?
         switch index {
-        case 0 : // Units
+        case 0 :    // Units
             vc = self.storyboard?.instantiateViewControllerWithIdentifier("Units") as UnitsViewController
             self.setBarItemsOfUnits()
-        case 1 :
+        case 1 :    // NS
             vc = self.storyboard?.instantiateViewControllerWithIdentifier("NS") as NSViewController
             self.setBarItemsOfNS()
-        case 2 : // Skills
+        case 2 :    // Skills
             vc = self.skillViewControllerForSegmentedIndex(self.skillIndex)
             self.setBarItemsOfSkills()
         default :
@@ -110,13 +110,14 @@ class DataViewController: UIViewController, UISearchBarDelegate {
     
     func skillViewControllerForSegmentedIndex(index: NSInteger) -> UIViewController
     {
+        // スキルビューの切り替え
         var vc: UIViewController?
         switch index {
-        case 0 :
+        case 0 :    // PS
             vc = self.storyboard?.instantiateViewControllerWithIdentifier("PS") as PSViewController
-        case 1 :
+        case 1 :    // LS
             vc = self.storyboard?.instantiateViewControllerWithIdentifier("LS") as LSViewController
-        case 2 :
+        case 2 :    // AS
             vc = self.storyboard?.instantiateViewControllerWithIdentifier("AS") as ASViewController
         default :
             break
@@ -124,13 +125,15 @@ class DataViewController: UIViewController, UISearchBarDelegate {
         return vc!
     }
     
+    // MARK: Units
+    
     func setBarItemsOfUnits() {
-        var leftButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Bookmarks, target: self, action: "sortUnits:")
-        var rightButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchUnits:")
+        var leftButton = UIBarButtonItem(title: "並替", style: UIBarButtonItemStyle.Plain , target: self, action: "sortUnits:")
+        var rightButton = UIBarButtonItem(title: "絞込", style: UIBarButtonItemStyle.Plain , target: self, action: "searchUnits:")
         var searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.Minimal
-        searchBar.placeholder = "例：無英斧士ギンジ"
+        searchBar.placeholder = "無英斧士ギンジ"
         searchBar.bounds.size.width = self.view.frame.size.width - 120
         searchBar.showsCancelButton = false
         navItem!.leftBarButtonItem = leftButton
@@ -146,13 +149,15 @@ class DataViewController: UIViewController, UISearchBarDelegate {
         
     }
     
+    // MARK: NS
+    
     func setBarItemsOfNS() {
-        var leftButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Bookmarks, target: self, action: "sortNS:")
-        var rightButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchNS:")
+        var leftButton = UIBarButtonItem(title: "並替", style: UIBarButtonItemStyle.Plain , target: self, action: "sortNS:")
+        var rightButton = UIBarButtonItem(title: "絞込", style: UIBarButtonItemStyle.Plain , target: self, action: "searchNS:")
         var searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.Minimal
-        searchBar.placeholder = "例：インフィニティ・リバース"
+        searchBar.placeholder = "インフィニティ・リバース"
         searchBar.bounds.size.width = self.view.frame.size.width - 120
         searchBar.showsCancelButton = false
         navItem!.leftBarButtonItem = leftButton
@@ -164,9 +169,11 @@ class DataViewController: UIViewController, UISearchBarDelegate {
         
     }
     
-    func sesarchNS(sender: UIButton) {
+    func searchNS(sender: UIButton) {
         
     }
+    
+    // MARK: Skills
     
     func setBarItemsOfSkills() {
         var rightButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchSkills")
@@ -182,6 +189,13 @@ class DataViewController: UIViewController, UISearchBarDelegate {
     
     func searchSkills() {
         
+    }
+    
+    // MARK: - UISearchBar Delegate
+    
+    // 検索ボタンを押した時
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
 }

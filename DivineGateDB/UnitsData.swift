@@ -7,53 +7,30 @@
 //
 
 import UIKit
+import CoreData
 
-class UnitsData: NSObject, NSCoding {
+class UnitsData: NSManagedObject {
     
-    var num: Int = 0
-    var name: String = "????"
-    var type: Int = -1
-    var rare: Int = 0
-    var race: String = "???"
-    var cost: Int = 0
-    var lv: Int = 0
-    var hp: Int = 0
-    var atk: Int = 0
+    @NSManaged var unit: Int
+    @NSManaged var name: String
+    @NSManaged var element: Int
+    @NSManaged var rare: Int
+    @NSManaged var race: String
+    @NSManaged var cost: Int
+    @NSManaged var lv: Int
+    @NSManaged var hp: Double
+    @NSManaged var atk: Double
     
-    init(num: Int, name: String, type: Int, rare: Int, race: String, cost: Int, lv: Int, hp: Int, atk: Int) {
-        self.num = num
-        self.name = name
-        self.type = type
-        self.rare = rare
-        self.race = race
-        self.cost = cost
-        self.lv = lv
-        self.hp = hp
-        self.atk = atk
-    }
-    
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(num, forKey: "num")
-        aCoder.encodeObject(name, forKey: "name")
-        aCoder.encodeObject(type, forKey: "type")
-        aCoder.encodeObject(rare, forKey: "rare")
-        aCoder.encodeObject(race, forKey: "race")
-        aCoder.encodeObject(cost, forKey: "cost")
-        aCoder.encodeObject(lv, forKey: "lv")
-        aCoder.encodeObject(hp, forKey: "hp")
-        aCoder.encodeObject(atk, forKey: "atk")
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        num = aDecoder.decodeObjectForKey("num") as Int
-        name = aDecoder.decodeObjectForKey("name") as String
-        type = aDecoder.decodeObjectForKey("type") as Int
-        rare = aDecoder.decodeObjectForKey("rare") as Int
-        race = aDecoder.decodeObjectForKey("race") as String
-        cost = aDecoder.decodeObjectForKey("cost") as Int
-        lv = aDecoder.decodeObjectForKey("lv") as Int
-        hp = aDecoder.decodeObjectForKey("hp") as Int
-        atk = aDecoder.decodeObjectForKey("atk") as Int
+    func initUnitsData(Unit: Int, Name: String, Element: Int, Rare: Int, Race: String, Cost: Int, Lv: Int, Hp: Double, Atk: Double) {
+        unit = Unit
+        name = Name
+        element = Element
+        rare = Rare
+        race = Race
+        cost = Cost
+        lv = Lv
+        hp = Hp
+        atk = Atk
     }
    
 }
