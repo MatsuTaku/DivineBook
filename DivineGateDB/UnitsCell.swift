@@ -19,6 +19,7 @@ class UnitsCell: UITableViewCell {
     @IBOutlet weak var level: UILabel!
     @IBOutlet weak var hp: UILabel!
     @IBOutlet weak var atk: UILabel!
+    @IBOutlet weak var plus: UILabel!
     
     
     let elementColor: [UIColor?] = [nil,                    // 0
@@ -45,17 +46,23 @@ class UnitsCell: UITableViewCell {
     {
         number.text = NSString(format: "No. %d", unit.unit)
         name.text = unit.name
-        race.text = unit.race
+        let races = unit.race
+        if races.count > 1 {
+            race.text = NSString(format: "%@/%@", races[0], races[1])
+        } else {
+            race.text = races[0]
+        }
         var string = ""
         let star = "★"
-        for _ in 0..<unit.rare {
+        for _ in 0..<Int(unit.rare) {
             string += star
         }
         rare.text = string
-        rare.textColor = elementColor[unit.element]
+        rare.textColor = elementColor[Int(unit.element)]
         level.text = NSString(format: "Lv. %d", unit.lv)
         hp.text = NSString(format: "HP %.0f", unit.hp)
         atk.text = NSString(format: "ATK %.0f", unit.atk)
+        plus.text = NSString(format: "+換算 %.1f", unit.stusOfPlus())
     }
     
 }
