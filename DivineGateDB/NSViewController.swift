@@ -14,7 +14,7 @@ protocol NSViewControllerDelegate {
     func setUpNSList() -> [NSData]
 }
 
-class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NSConditionMenuDelegate {
+class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NSConditionMenuDelegate, CMPopTipViewDelegate {
     
     var delegate: NSViewControllerDelegate?
     
@@ -106,12 +106,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         default :
             break
         }
+        
+        // ※３ボタンを下部Viewに移行し、長押し処理を追加 {
         var plusButton = UIBarButtonItem(title: "+99", style: .Done, target: self, action: "changePlus:")
-        plusButton.tintColor = isPlusMode == true ? accentColor : UIColor.grayColor()
+        plusButton.tintColor = isPlusMode ? accentColor : UIColor.grayColor()
         var crtButton = UIBarButtonItem(title: "CRT", style: .Done, target: self, action: "changeCRT:")
-        crtButton.tintColor = isCRTMode == true ? accentColor : UIColor.grayColor()
+        crtButton.tintColor = isCRTMode ? accentColor : UIColor.grayColor()
         var aveButton = UIBarButtonItem(title: "A/P", style: .Done, target: self, action: "changeAve:")
-        aveButton.tintColor = isAveMode == true ? accentColor : UIColor.grayColor()
+        aveButton.tintColor = isAveMode ? accentColor : UIColor.grayColor()
+        
+        let plusLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressPlusButton:")
+        let crtLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressCRTButton:")
+        let aveLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressAveButton:")
+        
+        // addGestureRecongnizer methods
+        // }
         
         let leftButtons = [conditionButton, searchButton]
         let rightButtons = [sortButton, aveButton, crtButton, plusButton]
@@ -121,6 +130,24 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         navItem.leftBarButtonItems = leftButtons
         navItem.titleView = nil
         navItem.rightBarButtonItems = rightButtons
+    }
+    
+    func longPressPlusButton(sender: UIButton) {
+        let plusPop = CMPopTipView(message: "攻撃に＋９９を振った状態の値を計算します")
+        plusPop.delegate = self
+        plusPop.presentPointingAtView(sender, inView: self.view, animated: true)
+    }
+    
+    func longPressCRTButton(sender: UIButton) {
+        let crtPop = CMPopTipView(message: "NSのクリティカル率を考慮して期待値を計算します")
+        crtPop.delegate = self
+        crtPop.presentPointingAtView(sender, inView: self.view, animated: true)
+    }
+    
+    func longPressAveButton(sender: UIButton) {
+        let avePop = CMPopTipView(message: "計算した値をNSのパネル数で割ります")
+        avePop.delegate = self
+        avePop.presentPointingAtView(sender, inView: self.view, animated: true)
     }
     
     func toggleConditionMenu(sender: UIButton) {
@@ -431,6 +458,13 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         }
         
         reloadList()
+    }
+    
+    
+    // MARK: - CMPopTipViewDelegate methods
+    
+    func popTipViewWasDismissedByUser(popTipView: CMPopTipView!) {
+        
     }
     
     

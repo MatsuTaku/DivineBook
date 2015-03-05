@@ -25,8 +25,8 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
 
         // Do any additional setup after loading the view.
         
-        setUnitsDammyData()
-        setNSDammyData()
+        setUnitsData()
+//        setNSDammyData()
         
         loadUnitsDataObject()
         loadNSDataObject()
@@ -100,13 +100,6 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         animationOfChangingViewController(toViewController: viewController)
     }
     
-//    func changeSkillIndex(sender: UISegmentedControl) {
-//        self.skillIndex = sender.selectedSegmentIndex
-//        let viewController = self.skillViewControllerForSegmentedIndex(self.skillIndex)
-//        self.currentViewController.willMoveToParentViewController(nil)
-//        self.animationOfChangingViewController(toViewController: viewController)
-//    }
-    
     func animationOfChangingViewController(toViewController viewController: UIViewController)
     {
         self.addChildViewController(viewController)
@@ -152,120 +145,52 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
 
     // MARK: - Units mehods
     
-    func setUnitsDammyData() {
-        let csv = NSBundle.mainBundle().pathForResource("Units", ofType: "csv")
-        if csv != nil {
-            let unitsdata = NSString(contentsOfFile: csv!, encoding: NSUTF8StringEncoding, error: nil) as String
-            let lines = unitsdata.componentsSeparatedByString("\n")
-            
-            var Ino: Int?
-            var Iname: Int?
-            var Itype: Int?
-            var Irace1: Int?
-            var Irace2: Int?
-            var Icost: Int?
-            var Irare: Int?
-            var Ilv: Int?
-            var Ihp: Int?
-            var Iatk: Int?
-            
-            let title = lines[0].componentsSeparatedByString(",")
-            if title[0] == "No" {
-                for i in 0..<title.count {
-                    switch title[i] {
-                    case    "No":
-                        Ino = i
-                    case    "Name":
-                        Iname = i
-                    case    "Type":
-                        Itype = i
-                    case    "Race1":
-                        Irace1 = i
-                    case    "Race2":
-                        Irace2 = i
-                    case    "COST":
-                        Icost = i
-                    case    "Rare":
-                        Irare = i
-                    case    "MaxLv":
-                        Ilv = i
-                    case    "HP":
-                        Ihp = i
-                    case    "ATK":
-                        Iatk = i
-                    default :
-                        break
-                    }
-                }
-            }
-            
-            if Ino != nil && Iname != nil && Itype != nil && Irace1 != nil && Irace2 != nil && Icost != nil && Irare != nil && Ilv != nil && Ihp != nil && Iatk != nil {
-                for unit in lines {
-                    let items = unit.componentsSeparatedByString(",")
-                    if items[Ino!].toInt() == nil {
-                        continue
-                    }
-                    var no = items[Ino!].toInt()!
-                    var name = items[Iname!]
-                    var type = 0
-                    switch items[Itype!] {
-                    case    "炎":
-                        type = 1
-                    case    "水":
-                        type = 2
-                    case    "風":
-                        type = 3
-                    case    "光":
-                        type = 4
-                    case    "闇":
-                        type = 5
-                    case    "無":
-                        type = 6
-                    default :
-                        break
-                    }
-                    var race = [String]()
-                    race.append(items[Irace1!])
-                    if items[Irace2!] != "" {
-                        race.append(items[Irace2!])
-                    }
-                    var cost = 0
-                    if items[Icost!].toInt() != nil {
-                        cost = items[Icost!].toInt()!
-                    }
-                    var rare = 0
-                    if items[Irare!].toInt() != nil {
-                        rare = items[Irare!].toInt()!
-                    }
-                    var lv = 0
-                    if items[Ilv!].toInt() != nil {
-                        lv = items[Ilv!].toInt()!
-                    }
-                    var hp: Double = 0
-                    if items[Ihp!].toInt() != nil {
-                        hp = (items[Ihp!] as NSString).doubleValue
-                    }
-                    var atk: Double = 0
-                    if items[Iatk!].toInt() != nil {
-                        atk = (items[Iatk!] as NSString).doubleValue
-                    }
-                    initUnitsDataObject(no, name: name, element: type, rare: rare, race: race, cost: cost, lv: lv, hp: hp, atk: atk)
-                }
+    func setUnitsData() {
+        if let path = NSBundle.mainBundle().pathForResource("units", ofType: "csv") {
+            println("Found units.csv file!")
+            let url = NSURL.fileURLWithPath(path)
+            let table = NTYCSVTable(contentsOfURL: url)
+            println(table.headers)
+            println(table.rows)
+            for unit in table.rows {
+                saveUnitsDataFromCSV(unit as NSDictionary)
             }
         }
     }
     
-    func initUnitsDataObject(unit: Int, name: String, element: Int, rare: Int, race: [String], cost: Int, lv: Int, hp: Double, atk: Double) {
+    func saveUnitsDataFromCSV(data: NSDictionary) {
         let appDel: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDel.managedObjectContext!
         
-        var request = NSFetchRequest(entityName: "UnitsData")
-        request.predicate = NSPredicate(format: "unit = %d", unit)
-        var results = context.executeFetchRequest(request, error: nil)
+        let request = NSFetchRequest(entityName: "UnitsData")
+        request.predicate = NSPredicate(format: "unit = %d", data["No"] as Int)
         
-        if results?.count == 0 {
+        if let results = context.executeFetchRequest(request, error: nil) {
             let ent = NSEntityDescription.entityForName("UnitsData", inManagedObjectContext: context)
-            var Units = UnitsData(entity: ent!, insertIntoManagedObjectContext: context)
+            let Units = UnitsData(entity: ent!, insertIntoManagedObjectContext: context)
+            Units.initUnitsDataFromCSV(data)
+                var error: NSError?
+                if !context.save(&error) {
+                println("Could not save \"\(Units.name)\" \(error), \(error?.userInfo)")
+                } else {
+                println("save \(Units.name)")
+            }
+        } else {
+            let name = data["Name"] as String
+            println("\(name) is already saved!")
+        }
+    }
+    
+    func saveUnitsDataFromValues(unit: Int, name: String, element: Int, rare: Int, race: [String], cost: Int, lv: Int, hp: Double, atk: Double) {
+        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let context: NSManagedObjectContext = appDel.managedObjectContext!
+        
+        let request = NSFetchRequest(entityName: "UnitsData")
+        request.predicate = NSPredicate(format: "unit = %d", unit)
+        
+        if let results = context.executeFetchRequest(request, error: nil) {
+            let ent = NSEntityDescription.entityForName("UnitsData", inManagedObjectContext: context)
+            let Units = UnitsData(entity: ent!, insertIntoManagedObjectContext: context)
             Units.initUnitsData(unit, Name: name, Element: element, Rare: rare, Race: race, Cost: cost, Lv: lv, Hp: hp, Atk: atk)
             
             var error: NSError?
@@ -350,13 +275,12 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         let appDel: AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         let context: NSManagedObjectContext = appDel.managedObjectContext!
         
-        var request = NSFetchRequest(entityName: "NSData")
+        let request = NSFetchRequest(entityName: "NSData")
         request.predicate = NSPredicate(format: "unit = %d AND number = %d", unit, number)
-        var results = context.executeFetchRequest(request, error: nil)
         
-        if results?.count == 0 {
+        if let results = context.executeFetchRequest(request, error: nil) {
             let ent = NSEntityDescription.entityForName("NSData", inManagedObjectContext: context)
-            var NS = NSData(entity: ent!, insertIntoManagedObjectContext: context)
+            let NS = NSData(entity: ent!, insertIntoManagedObjectContext: context)
             NS.initNSData(unit, Number: number, Name: name, Detail: detail?, Boost: boost?, Panel: panel, Target: target, Element: element, Leverage: leverage, Critical: critical?)
             
             var error: NSError?

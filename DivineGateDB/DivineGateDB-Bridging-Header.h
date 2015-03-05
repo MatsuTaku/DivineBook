@@ -9,5 +9,9 @@
 #ifndef DivineGateDB_DivineGateDB_Bridging_Header_h
 #define DivineGateDB_DivineGateDB_Bridging_Header_h
 
+#import "NTYCSVTable.h"
+#import "NSString+NTYNonStringHandling.h"
+#import "CMPopTipView.h"
+
 
 #endif

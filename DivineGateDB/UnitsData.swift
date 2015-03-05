@@ -34,6 +34,59 @@ class UnitsData: NSManagedObject {
         atk = Atk
     }
     
+    func initUnitsDataFromCSV(data: NSDictionary) {
+        /*  table.headers
+        No
+        Name
+        Type
+        Race1
+        Race2
+        COST
+        Rare
+        Lv
+        HP
+        ATK
+        */
+        unit = (data["No"] as Int)
+        name = data["Name"] as String
+        switch data["Type"] as String {
+        case    "炎":
+            element = 1
+        case    "水":
+            element = 2
+        case    "風":
+            element = 3
+        case    "光":
+            element = 4
+        case    "闇":
+            element = 5
+        case    "無":
+            element = 6
+        default :
+            element = 0
+        }
+        race = [String]()
+        race.append(data["Race1"] as String)
+        if (data["Race2"] as String) != "" {
+            race.append(data["Race2"] as String)
+        }
+        if let iCost = data["COST"] as? Int {
+            cost = iCost
+        }
+        if let iRare = data["Rare"] as? Int {
+            rare = iRare
+        }
+        if let iLv = data["Lv"] as? Int {
+            lv = iLv
+        }
+        if let iHp = data["HP"] as? Double {
+            hp = iHp
+        }
+        if let iAtk = data["ATK"] as? Double {
+            atk = iAtk
+        }
+    }
+    
     func atkPlus() -> Double {
         return atk + 99 * 5
     }
