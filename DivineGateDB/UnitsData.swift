@@ -43,13 +43,18 @@ class UnitsData: NSManagedObject {
         Race2
         COST
         Rare
-        Lv
+        MaxLv
         HP
         ATK
         */
         unit = (data["No"] as Int)
-        name = data["Name"] as String
-        switch data["Type"] as String {
+        if let unitName = data["Name"] as? String {
+            name = unitName
+        } else if let unitName = (data["Name"] as? Int)?.description {
+            name = unitName
+        }
+        let stype = data["Type"] as String
+        switch stype {
         case    "炎":
             element = 1
         case    "水":
@@ -65,18 +70,21 @@ class UnitsData: NSManagedObject {
         default :
             element = 0
         }
-        race = [String]()
-        race.append(data["Race1"] as String)
-        if (data["Race2"] as String) != "" {
-            race.append(data["Race2"] as String)
+        var races = [String]()
+        if let race1 = data["Race1"] as? String {
+            races.append(race1)
         }
+        if let race2 = data["Race2"] as? String {
+            races.append(race2)
+        }
+        race = races
         if let iCost = data["COST"] as? Int {
             cost = iCost
         }
         if let iRare = data["Rare"] as? Int {
             rare = iRare
         }
-        if let iLv = data["Lv"] as? Int {
+        if let iLv = data["MaxLv"] as? Int {
             lv = iLv
         }
         if let iHp = data["HP"] as? Double {

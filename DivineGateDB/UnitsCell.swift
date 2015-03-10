@@ -23,12 +23,12 @@ class UnitsCell: UITableViewCell {
     
     
     let elementColor: [UIColor?] = [nil,                    // 0
-        UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 1),   // 1 炎
-        UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 1),   // 2 水
-        UIColor(red: 0.5, green: 1, blue: 0.5, alpha: 1),   // 3 風
-        UIColor(red: 1, green: 1, blue: 0.5, alpha: 1),     // 4 光
-        UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1),   // 5 闇
-        UIColor(red: 1, green: 1, blue: 1, alpha: 1),       // 6 無
+        UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 0.2),   // 1 炎
+        UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 0.2),   // 2 水
+        UIColor(red: 0.5, green: 1, blue: 0.5, alpha: 0.2),   // 3 風
+        UIColor(red: 1, green: 1, blue: 0.5, alpha: 0.2),     // 4 光
+        UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.2),   // 5 闇
+        UIColor(red: 1, green: 1, blue: 1, alpha: 0.2),       // 6 無
     ]
     
     override func awakeFromNib() {
@@ -44,14 +44,15 @@ class UnitsCell: UITableViewCell {
     
     func setCell(unit: UnitsData)
     {
+        let iconName = NSString(format: "%03d-icon.png", unit.unit)
+        if let iconImage = UIImage(named: iconName) {
+            icon.image = iconImage
+        } else {
+            icon.image = UIImage(named: "empty-icon.png")
+        }
         number.text = NSString(format: "No. %d", unit.unit)
         name.text = unit.name
-        let races = unit.race
-        if races.count > 1 {
-            race.text = NSString(format: "%@/%@", races[0], races[1])
-        } else {
-            race.text = races[0]
-        }
+        race.text = unit.race.count == 1 ? unit.race[0] : unit.race[0] + "/" + unit.race[1]
         var string = ""
         let star = "★"
         for _ in 0..<Int(unit.rare) {

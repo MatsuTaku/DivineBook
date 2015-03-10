@@ -27,13 +27,13 @@ class NSCell: UITableViewCell {
     
     
     let elementColor: [UIColor?] = [nil,                    // 0
-        UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 1),   // 1 炎
-        UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 1),   // 2 水
-        UIColor(red: 0.5, green: 1, blue: 0.5, alpha: 1),   // 3 風
-        UIColor(red: 1, green: 1, blue: 0.5, alpha: 1),     // 4 光
-        UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 1),   // 5 闇
-        UIColor(red: 1, green: 1, blue: 1, alpha: 1),       // 6 無
-        UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 1)    // 7 回復
+        UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 0.4),   // 1 炎
+        UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 0.4),   // 2 水
+        UIColor(red: 0.5, green: 1, blue: 0.5, alpha: 0.4),   // 3 風
+        UIColor(red: 1, green: 1, blue: 0.5, alpha: 0.4),     // 4 光
+        UIColor(red: 0.8, green: 0.4, blue: 1, alpha: 0.4),   // 5 闇
+        UIColor(red: 1, green: 1, blue: 1, alpha: 0.4),       // 6 無
+        UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 0.4)    // 7 回復
     ]
     
     let iconImage: [UIImage?] = [
@@ -190,6 +190,12 @@ class NSCell: UITableViewCell {
             boost.text = NS.boost
         } else {
             boost.text = NSString(format: "■BOOST:%@", NS.boost)
+        }
+        let iconName = NSString(format: "%03d-icon.png", NS.unit)
+        if let iconImage = UIImage(named: iconName) {
+            icon.image = iconImage
+        } else {
+            icon.image = UIImage(named: "empty-icon.png")
         }
     }
     

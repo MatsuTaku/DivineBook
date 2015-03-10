@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="xsK-sa-M3c">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -12,14 +11,14 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="xsK-sa-M3c" sceneMemberID="viewController">
                     <toolbarItems/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="Yut-FR-UMr">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="Yut-FR-UMr" customClass="RAMTabBarController">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="selectedImageTintColor" white="0.80000000000000004" alpha="1" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
                         <segue destination="kgC-Xj-3d3" kind="relationship" relationship="viewControllers" id="gvY-lR-6aU"/>
-                        <segue destination="9VU-Ex-O3b" kind="relationship" relationship="viewControllers" id="59R-4k-mOt"/>
+                        <segue destination="Uaa-Ni-FsI" kind="relationship" relationship="viewControllers" id="WXc-nq-S9E"/>
                         <segue destination="yga-e4-4E5" kind="relationship" relationship="viewControllers" id="UbF-JW-Tid"/>
                         <segue destination="Sij-6B-4gv" kind="relationship" relationship="viewControllers" id="EIx-KR-xbs"/>
                     </connections>
@@ -45,13 +44,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bEq-DR-Vpc" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5777" y="3689"/>
+            <point key="canvasLocation" x="5741" y="3689"/>
         </scene>
         <!--TOOL-->
         <scene sceneID="kcn-1b-vua">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Sij-6B-4gv" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="TOOL" id="L46-8Y-ZiR"/>
+                    <tabBarItem key="tabBarItem" title="TOOL" id="L46-8Y-ZiR" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="l2j-Oj-LOz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -67,8 +66,9 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pip-20-sQ3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="bS7-39-KCZ" customClass="RAMFlipBottomTransitionItemAniamtions" customModule="RAMAnimatedTabBarController"/>
             </objects>
-            <point key="canvasLocation" x="4965" y="3689"/>
+            <point key="canvasLocation" x="4929" y="3689"/>
         </scene>
         <!--Data View Controller-->
         <scene sceneID="Xim-fl-PSE">
@@ -84,7 +84,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="gNH-Pr-8sb">
                         <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="ZnL-l6-yad">
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="cQK-NU-5Xq">
                             <rect key="frame" x="16" y="7" width="568" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
@@ -93,14 +93,14 @@
                             </segments>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <action selector="changeSegmentIndex:" destination="bp2-Ha-Z0o" eventType="valueChanged" id="F99-yy-odV"/>
+                                <action selector="changeSegmentIndex:" destination="bp2-Ha-Z0o" eventType="valueChanged" id="eZJ-br-qST"/>
                             </connections>
                         </segmentedControl>
                     </navigationItem>
                     <connections>
-                        <outlet property="contentView" destination="8aU-g2-ZhL" id="Se9-0z-wrE"/>
+                        <outlet property="contentsView" destination="8aU-g2-ZhL" id="hC6-rz-oKH"/>
                         <outlet property="searchDisplayController" destination="72y-uD-N4O" id="9Df-3s-19g"/>
-                        <outlet property="segmentedControlData" destination="ZnL-l6-yad" id="UGW-Dx-ug7"/>
+                        <outlet property="segmentedController" destination="cQK-NU-5Xq" id="LgZ-4L-U2I"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OGk-tF-BGL" sceneMemberID="firstResponder"/>
@@ -154,6 +154,7 @@
                             <constraint firstItem="gix-cx-lDO" firstAttribute="leading" secondItem="z5z-YO-ilw" secondAttribute="leadingMargin" constant="-16" id="q5j-kX-XCH"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="TwW-7i-lFA"/>
                     <connections>
                         <outlet property="navigationBar" destination="amC-ub-fcO" id="5eU-KA-r5z"/>
                         <outlet property="tableView" destination="gix-cx-lDO" id="4Ta-SE-jFy"/>
@@ -162,7 +163,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vLq-Wq-RsP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1757" y="4429"/>
+            <point key="canvasLocation" x="1757" y="4421"/>
         </scene>
         <!--Unit Status View Controller-->
         <scene sceneID="Gsf-87-J7y">
@@ -181,31 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fft-Kl-leq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2569" y="4429"/>
-        </scene>
-        <!--DATA-->
-        <scene sceneID="JUT-pZ-KDZ">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9VU-Ex-O3b" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="DATA" id="TCN-C0-YcP"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="et9-PV-cUJ">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.38823529410000002" green="0.031372549020000001" blue="0.51764705879999995" alpha="1" colorSpace="calibratedRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="bp2-Ha-Z0o" kind="relationship" relationship="rootViewController" id="uiz-FS-CW1"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xuw-Ky-214" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1757" y="3689"/>
+            <point key="canvasLocation" x="2569" y="4421"/>
         </scene>
         <!--クエスト-->
         <scene sceneID="DiG-fl-qMm">
@@ -224,7 +201,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OiH-r6-oX3" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4177" y="3689"/>
+            <point key="canvasLocation" x="4141" y="3689"/>
         </scene>
         <!--ディバゲ攻略データベース-->
         <scene sceneID="gM7-Jw-kV7">
@@ -249,7 +226,7 @@
         <scene sceneID="wov-EQ-OlQ">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yga-e4-4E5" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="QUEST" id="LIK-oo-3fl"/>
+                    <tabBarItem key="tabBarItem" title="QUEST" id="LIK-oo-3fl" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="YzQ-Pd-sqg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -265,14 +242,15 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WLI-ec-zBp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="WL7-Ab-0f8" customClass="RAMFlipBottomTransitionItemAniamtions" customModule="RAMAnimatedTabBarController"/>
             </objects>
-            <point key="canvasLocation" x="3365" y="3689"/>
+            <point key="canvasLocation" x="3329" y="3689"/>
         </scene>
         <!--HOME-->
         <scene sceneID="mnc-fp-gGY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="kgC-Xj-3d3" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="HOME" id="NoU-p7-mbM"/>
+                    <tabBarItem key="tabBarItem" title="HOME" id="NoU-p7-mbM" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KNU-x1-Ljc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -288,6 +266,7 @@
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ZI-Jl-ZXB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="x8G-AE-oLR" customClass="RAMFlipBottomTransitionItemAniamtions" customModule="RAMAnimatedTabBarController"/>
             </objects>
             <point key="canvasLocation" x="173" y="3689"/>
         </scene>
@@ -330,6 +309,7 @@
                             <constraint firstItem="wEc-pB-NiG" firstAttribute="top" secondItem="Nmd-0t-zOa" secondAttribute="bottom" id="jX4-en-o1G"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="ja0-Uw-ssM"/>
                     <connections>
                         <outlet property="navigationBar" destination="Nd4-9C-MKM" id="oLb-AA-3VB"/>
                         <outlet property="tableView" destination="Nmd-0t-zOa" id="xGJ-xI-rfx"/>
@@ -338,6 +318,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rjN-8E-Rmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1757" y="5165"/>
+        </scene>
+        <!--DATA-->
+        <scene sceneID="LrQ-gi-6yL">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Uaa-Ni-FsI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="DATA" id="8Zf-Iw-rrE" customClass="RAMAnimatedTabBarItem" customModule="RAMAnimatedTabBarController"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3jD-Kg-JfE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.38823529410000002" green="0.031372549020000001" blue="0.51764705879999995" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="bp2-Ha-Z0o" kind="relationship" relationship="rootViewController" id="dr2-VU-f68"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pSV-xK-dB2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <customObject id="DfC-fl-fEu" customClass="RAMFlipBottomTransitionItemAniamtions" customModule="RAMAnimatedTabBarController"/>
+            </objects>
+            <point key="canvasLocation" x="1757" y="3689"/>
         </scene>
     </scenes>
 </document>

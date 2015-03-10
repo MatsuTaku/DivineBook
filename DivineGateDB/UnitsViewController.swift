@@ -21,9 +21,16 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var navigationBar: UINavigationBar!
     
     var conditionMenu: UnitsConditionMenu?
+    var sortButtons = [UIBarButtonItem]()
+    var defaultLeftButtons = [UIBarButtonItem]()
+    var defaultRightButtons = [UIBarButtonItem]()
+    var searchBar: UISearchBar?
+//    var unitsSearchDisplayController: UISearchDisplayController?
+    var cancelSearchButton: UIBarButtonItem?
     
-    var listUnits: [UnitsData] = []
-    var list: [UnitsData] = []
+    var listUnits = [UnitsData]()
+    var list = [UnitsData]()
+    var searchResultsList = [UnitsData]()
     
     var isSearchMode: Bool = false
     var sortIndex: Int = 0 // 0: ↑num, 1: ↓num, 2: hp, 3: atk, 4: plus
@@ -40,25 +47,37 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         var nib = UINib(nibName: "UnitsCell", bundle: nil)
         tableView.registerNib(nib, forCellReuseIdentifier: "UnitCell")
+        tableView.estimatedRowHeight = 55.0
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.bounds = self.view.bounds
+        
+        var insetTop: CGFloat = 0
         let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        tableView.contentInset.top = stuBarHeight + navBarHeight! * 2
-        tableView.scrollIndicatorInsets.top = stuBarHeight + navBarHeight! * 2
+        insetTop += stuBarHeight
+        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+            insetTop += navBarHeight
+        }
+        insetTop += navigationBar.bounds.height
+        tableView.contentInset.top = insetTop
+        tableView.scrollIndicatorInsets.top = insetTop
         
         if let del = delegate {
             listUnits = del.setUpUnitsList()
         }
         list = listUnits
-        reloadList()
+        listSortAndReload()
         
         // Set up views
         setUpNavigationItems()
+        setNavigationItem(false)
         
         conditionMenu = UnitsConditionMenu(sourceView: self.view)
         conditionMenu!.delegate = self
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
     
     override func didReceiveMemoryWarning() {
@@ -82,55 +101,42 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func setUpNavigationItems() {
         // ButtonItems
-        var conditionButton = UIBarButtonItem(title: "▼", style: .Done , target: self, action: "toggleConditionMenu:")
-        var searchButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "changeSearchMode:")
-        var sortButton = UIBarButtonItem()
-        switch sortIndex {
-        case    0:
-            sortButton = sortButtonMakeInTitle("No↑")
-        case    1:
-            sortButton = sortButtonMakeInTitle("No↓")
-        case    2:
-            sortButton = sortButtonMakeInTitle("HP↓")
-        case    3:
-            sortButton = sortButtonMakeInTitle("ATK↓")
-        case    4:
-            sortButton = sortButtonMakeInTitle("+換算↓")
-        default :
-            break
-        }
+        let conditionButton = UIBarButtonItem(title: "▼", style: .Done , target: self, action: "toggleConditionMenu:")
+        let searchButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchButtonTapped:")
+        defaultLeftButtons = [conditionButton, searchButton]
         
-        let leftButtons = [conditionButton, searchButton]
-        let rightButtons = [sortButton]
-        
-        let navigationItem = navigationBar!.items[0] as UINavigationItem
-        
-        navigationItem.leftBarButtonItems = leftButtons
-        navigationItem.titleView = nil
-        navigationItem.rightBarButtonItems = rightButtons
+        sortButtons.insert(sortButtonMakeInTitle("No順"), atIndex: 0)
+        sortButtons.insert(sortButtonMakeInTitle("No逆順"), atIndex: 1)
+        sortButtons.insert(sortButtonMakeInTitle("HP順"), atIndex: 2)
+        sortButtons.insert(sortButtonMakeInTitle("ATK順"), atIndex: 3)
+        sortButtons.insert(sortButtonMakeInTitle("+換算順"), atIndex: 4)
+        defaultRightButtons = [sortButtons[sortIndex]]
     }
     
-    func reloadList() {
+    func listSortAndReload() {
         sortAtIndex()
         tableView.reloadData()
-        println("TableView reloaded!")
+        println("UnitsTableView reloaded!")
     }
     
     func toggleConditionMenu(sender: UIButton) {
-        let stuBarHeight = UIApplication.sharedApplication().statusBarFrame.height
-        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        var insetTop: CGFloat?
+        var insetTop: CGFloat = 0
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        insetTop += stuBarHeight
+        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+            insetTop += navBarHeight
+        }
         if !conditionMenu!.isMenuOpen {
-            insetTop = stuBarHeight + navBarHeight! + self.conditionMenu!.menuHeight
+            insetTop += self.conditionMenu!.menuHeight
             conditionMenu!.toggleMenu(true)
         } else {
-            insetTop = stuBarHeight + navBarHeight!
+            insetTop += navigationBar!.bounds.height
             conditionMenu!.toggleMenu(false)
         }
         UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut,
             animations: {() in
-                self.tableView.contentInset.top = insetTop!
-                self.tableView.scrollIndicatorInsets.top = insetTop!
+                self.tableView.contentInset.top = insetTop
+                self.tableView.scrollIndicatorInsets.top = insetTop
             }, completion: nil)
     }
     
@@ -149,14 +155,6 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         default :
             break
         }
-    }
-    
-    func changeSortMode(index: Int) {
-        if sortIndex != index {
-            sortIndex = index
-        }
-        sortAtIndex()
-        reloadList()
     }
     
     func sortInNumUp() {
@@ -192,42 +190,49 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func sortUnits(sender: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: UIAlertControllerStyle.ActionSheet)
         let navigationItem = navigationBar!.items[0] as UINavigationItem
-        let numUpSort = UIAlertAction(title: "No↑", style: .Default,
+        let numUpSort = UIAlertAction(title: "No順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↑No]")
-                self.changeSortMode(0)
-                let sortButton = self.sortButtonMakeInTitle("No↑")
-                navigationItem.rightBarButtonItems?[0] = sortButton
+                self.sortIndex = 0
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+                self.listSortAndReload()
         })
-        let numDownSort = UIAlertAction(title: "No↓", style: .Default,
+        let numDownSort = UIAlertAction(title: "No逆順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓No]")
-                self.changeSortMode(1)
-                let sortButton = self.sortButtonMakeInTitle("No↓")
-                navigationItem.rightBarButtonItems?[0] = sortButton
+                self.sortIndex = 1
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+                self.listSortAndReload()
         })
-        let hpSort = UIAlertAction(title: "HP↓", style: .Default,
+        let hpSort = UIAlertAction(title: "HP順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓HP]")
-                self.changeSortMode(2)
-                let sortButton = self.sortButtonMakeInTitle("HP↓")
-                navigationItem.rightBarButtonItems?[0] = sortButton
+                self.sortIndex = 2
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+                self.listSortAndReload()
         })
-        let atkSort = UIAlertAction(title: "ATK↓", style: .Default,
+        let atkSort = UIAlertAction(title: "ATK順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓ATK]")
-                self.changeSortMode(3)
-                let sortButton = self.sortButtonMakeInTitle("ATK↓")
-                navigationItem.rightBarButtonItems?[0] = sortButton
+                self.sortIndex = 3
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+                self.listSortAndReload()
         })
-        let plusSort = UIAlertAction(title: "+換算↓", style: .Default,
+        let plusSort = UIAlertAction(title: "+換算順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓+換算]")
-                self.changeSortMode(4)
-                let sortButton = self.sortButtonMakeInTitle("+換算↓")
-                navigationItem.rightBarButtonItems?[0] = sortButton
+                self.sortIndex = 4
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+                self.listSortAndReload()
         })
-        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: nil)
+        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction!) in
+            println("sort[Cancel!]")
+        })
         actionSheet.addAction(numUpSort)
         actionSheet.addAction(numDownSort)
         actionSheet.addAction(hpSort)
@@ -242,50 +247,100 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         return sb
     }
     
-    func changeSearchMode(sender: UIButton) {
-        if isSearchMode == false {
-            isSearchMode = true
-            // SearchBar
-            var searchBar = UISearchBar()
-            searchBar.delegate = self
-            searchBar.showsCancelButton = false
-            searchBar.placeholder = "無英斧士ギンジ"
-            searchBar.barTintColor = UIColor.whiteColor()
-            searchBar.tintColor = accentColor
-            searchBar.searchBarStyle = UISearchBarStyle.Default
-            searchBar.frame.origin = CGPointMake(-150, 22)
-            var cancelButton = UIBarButtonItem(title: "戻る", style: .Plain, target: self, action: "changeSearchMode:")
-            
+    func searchButtonTapped(sender: UIBarButtonItem) {
+        setNavigationItem(true)
+    }
+    
+    func cancelSearchButtonTapped(sender: UIBarButtonItem) {
+        setNavigationItem(false)
+    }
+    
+    func setNavigationItem(willSearchMode: Bool) {
+        if willSearchMode {
+            println("search: \(willSearchMode)")
+            isSearchMode = willSearchMode
+            if searchBar == nil {
+                searchBar = UISearchBar()
+                searchBar!.frame.origin = CGPointMake(-150, 22)
+                searchBar!.delegate = self
+                searchBar!.showsCancelButton = false
+                searchBar!.placeholder = "無英斧士ギンジ"
+                searchBar!.barTintColor = UIColor.whiteColor()
+                searchBar!.tintColor = accentColor
+                searchBar!.searchBarStyle = UISearchBarStyle.Default
+            } else {
+                searchBar!.frame.origin = CGPointMake(-150, 0)
+            }
+            if cancelSearchButton == nil {
+                cancelSearchButton = UIBarButtonItem(title: "戻る", style: .Plain, target: self, action: "cancelSearchButtonTapped:")
+            }
             let navigationItem = navigationBar!.items[0] as UINavigationItem
             UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: nil,
-                animations: {
+                animations: {() in
                     navigationItem.leftBarButtonItems = nil
-                    navigationItem.titleView = searchBar
-                    navigationItem.rightBarButtonItems = [cancelButton]
+                    navigationItem.titleView = self.searchBar!
+                    navigationItem.rightBarButtonItem = self.cancelSearchButton!
                 }, completion: nil)
-            searchBar.becomeFirstResponder()
+            searchBar!.becomeFirstResponder()
+            tableView!.reloadData()
         } else {
-            isSearchMode = false
-            setUpNavigationItems()
+            println("search: \(willSearchMode)")
+            isSearchMode = willSearchMode
+            let navigationItem = navigationBar!.items[0] as UINavigationItem
+            navigationItem.leftBarButtonItems = defaultLeftButtons
+            navigationItem.titleView = nil
+            navigationItem.rightBarButtonItems = defaultRightButtons
+            tableView!.reloadData()
         }
     }
     
-    // 検索ボタンを押した時
+    
+    // MARK: - UISearchBarDelegate methods
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        
+    func filterContaintsWithSearchText(searchText: String) {
+        println("searchText: \(searchText)")
+        var predicates = [NSPredicate]()
+        predicates.append(NSPredicate(format: "name contains[cd] %@", searchText)!)
+        if let no = searchText.toInt() {
+            predicates.append(NSPredicate(format: "unit == %d", no)!)
+        }
+        let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
+        searchResultsList = (listUnits as NSArray).filteredArrayUsingPredicate(predicate) as [UnitsData]
     }
     
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        filterContaintsWithSearchText(searchText)
+        tableView!.reloadData()
+    }
+    
+    /*
+    // MARK: - UISearchDisplayDelegate methods
+    
+    func searchDisplayController(controller: UISearchDisplayController, shouldReloadTableForSearchString searchString: String!) -> Bool {
+        if searchString != "" {
+            filterContaintsWithSearchText(searchString)
+            tableView!.reloadData()
+            return true
+        } else {
+            return false
+        }
+    }
+    */
     
     // MARK: - UnitsConditionMenuDelegate methods
     
     func condMenuWillClose() {
-        let stuBarHeight = UIApplication.sharedApplication().statusBarFrame.height
-        let navBarHeight: CGFloat? = self.navigationController?.navigationBar.frame.size.height
-        let insetTop = stuBarHeight + navBarHeight! + navigationBar.bounds.height
+        var insetTop: CGFloat = 0
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        insetTop += stuBarHeight
+        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+            insetTop += navBarHeight
+        }
+        insetTop += navigationBar.bounds.height
         UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut,
             animations: {() in
                 self.tableView.contentInset.top = insetTop
@@ -321,7 +376,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             list = listUnits
         }
         
-        reloadList()
+        listSortAndReload()
     }
     
     
@@ -329,19 +384,31 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return list.count
+        if !isSearchMode {
+            // 通常時
+            return list.count
+        } else {
+            // 検索時
+            return searchResultsList.count
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
-        cell.setCell(list[indexPath.row])
+        if !isSearchMode {
+            // 通常時
+            cell.setCell(list[indexPath.row])
+        } else {
+            // 検索時
+            cell.setCell(searchResultsList[indexPath.row])
+        }
         return cell
     }
     
     
     // MARK: - UITableViewDelegate method
-    
+    /*
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
         var bounds = cell.bounds
@@ -352,5 +419,6 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.layoutIfNeeded()
         return cell.contentView.bounds.height
     }
+    */
     
 }

@@ -23,6 +23,9 @@ class NSConditionMenu: NSObject {
     let condMenuContainerView = UIView()
     var isMenuOpen: Bool = false
     var animator: UIDynamicAnimator!
+    
+    var valueChanged: Bool = false
+
     var condIndex: [Bool] = [false, false, false, false, false, false]
     var countIndex: [Bool] = [false, false, false, false, false]
     var panelIndex: [Int] = [0, 0, 0, 0, 0]   // 8進数で選択中のパネル条件を格納(5桁)
@@ -271,7 +274,7 @@ class NSConditionMenu: NSObject {
         println("Flame: \(selected)")
         condIndex[0] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func aquaSelected(sender: UIButton) {
@@ -280,7 +283,7 @@ class NSConditionMenu: NSObject {
         println("aqua: \(selected)")
         condIndex[1] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func windSelected(sender: UIButton) {
@@ -289,7 +292,7 @@ class NSConditionMenu: NSObject {
         println("Wind: \(selected)")
         condIndex[2] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func lightSelected(sender: UIButton) {
@@ -298,7 +301,7 @@ class NSConditionMenu: NSObject {
         println("Light: \(selected)")
         condIndex[3] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func darkSelected(sender: UIButton) {
@@ -307,7 +310,7 @@ class NSConditionMenu: NSObject {
         println("Dark: \(selected)")
         condIndex[4] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func noneSelected(sender: UIButton) {
@@ -316,7 +319,7 @@ class NSConditionMenu: NSObject {
         println("None: \(selected)")
         condIndex[5] = selected
         println("condIndex: \(condIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func count1Selected(sender: UIButton) {
@@ -325,7 +328,8 @@ class NSConditionMenu: NSObject {
         println("count1: \(selected)")
         countIndex[0] = selected
         println("countIndex: \(countIndex)")
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     
     func count2Selected(sender: UIButton) {
@@ -334,7 +338,8 @@ class NSConditionMenu: NSObject {
         println("count2: \(selected)")
         countIndex[1] = selected
         println("countIndex: \(countIndex)")
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     
     func count3Selected(sender: UIButton) {
@@ -343,7 +348,8 @@ class NSConditionMenu: NSObject {
         println("count3: \(selected)")
         countIndex[2] = selected
         println("countIndex: \(countIndex)")
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     
     func count4Selected(sender: UIButton) {
@@ -352,7 +358,8 @@ class NSConditionMenu: NSObject {
         println("count4: \(selected)")
         countIndex[3] = selected
         println("countIndex: \(countIndex)")
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     
     func count5Selected(sender: UIButton) {
@@ -361,14 +368,15 @@ class NSConditionMenu: NSObject {
         println("count5: \(selected)")
         countIndex[4] = selected
         println("countIndex: \(countIndex)")
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     func panel1Selected(sender: UIButton) {
         panelIndex[0] = (panelIndex[0] + 1) % 8
         println("panel1: \(panelIndex[0])")
         sender.setImage(panelImage[panelIndex[0]], forState: .Normal)
         println("panelIndex: \(panelIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func panel2Selected(sender: UIButton) {
@@ -376,7 +384,7 @@ class NSConditionMenu: NSObject {
         println("panel1: \(panelIndex[1])")
         sender.setImage(panelImage[panelIndex[1]], forState: .Normal)
         println("panelIndex: \(panelIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func panel3Selected(sender: UIButton) {
@@ -384,7 +392,7 @@ class NSConditionMenu: NSObject {
         println("panel1: \(panelIndex[2])")
         sender.setImage(panelImage[panelIndex[2]], forState: .Normal)
         println("panelIndex: \(panelIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func panel4Selected(sender: UIButton) {
@@ -392,7 +400,7 @@ class NSConditionMenu: NSObject {
         println("panel1: \(panelIndex[3])")
         sender.setImage(panelImage[panelIndex[3]], forState: .Normal)
         println("panelIndex: \(panelIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func panel5Selected(sender: UIButton) {
@@ -400,13 +408,13 @@ class NSConditionMenu: NSObject {
         println("panel1: \(panelIndex[4])")
         sender.setImage(panelImage[panelIndex[4]], forState: .Normal)
         println("panelIndex: \(panelIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func changeTypeIndex(sender: UISegmentedControl) {
         typeIndex = sender.selectedSegmentIndex
         println("typeIndex: \(typeIndex)")
-        sendListConditioning()
+        valueChanged = true
     }
     
     func decidePanelDisabled() -> Int {
@@ -449,12 +457,14 @@ class NSConditionMenu: NSObject {
     }
 
     func sendListConditioning() {
-        changePanelDisabled()
-        var panel = [0, 0, 0, 0, 0]
-        for i in 0..<decidePanelDisabled() {
-            panel[i] = panelIndex[i]
+        if valueChanged {
+            valueChanged = !valueChanged
+            var panel = [0, 0, 0, 0, 0]
+            for i in 0..<decidePanelDisabled() {
+                panel[i] = panelIndex[i]
+            }
+            delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelIndex: panel, typeIndex: typeIndex)
         }
-        delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelIndex: panel, typeIndex: typeIndex)
     }
     
     func clearButtonPushed(sender: UIButton) {
@@ -479,12 +489,14 @@ class NSConditionMenu: NSObject {
         panelIndex = [0, 0, 0, 0, 0]
         segConType!.selectedSegmentIndex = 0
         typeIndex = 0
-        sendListConditioning()
+        changePanelDisabled()
+        valueChanged = true
     }
     
     func doneButtonPushed(sender: UIButton) {
         delegate?.condMenuWillClose()
         toggleMenu(false)
+        sendListConditioning()
     }
     
     
@@ -494,6 +506,7 @@ class NSConditionMenu: NSObject {
         if gesture.direction == .Up {
             delegate?.condMenuWillClose()
             toggleMenu(false)
+            sendListConditioning()
         }
     }
     

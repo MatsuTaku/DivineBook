@@ -26,6 +26,8 @@ class UnitsConditionMenu: NSObject {
     var animator: UIDynamicAnimator!
     var delegate: UnitsConditionMenuDelegate?
     
+    var valueChanged: Bool = false
+    
     var condIndex: [Bool] = [false, false, false, false, false, false]
     var raceIndex: [Bool] = []  // 人間、ドラゴン、神、魔物、妖精、獣、機械、強化
     
@@ -207,7 +209,7 @@ class UnitsConditionMenu: NSObject {
         println("Flame: \(selected)")
         condIndex[0] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func aquaSelected(sender: UIButton) {
@@ -216,7 +218,7 @@ class UnitsConditionMenu: NSObject {
         println("Aqua: \(selected)")
         condIndex[1] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func windSelected(sender: UIButton) {
@@ -225,7 +227,7 @@ class UnitsConditionMenu: NSObject {
         println("Wind: \(selected)")
         condIndex[2] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func lightSelected(sender: UIButton) {
@@ -234,7 +236,7 @@ class UnitsConditionMenu: NSObject {
         println("Light: \(selected)")
         condIndex[3] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func darkSelected(sender: UIButton) {
@@ -243,7 +245,7 @@ class UnitsConditionMenu: NSObject {
         println("Dark: \(selected)")
         condIndex[4] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func noneSelected(sender: UIButton) {
@@ -252,7 +254,7 @@ class UnitsConditionMenu: NSObject {
         println("None: \(selected)")
         condIndex[5] = selected
         println("condIndex: \(condIndex)")
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func clearButtonPushed(sender: UIButton) {
@@ -263,12 +265,16 @@ class UnitsConditionMenu: NSObject {
         dark!.selected = false
         none!.selected = false
         condIndex = [false, false, false, false, false, false]
-        delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        valueChanged = true
     }
     
     func doneButtonPushed(sender: UIButton) {
         delegate?.condMenuWillClose()
         toggleMenu(false)
+        if valueChanged {
+            valueChanged = !valueChanged
+            delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        }
     }
     
     
@@ -278,6 +284,10 @@ class UnitsConditionMenu: NSObject {
         if gesture.direction == .Up {
             delegate?.condMenuWillClose()
             toggleMenu(false)
+            if valueChanged {
+                valueChanged = !valueChanged
+                delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+            }
         }
     }
     

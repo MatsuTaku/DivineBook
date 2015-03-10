@@ -1,9 +1,13 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '7.1'
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.1'
+use_frameworks!
 
 target 'DivineGateDB' do
 pod 'NTYCSVTable'
 pod 'CMPopTipView'
+pod 'PageMenu', :git => "https://github.com/uacaps/PageMenu.git"
+pod 'RAMAnimatedTabBarController', :git => "https://github.com/Ramotion/animated-tab-bar"
 
 end
 

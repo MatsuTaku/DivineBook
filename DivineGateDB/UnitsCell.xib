@@ -29,10 +29,10 @@
                             <constraint firstAttribute="height" constant="1" id="tXi-HR-lH4"/>
                         </constraints>
                     </imageView>
-                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kcT-7b-nMm">
+                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="kcT-7b-nMm">
                         <rect key="frame" x="0.0" y="1" width="52" height="52"/>
-                        <color key="backgroundColor" red="0.38823529410000002" green="0.031372549020000001" blue="0.51764705879999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="height" constant="52" id="9MM-xX-juA"/>
                             <constraint firstAttribute="width" constant="53" id="Zfd-X1-qev"/>
                             <constraint firstAttribute="width" secondItem="kcT-7b-nMm" secondAttribute="height" multiplier="1:1" id="xIT-86-YFk"/>
                             <constraint firstAttribute="height" constant="53" id="yir-22-MmJ"/>
@@ -44,13 +44,13 @@
                             </mask>
                         </variation>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.20000000000000007" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★★★★★★★" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcB-im-fvl">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="★★★★★★★" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcB-im-fvl">
                         <rect key="frame" x="56" y="1" width="256" height="40"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="lGX-Nz-7MT"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="60"/>
-                        <color key="textColor" red="1" green="0.82785183566433551" blue="0.61841673951048948" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.82745098039215681" blue="0.61960784313725492" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -247,4 +247,7 @@
             <point key="canvasLocation" x="310" y="355.5"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="empty-icon.png" width="82" height="82"/>
+    </resources>
 </document>

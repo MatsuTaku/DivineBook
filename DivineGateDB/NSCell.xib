@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -30,7 +29,7 @@
                             <constraint firstAttribute="height" constant="1" id="gd4-0j-aSD"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.39999999999999963" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ATK" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="64" translatesAutoresizingMaskIntoConstraints="NO" id="wVc-KW-f9a">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ATK" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="64" translatesAutoresizingMaskIntoConstraints="NO" id="wVc-KW-f9a">
                         <rect key="frame" x="144" y="40" width="28" height="18"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="64" id="Efk-oc-mDp"/>
@@ -38,7 +37,7 @@
                             <constraint firstAttribute="width" constant="70" id="y0O-26-CvJ"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="15"/>
-                        <color key="textColor" red="1" green="0.69803921568627447" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.69803921568627447" blue="0.70196078431372544" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -48,7 +47,7 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.39999999999999963" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="136" translatesAutoresizingMaskIntoConstraints="NO" id="yBo-ML-d78">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="136" translatesAutoresizingMaskIntoConstraints="NO" id="yBo-ML-d78">
                         <rect key="frame" x="8" y="20" width="136" height="38"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="38" id="4aX-lK-gEv"/>
@@ -58,7 +57,7 @@
                             <constraint firstAttribute="height" constant="32" id="l8G-IW-4at"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="45"/>
-                        <color key="textColor" red="1" green="0.67272180944055948" blue="0.69670563811188813" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.67272180944055948" blue="0.69670563811188813" alpha="0.40000000000000002" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -68,14 +67,14 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CRT" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="28" translatesAutoresizingMaskIntoConstraints="NO" id="iNe-wn-0bY">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CRT" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="28" translatesAutoresizingMaskIntoConstraints="NO" id="iNe-wn-0bY">
                         <rect key="frame" x="248" y="41" width="28" height="17"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="70" id="SwV-Ma-iGL"/>
                             <constraint firstAttribute="height" constant="17" id="pQd-OI-Rj4"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="15"/>
-                        <color key="textColor" red="1" green="0.84844842657342656" blue="0.70137674829999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.84844842657342656" blue="0.70137674829999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -83,7 +82,7 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" alpha="0.59999999999999964" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="38" translatesAutoresizingMaskIntoConstraints="NO" id="Jv7-Od-a0x">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00%" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="38" translatesAutoresizingMaskIntoConstraints="NO" id="Jv7-Od-a0x">
                         <rect key="frame" x="210" y="37" width="38" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="34" id="CBW-c6-NOB"/>
@@ -91,7 +90,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="38" id="vxt-x8-v2r"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="21"/>
-                        <color key="textColor" red="1" green="0.84844842659999997" blue="0.70137674829999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="1" green="0.84844842659999997" blue="0.70137674829999996" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
@@ -221,15 +220,14 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="CcM-Cm-XYv"/>
-                                <exclude reference="qVs-gC-KoI"/>
                                 <exclude reference="OF1-7x-MBI"/>
                                 <exclude reference="R2t-q5-ckY"/>
+                                <exclude reference="qVs-gC-KoI"/>
                             </mask>
                         </variation>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iqD-GR-meQ">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="iqD-GR-meQ">
                         <rect key="frame" x="284" y="22" width="36" height="36"/>
-                        <color key="backgroundColor" red="0.38823529410000002" green="0.031372549020000001" blue="0.51764705879999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="iqD-GR-meQ" secondAttribute="height" multiplier="1:1" constant="1" id="8FT-bh-YXF"/>
                             <constraint firstAttribute="height" constant="36" id="jqf-fy-2Uq"/>
@@ -421,6 +419,7 @@
     <resources>
         <image name="aqua.png" width="128" height="128"/>
         <image name="dark.png" width="128" height="128"/>
+        <image name="empty-icon.png" width="82" height="82"/>
         <image name="flame.png" width="128" height="128"/>
         <image name="light.png" width="128" height="128"/>
         <image name="wind.png" width="128" height="128"/>
