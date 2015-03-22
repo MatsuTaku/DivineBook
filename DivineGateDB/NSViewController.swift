@@ -10,17 +10,17 @@
 import UIKit
 import CoreData
 import CMPopTipView
+import SVProgressHUD
+import MBProgressHUD
 
-protocol NSViewControllerDelegate {
-    func setUpNSList() -> [NSData]
-}
-
-class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NSConditionMenuDelegate, CMPopTipViewDelegate {
-    
-    var delegate: NSViewControllerDelegate?
+class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NSConditionMenuDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var passiveButton: UIButton!
+    @IBOutlet weak var plusButton: UIButton!
+    @IBOutlet weak var crtButton: UIButton!
+    @IBOutlet weak var aveButton: UIButton!
     
     var conditionMenu: NSConditionMenu?
     var sortButtons = [UIBarButtonItem]()
@@ -29,15 +29,18 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     var searchBar: UISearchBar?
     var cancelSearchButton: UIBarButtonItem?
     
-    var listNS: [NSData] = [NSData]()
-    var list: [NSData] = [NSData]()
-    var searchResultsList = [NSData]()
+    var nsTable: NSTable?
+    var currentArray = [NS]()
+    var filteredArray = [NS]()
     
+    var isPassiveMode: Bool = false
     var isSearchMode: Bool = false
     var isPlusMode: Bool = false
     var isCRTMode: Bool = true
     var isAveMode: Bool = true
-    var sortIndex: Int = 2  // 2: ATK, 3: Panels, 4: CRT, 0,1: Unit
+    var sortIndex: Int = 0  // 2: ATK, 3: Panels, 4: CRT, 0,1: Unit
+    
+    var isLoading: Bool = false
     
     let accentColor = UIColor(red: 0.7, green: 0.1, blue: 0.8, alpha: 1)
     
@@ -46,40 +49,54 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         
         // Do any additional setup after loading the view.
         
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = UITableViewAutomaticDimension
-        
-        let nib = UINib(nibName: "NSCell", bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: "NSCell")
-        tableView.estimatedRowHeight = 60   // xib上の高さ
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.bounds = self.view.bounds
-        
-        var insetTop: CGFloat = 0
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        insetTop += stuBarHeight
-        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
-            insetTop += navBarHeight
-        }
-        insetTop += navigationBar.bounds.height
-        tableView.contentInset.top = insetTop
-        tableView.scrollIndicatorInsets.top = insetTop
-
-        if let del = delegate {
-            listNS = del.setUpNSList()
-        }
-        list = listNS
-        changeValueAndListSortAndReload()
-        
         // Set up views
+        setUpTableView()
         setUpNavigationItems()
-        setNavigationItem(false)
+        switchSearchMode(false)
         
         // conditionMenu
         conditionMenu = NSConditionMenu(sourceView: self.view)
         conditionMenu!.delegate = self
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if nsTable == nil {
+            if !isLoading {
+                isLoading = true
+//                SVProgressHUD.showWithStatus("少しだけ待ってぼん", maskType: .Clear)
+                let showHud: MBProgressHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                showHud.dimBackground = true
+                showHud.labelText = "少しだけ待ってぼん"
+                dispatch_async_global {
+                    self.nsTable = NSTable()
+                    self.dispatch_async_main {
+                        if self.nsTable != nil {
+//                            SVProgressHUD.dismiss()
+                            self.currentArray = self.nsTable!.rows
+                            self.reloadList()
+                        } else {
+                            self.isLoading = false
+//                            SVProgressHUD.showErrorWithStatus("ERROR!")
+                            MBProgressHUD.hideHUDForView(self.view, animated: true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if conditionMenu!.isMenuOpen {
+            condMenuWillClose()
+            conditionMenu!.toggleMenu(false)
+            SVProgressHUD.popActivity()
+        }
+        if isSearchMode {
+            switchSearchMode(false)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -90,7 +107,17 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    // MARK: - GCD
+    
+    func dispatch_async_main(block: () -> ()) {
+        dispatch_async(dispatch_get_main_queue(), block)
+    }
+    
+    func dispatch_async_global(block: () -> ()) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
+    }
+    
     
     /*
     // MARK: - Navigation
@@ -106,6 +133,32 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     
     // MARK: - Set up navigation items
     
+    func setUpTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+        let nib = UINib(nibName: "NSCell", bundle: nil)
+        tableView.registerNib(nib, forCellReuseIdentifier: "NSCell")
+        tableView.estimatedRowHeight = 60   // xib上の高さ
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.bounds = self.view.bounds
+        
+        var inset = tableView.contentInset
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        inset.top += stuBarHeight
+        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+            inset.top += navBarHeight
+        }
+        inset.top += navigationBar.bounds.height
+        if let insetBottom: CGFloat = self.tabBarController?.tabBar.frame.height {
+            inset.bottom += insetBottom
+        }
+        tableView.scrollIndicatorInsets = inset
+        inset.bottom += passiveButton.bounds.height + 3
+        tableView.contentInset = inset
+    }
+    
     func setUpNavigationItems() {
         let conditionButton = UIBarButtonItem(title: "▼", style: .Done , target: self, action: "toggleConditionMenu:")
         let searchButton = UIBarButtonItem(barButtonSystemItem: .Search, target: self, action: "searchButtonTapped:")
@@ -113,11 +166,12 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         
         sortButtons.insert(sortButtonMakeInTitle("No順"), atIndex: 0)
         sortButtons.insert(sortButtonMakeInTitle("No逆順"), atIndex: 1)
-        sortButtons.insert(sortButtonMakeInTitle("ATK順"), atIndex: 2)
+        sortButtons.insert(sortButtonMakeInTitle("数値順"), atIndex: 2)
         sortButtons.insert(sortButtonMakeInTitle("パネル数順"), atIndex: 3)
         sortButtons.insert(sortButtonMakeInTitle("CRT順"), atIndex: 4)
         
         // ※３ボタンを下部Viewに移行し、長押し処理を追加 {
+        /*
         let plusButton = UIBarButtonItem(title: "+99", style: .Done, target: self, action: "changePlus:")
         plusButton.tintColor = isPlusMode ? accentColor : UIColor.grayColor()
         let crtButton = UIBarButtonItem(title: "CRT", style: .Done, target: self, action: "changeCRT:")
@@ -128,13 +182,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         let plusLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressPlusButton:")
         let crtLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressCRTButton:")
         let aveLongGesture = UILongPressGestureRecognizer(target: self, action: "longPressAveButton:")
+        */
         
         // addGestureRecongnizer methods
         // }
         
-        defaultRightButtons = [sortButtons[sortIndex], aveButton, crtButton, plusButton]
+//        defaultRightButtons = [sortButtons[sortIndex], aveButton, crtButton, plusButton]
+        defaultRightButtons = [sortButtons[sortIndex]]
+        
+        passiveButton.selected = isPassiveMode
+        plusButton.selected = isPlusMode
+        crtButton.selected = isCRTMode
+        aveButton.selected = isAveMode
     }
     
+    /*
     func longPressPlusButton(sender: UIButton) {
         let plusPop = CMPopTipView(message: "攻撃に＋９９を振った状態の値を計算します")
         plusPop.delegate = self
@@ -152,66 +214,69 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         avePop.delegate = self
         avePop.presentPointingAtView(sender, inView: self.view, animated: true)
     }
+    */
     
-    func changeValueAndListSortAndReload() {
-        // Cell表示内容の変更
-        changeValue()
-        // リストソート
-        sortAtIndex()
-        // TableViewの更新
-        tableView!.reloadData()
-        println("NSTableView reloaded!!")
+    func reloadList() {
+        if !isLoading {
+            isLoading = true
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        }
+        dispatch_async_global {
+            // Cell表示内容の変更
+            self.changeValue()
+            // リストソート
+            self.sortAtIndex()
+            self.dispatch_async_main {
+                self.isLoading = false
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+                // TableViewの更新
+                self.tableView!.reloadData()
+                println("NSTableView reloaded!!")
+            }
+        }
     }
     
-    func toggleConditionMenu(sender: UIButton) {
-        var insetTop: CGFloat = 0
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        insetTop += stuBarHeight
-        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
-            insetTop += navBarHeight
-        }
-        if !conditionMenu!.isMenuOpen { // show
-            insetTop += self.conditionMenu!.menuHeight
-            conditionMenu!.toggleMenu(true)
-        } else {                        // hide
-            insetTop += navigationBar.bounds.height
-            conditionMenu!.toggleMenu(false)
-        }
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut,
-            animations: {() in
-                self.tableView.contentInset.top = insetTop
-                self.tableView.scrollIndicatorInsets.top = insetTop
-            }, completion: nil)
+    func toggleConditionMenu(button: UIBarButtonItem) {
+        conditionMenu!.toggleMenu()
+    }
+    
+    @IBAction func changePassive(sender: UIButton) {
+        isPassiveMode = !isPassiveMode
+        passiveButton.selected = isPassiveMode
     }
     
     func changeValue() {
-        for ns in list {
-            ns.value = Double(isPlusMode ? ns.attack+99*5*ns.leverage : ns.attack) * Double(isCRTMode ? 1+ns.critical()/2 : 1) / Double(isAveMode ? ns.panels() : 1)
+        for ns in currentArray {
+            // change value method
+            ns.changeValue(plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         }
     }
     
-    func changePlus(sender: UIButton) {
-        isPlusMode = isPlusMode ? false : true
+    @IBAction func changePlus(sender: UIButton) {
+        isPlusMode = !isPlusMode
+        sender.selected = isPlusMode
+        reloadList()
         println("isPlusMode: \(isPlusMode)")
         println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isPlusMode == true ? accentColor : UIColor.grayColor()
-        changeValueAndListSortAndReload()
     }
     
-    func changeCRT(sender: UIButton) {
-        isCRTMode = isCRTMode ? false : true
+    @IBAction func changeCRT(sender: UIButton) {
+        isCRTMode = !isCRTMode
+        sender.selected = isCRTMode
+        reloadList()
         println("isCRTMode: \(isCRTMode)")
         println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isCRTMode == true ? accentColor : UIColor.grayColor()
-        changeValueAndListSortAndReload()
     }
     
-    func changeAve(sender: UIButton) {
-        isAveMode = isAveMode ? false : true
+    @IBAction func changeAve(sender: UIButton) {
+        isAveMode = !isAveMode
+        sender.selected = isAveMode
+        reloadList()
         println("isAveMode: \(isAveMode)")
         println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isAveMode == true ? accentColor : UIColor.grayColor()
-        changeValueAndListSortAndReload()
     }
     
     func sortAtIndex() {
@@ -232,45 +297,48 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func sortInUnit() {
-        list.sort { (h: NSData, b: NSData) in
-            h.unit != b.unit ? h.unit < b.unit
+        currentArray.sort {(h: NS, b: NS) in
+            h.No != b.No ? h.No < b.No
                 : h.number < b.number
         }
     }
     
     func sortInUnitDown() {
-        list.sort { (h: NSData, b: NSData) in
-            h.unit != b.unit ? h.unit > b.unit
+        currentArray.sort {(h: NS, b: NS) in
+            h.No != b.No ? h.No > b.No
                 : h.number < b.number
         }
     }
     
     func sortInValue() {
-        list.sort { (h: NSData, b: NSData) in
+        currentArray.sort { (h: NS, b: NS) in
             h.value != b.value ? h.value > b.value
-                : h.panels() != b.panels() ? h.panels() < b.panels()
-                : h.unit != b.unit ? h.unit < b.unit
+                : h.panels != b.panels ? h.panels < b.panels
+                : h.No != b.No ? h.No < b.No
                 : h.number < b.number
         }
     }
     
     func sortInPanels() {
-        list.sort { (h: NSData, b: NSData) in
-            h.panels() != b.panels() ? h.panels() < b.panels()
+        currentArray.sort {(h: NS, b: NS) in
+            h.panels != b.panels ? h.panels < b.panels
                 : h.value != b.value ? h.value > b.value
-                : h.unit != b.unit ? h.unit < b.unit
+                : h.No != b.No ? h.No < b.No
                 : h.number < b.number
         }
     }
     
     func sortInCRT() {
-        list.sort { (h: NSData, b: NSData) in
-            h.critical() != b.critical() ? h.critical() > b.critical()
-                : h.value != b.value ? h.value > b.value
-                : h.panels() != b.panels() ? h.panels() < b.panels()
-                : h.unit != b.unit ? h.unit < b.unit
+        currentArray.sort {(h: NS, b: NS) in
+            h.critical != b.critical ? h.critical > b.critical
+                : h.No != b.No ? h.No < b.No
                 : h.number < b.number
         }
+    }
+    
+    func reloadListInSortAt(sortIndex: Int) {
+        self.sortIndex = sortIndex
+        reloadList()
     }
     
     func sortNS(sender: UIButton) {
@@ -279,44 +347,37 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         let NoSort = UIAlertAction(title: "No順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[No↑]")
-                self.sortIndex = 0
+                self.reloadListInSortAt(0)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
-                self.changeValueAndListSortAndReload()
         })
         let NoDownSort = UIAlertAction(title: "No逆順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[No↓]")
-                self.sortIndex = 1
+                self.reloadListInSortAt(1)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
-                self.changeValueAndListSortAndReload()
         })
-        let ATKSort = UIAlertAction(title: "攻撃力期待値順", style: .Default,
+        let ATKSort = UIAlertAction(title: "数値順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[ATK↓]")
-                self.sortIndex = 2
+                self.reloadListInSortAt(2)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
-                self.changeValueAndListSortAndReload()
         })
-        /*
         let PanelSort = UIAlertAction(title: "パネル数順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[Panels↑]")
-                self.sortIndex = 3
+                self.reloadListInSortAt(3)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
-                self.changeValueAndListSortAndReload()
         })
-        */
         let CRTSort = UIAlertAction(title: "クリティカル率順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[CRT↓]")
-                self.sortIndex = 4
+                self.reloadListInSortAt(4)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
-                self.changeValueAndListSortAndReload()
         })
         let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction!) in
             println("sort[Cancel!]")
@@ -329,21 +390,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         actionSheet.addAction(cancel)
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
-
+    
     func sortButtonMakeInTitle(title: String) -> UIBarButtonItem {
         let sb = UIBarButtonItem(title: title, style: .Plain, target: self, action: "sortNS:")
         return sb
     }
     
     func searchButtonTapped(sender: UIBarButtonItem) {
-        setNavigationItem(true)
+        switchSearchMode(true)
     }
     
     func cancelSearchButtonTapped(sender: UIBarButtonItem) {
-        setNavigationItem(false)
+        switchSearchMode(false)
     }
-    
-    func setNavigationItem(willSearchMode: Bool) {
+
+    func switchSearchMode(willSearchMode: Bool) {
         if willSearchMode {
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
@@ -352,7 +413,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 searchBar!.frame.origin = CGPointMake(-150, 22)
                 searchBar!.delegate = self
                 searchBar!.showsCancelButton = false
-                searchBar!.placeholder = "インフィニティ・リバース"
+                searchBar!.placeholder = "例：インフィニティ、ギンジ、899"
                 searchBar!.barTintColor = UIColor.whiteColor()
                 searchBar!.tintColor = accentColor
                 searchBar!.searchBarStyle = UISearchBarStyle.Default
@@ -376,10 +437,10 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
             let navItem = navigationBar!.items[0] as UINavigationItem
-            navItem.leftBarButtonItems = defaultLeftButtons
+            navItem.leftBarButtonItems = self.defaultLeftButtons
             navItem.titleView = nil
-            navItem.rightBarButtonItems = defaultRightButtons
-            tableView!.reloadData()
+            navItem.rightBarButtonItems = self.defaultRightButtons
+            self.tableView!.reloadData()
         }
     }
     
@@ -395,8 +456,11 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "unitsName contains[cd] %@", searchText)!)
         predicates.append(NSPredicate(format: "name contains[cd] %@", searchText)!)
+        if let num = searchText.toInt() {
+            predicates.append(NSPredicate(format: "showNo == %d", num)!)
+        }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
-        searchResultsList = (listNS as NSArray).filteredArrayUsingPredicate(predicate) as [NSData]
+        filteredArray = (nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [NS]
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -408,6 +472,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     // MARK: - NSConditionMenuDelegate methods
     
     func condMenuWillClose() {
+        /*
         var insetTop: CGFloat = 0
         let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
         insetTop += stuBarHeight
@@ -420,88 +485,98 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 self.tableView.contentInset.top = insetTop
                 self.tableView.scrollIndicatorInsets.top = insetTop
             } , completion: nil)
+        */
     }
-
+    
     // 絞込処理
     func listConditioning(#condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int) {
-        
-        var predicates = [NSPredicate]()
-        
-        // 属性条件
-        if condIndex != [false, false, false, false, false, false] {
-            var energyArray = [NSPredicate]()
-            for i in 0..<condIndex.count {
-                if condIndex[i] == true {
-                    energyArray.append(NSPredicate(format: "element == %d", i + 1)!)
-                }
-            }
-            let energyPre = NSCompoundPredicate(type: .OrPredicateType, subpredicates: energyArray)
-            predicates.append(energyPre)
-        }
-        
-        // 対象条件
-        var typePre: NSPredicate?
-        if typeIndex != 0 {
-            switch typeIndex {
-            case    0:  // ALL
-                break
-            case    1:  // ATK
-                typePre = NSPredicate(format: "target == %d OR target == %d", 1, 2)
-            case    2:  // ATK:単体
-                typePre = NSPredicate(format: "target == %d", 1)
-            case    3:  // ATK:全体
-                typePre = NSPredicate(format: "target == %d", 2)
-            case    4:  // HEAL
-                typePre = NSPredicate(format: "target == %d", 0)
-            default :
-                break
-            }
-        }
-        if typePre != nil {
-            predicates.append(typePre!)
-        }
-        
-        if predicates != [] {
-            let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
-            println(predicate)
-            list = (listNS as NSArray).filteredArrayUsingPredicate(predicate) as [NSData]
-        } else {
-            list = listNS
-        }
-        
-        // パネル数条件
-        if countIndex != [false, false, false, false, false] {
-            var li = [NSData]()
-            for ns in list {
-                if countIndex[ns.panels() - 1] {
-                    li.append(ns)
-                }
-            }
-            list = li
-        }
-        
-        // パネル条件
-        if panelIndex != [0, 0, 0, 0, 0] {
-            var li = [NSData]()
-            var cond = [0, 0, 0, 0, 0, 0, 0, 0]
-            for p in panelIndex {
-                cond[p]++
-            }
-            for ns in list {
-                var bool: Bool = true
-                for i in 1..<cond.count {   // 1..<8    0=empty
-                    if ns.condition()[i] < cond[i] {
-                        bool = false
+        isLoading = true
+        let showHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        showHud.labelText = "検索中だぼん"
+        dispatch_async_global {
+            var predicates = [NSPredicate]()
+            
+            // 属性条件
+            if condIndex != [false, false, false, false, false, false] {
+                var energyArray = [NSPredicate]()
+                for i in 0..<condIndex.count {
+                    if condIndex[i] == true {
+                        energyArray.append(NSPredicate(format: "element == %d", i + 1)!)
                     }
                 }
-                if bool {
-                    li.append(ns)
+                let energyPre = NSCompoundPredicate(type: .OrPredicateType, subpredicates: energyArray)
+                predicates.append(energyPre)
+            }
+            
+            // 対象条件
+            var typePre: NSPredicate?
+            if typeIndex != 0 {
+                switch typeIndex {
+                case    0:  // ALL
+                    break
+                case    1:  // ATK
+                    typePre = NSPredicate(format: "target == %d OR target == %d", 1, 2)
+                case    2:  // ATK:単体
+                    typePre = NSPredicate(format: "target == %d", 1)
+                case    3:  // ATK:全体
+                    typePre = NSPredicate(format: "target == %d", 2)
+                case    4:  // HEAL
+                    typePre = NSPredicate(format: "target == %d", 0)
+                default :
+                    break
                 }
             }
-            list = li
+            if typePre != nil {
+                predicates.append(typePre!)
+            }
+            
+            if predicates != [] {
+                let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
+                println(predicate)
+                //            list = (listNS as NSArray).filteredArrayUsingPredicate(predicate) as [NSData]
+                self.currentArray = (self.nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [NS]
+            } else {
+                //            list = listNS
+                self.currentArray = self.nsTable!.rows
+            }
+            
+            // パネル数条件
+            if countIndex != [false, false, false, false, false] {
+                //            var li = [NSData]()
+                var list = [NS]()
+                for ns in self.currentArray {
+                    if countIndex[ns.panels - 1] {
+                        list.append(ns)
+                    }
+                }
+                self.currentArray = list
+            }
+            
+            // パネル条件
+            if panelIndex != [0, 0, 0, 0, 0] {
+                var list = [NS]()
+                var cond = [0, 0, 0, 0, 0, 0, 0, 0]
+                for p in panelIndex {
+                    cond[p]++
+                }
+                for ns in self.currentArray {
+                    var isMatch: Bool = true
+                    for i in 1..<cond.count {   // 1..<8    0=empty
+                        if ns.condition()[i] < cond[i] {
+                            isMatch = false
+                        }
+                    }
+                    if isMatch {
+                        list.append(ns)
+                    }
+                }
+                self.currentArray = list
+            }
+            
+            self.dispatch_async_main {
+                self.reloadList()
+            }
         }
-        
-        changeValueAndListSortAndReload()
     }
     
     
@@ -517,47 +592,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if !isSearchMode {
             // 通常時
-            return list.count
+            return currentArray.count
         } else {
             // 検索時
-            return searchResultsList.count
+            return filteredArray.count
         }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
-        let ns = !isSearchMode ? list[indexPath.row] : searchResultsList[indexPath.row]
-        !isPlusMode ?
-            !isCRTMode ?
-                !isAveMode ?
-                    cell.setCell(ns)
-                    : cell.setOneCell(ns)
-                : !isAveMode ?
-                    cell.setStatisticsCell(ns)
-                    : cell.setOneStatisticsCell(ns)
-            : !isCRTMode ?
-                !isAveMode ?
-                    cell.setPlusCell(ns)
-                    : cell.setOnePlusCell(ns)
-                : !isAveMode ?
-                    cell.setStatisticsPlusCell(ns)
-                    : cell.setOneStatisticsPlusCell(ns)
+        let ns = !isSearchMode ? currentArray[indexPath.row] : filteredArray[indexPath.row]
+        cell.setCell(ns, plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         
         return cell
     }
     
     // MARK: - UITableViewDelegate method
-    /*
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
-        var bounds = cell.bounds
-        bounds.size.width = tableView.bounds.width
-        cell.bounds = bounds
-        
-        cell.setNeedsLayout()
-        cell.layoutIfNeeded()
-        return cell.contentView.bounds.height
-    }
-    */
     
 }

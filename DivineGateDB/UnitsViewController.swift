@@ -8,14 +8,10 @@
 
 import UIKit
 import CoreData
-
-protocol UnitsViewControllerDelegate  {
-    func setUpUnitsList() -> [UnitsData]
-}
+import SVProgressHUD
+import MBProgressHUD
 
 class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UnitsConditionMenuDelegate {
-    
-    var delegate: UnitsViewControllerDelegate?
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
@@ -25,15 +21,16 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     var defaultLeftButtons = [UIBarButtonItem]()
     var defaultRightButtons = [UIBarButtonItem]()
     var searchBar: UISearchBar?
-//    var unitsSearchDisplayController: UISearchDisplayController?
     var cancelSearchButton: UIBarButtonItem?
     
-    var listUnits = [UnitsData]()
-    var list = [UnitsData]()
-    var searchResultsList = [UnitsData]()
+    var unitsTable: UnitsTable?
+    var currentArray = [Unit]()
+    var filteredArray = [Unit]()
     
     var isSearchMode: Bool = false
-    var sortIndex: Int = 0 // 0: ↑num, 1: ↓num, 2: hp, 3: atk, 4: plus
+    var sortIndex: Int = 0 // 0: ↑num, 1: ↓num, 2: hp, 3: atk, 4: plus, 5: all
+    
+    var isLoading: Bool = false
     
     let accentColor = UIColor(red: 0.7, green: 0.1, blue: 0.8, alpha: 1)
     
@@ -41,39 +38,53 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        var nib = UINib(nibName: "UnitsCell", bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: "UnitCell")
-        tableView.estimatedRowHeight = 55.0
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.bounds = self.view.bounds
-        
-        var insetTop: CGFloat = 0
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        insetTop += stuBarHeight
-        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
-            insetTop += navBarHeight
-        }
-        insetTop += navigationBar.bounds.height
-        tableView.contentInset.top = insetTop
-        tableView.scrollIndicatorInsets.top = insetTop
-        
-        if let del = delegate {
-            listUnits = del.setUpUnitsList()
-        }
-        list = listUnits
-        listSortAndReload()
-        
+
         // Set up views
+        setUpTableView()
         setUpNavigationItems()
-        setNavigationItem(false)
+        switchSearchMode(false)
         
         conditionMenu = UnitsConditionMenu(sourceView: self.view)
         conditionMenu!.delegate = self
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if unitsTable == nil {
+            if !isLoading {
+                isLoading = true
+//                SVProgressHUD.showWithMaskType(.Clear)
+                let showHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                showHUD.dimBackground = true
+                dispatch_async_global {
+                    self.unitsTable = UnitsTable()
+                    self.dispatch_async_main {
+                        if self.unitsTable != nil {
+//                            SVProgressHUD.dismiss()
+                            self.currentArray = self.unitsTable!.rows
+                            self.reloadList()
+                        } else {
+                            self.isLoading = false
+//                            SVProgressHUD.showErrorWithStatus("ERROR!")
+                            MBProgressHUD.hideHUDForView(self.view, animated: true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        if conditionMenu!.isMenuOpen {
+            condMenuWillClose()
+            conditionMenu!.toggleMenu(false)
+//            SVProgressHUD.popActivity()
+        }
+        if isSearchMode {
+            switchSearchMode(false)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -83,6 +94,16 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - GCD
+    
+    func dispatch_async_main(block: () -> ()) {
+        dispatch_async(dispatch_get_main_queue(), block)
+    }
+    
+    func dispatch_async_global(block: () -> ()) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block)
     }
     
     
@@ -99,6 +120,30 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // Set up navigation items
     
+    func setUpTableView() {
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        var nib = UINib(nibName: "UnitsCell", bundle: nil)
+        tableView.registerNib(nib, forCellReuseIdentifier: "UnitCell")
+        tableView.estimatedRowHeight = 55.0
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.bounds = self.view.bounds
+        
+        var inset = tableView.contentInset
+        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
+        inset.top += stuBarHeight
+        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
+            inset.top += navBarHeight
+        }
+        inset.top += navigationBar.bounds.height
+        if let insetBottom: CGFloat = self.tabBarController?.tabBar.frame.height {
+            inset.bottom = insetBottom
+        }
+        tableView.contentInset = inset
+        tableView.scrollIndicatorInsets = inset
+    }
+    
     func setUpNavigationItems() {
         // ButtonItems
         let conditionButton = UIBarButtonItem(title: "▼", style: .Done , target: self, action: "toggleConditionMenu:")
@@ -110,34 +155,33 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         sortButtons.insert(sortButtonMakeInTitle("HP順"), atIndex: 2)
         sortButtons.insert(sortButtonMakeInTitle("ATK順"), atIndex: 3)
         sortButtons.insert(sortButtonMakeInTitle("+換算順"), atIndex: 4)
+        sortButtons.insert(sortButtonMakeInTitle("HP+ATK順"), atIndex: 5)
         defaultRightButtons = [sortButtons[sortIndex]]
     }
     
-    func listSortAndReload() {
-        sortAtIndex()
-        tableView.reloadData()
-        println("UnitsTableView reloaded!")
+    func sortButtonMakeInTitle(title: String) -> UIBarButtonItem {
+        let sb = UIBarButtonItem(title: title, style: .Bordered, target: self, action: "sortUnits:")
+        return sb
     }
     
-    func toggleConditionMenu(sender: UIButton) {
-        var insetTop: CGFloat = 0
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        insetTop += stuBarHeight
-        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
-            insetTop += navBarHeight
+    func reloadList() {
+        if !isLoading {
+            isLoading = true
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         }
-        if !conditionMenu!.isMenuOpen {
-            insetTop += self.conditionMenu!.menuHeight
-            conditionMenu!.toggleMenu(true)
-        } else {
-            insetTop += navigationBar!.bounds.height
-            conditionMenu!.toggleMenu(false)
+        dispatch_async_global {
+            self.sortAtIndex()
+            self.dispatch_async_main {
+                self.isLoading = false
+                self.tableView.reloadData()
+                println("UnitsTableView reloaded!")
+                MBProgressHUD.hideHUDForView(self.view, animated: true)
+            }
         }
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut,
-            animations: {() in
-                self.tableView.contentInset.top = insetTop
-                self.tableView.scrollIndicatorInsets.top = insetTop
-            }, completion: nil)
+    }
+    
+    func toggleConditionMenu(button: UIBarButtonItem) {
+        conditionMenu!.toggleMenu()
     }
     
     func sortAtIndex() {
@@ -151,40 +195,53 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         case    3:
             sortInAtk()
         case    4:
-            sortInPlus()
+            sortInStatus()
+        case    5:
+            sortInSum()
         default :
             break
         }
     }
     
     func sortInNumUp() {
-        list.sort { (h: UnitsData, b: UnitsData) in
-            h.unit < b.unit
+        currentArray.sort { (h: Unit, b: Unit) in
+            h.No < b.No
         }
     }
     
     func sortInNumDown() {
-        list.sort { (h: UnitsData, b: UnitsData) in
-            h.unit > b.unit
+        currentArray.sort { (h: Unit, b: Unit) in
+            h.No > b.No
         }
     }
     
     func sortInHp() {
-        list.sort { (h: UnitsData, b: UnitsData) in
+        currentArray.sort {(h: Unit, b: Unit) in
             h.hp > b.hp
         }
     }
     
     func sortInAtk() {
-        list.sort { (h: UnitsData, b: UnitsData) in
+        currentArray.sort {(h: Unit, b: Unit) in
             h.atk > b.atk
         }
     }
     
-    func sortInPlus() {
-        list.sort { (h: UnitsData, b: UnitsData) in
-            h.stusOfPlus() > b.stusOfPlus()
+    func sortInStatus() {
+        currentArray.sort {(h: Unit, b: Unit) in
+            h.status() > b.status()
         }
+    }
+    
+    func sortInSum() {
+        currentArray.sort {(h: Unit, b: Unit) in
+            h.sum() > b.sum()
+        }
+    }
+    
+    func reloadListInSortAt(sortIndex: Int) {
+        self.sortIndex = sortIndex
+        reloadList()
     }
     
     func sortUnits(sender: UIButton) {
@@ -193,43 +250,45 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let numUpSort = UIAlertAction(title: "No順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↑No]")
-                self.sortIndex = 0
+                self.reloadListInSortAt(0)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
-                self.listSortAndReload()
         })
         let numDownSort = UIAlertAction(title: "No逆順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓No]")
-                self.sortIndex = 1
+                self.reloadListInSortAt(1)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
-                self.listSortAndReload()
         })
         let hpSort = UIAlertAction(title: "HP順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓HP]")
-                self.sortIndex = 2
+                self.reloadListInSortAt(2)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
-                self.listSortAndReload()
         })
         let atkSort = UIAlertAction(title: "ATK順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓ATK]")
-                self.sortIndex = 3
+                self.reloadListInSortAt(3)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
-                self.listSortAndReload()
         })
         let plusSort = UIAlertAction(title: "+換算順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[↓+換算]")
-                self.sortIndex = 4
+                self.reloadListInSortAt(4)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
-                self.listSortAndReload()
         })
+        let sumSort = UIAlertAction(title: "HP+ATK順", style: .Default,
+            handler: {(action: UIAlertAction!) in
+                println("sort[HP+ATK順]")
+                self.reloadListInSortAt(5)
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+            })
         let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction!) in
             println("sort[Cancel!]")
         })
@@ -238,24 +297,20 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         actionSheet.addAction(hpSort)
         actionSheet.addAction(atkSort)
         actionSheet.addAction(plusSort)
+        actionSheet.addAction(sumSort)
         actionSheet.addAction(cancel)
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
-    func sortButtonMakeInTitle(title: String) -> UIBarButtonItem {
-        let sb = UIBarButtonItem(title: title, style: .Bordered, target: self, action: "sortUnits:")
-        return sb
-    }
-    
     func searchButtonTapped(sender: UIBarButtonItem) {
-        setNavigationItem(true)
+        switchSearchMode(true)
     }
     
     func cancelSearchButtonTapped(sender: UIBarButtonItem) {
-        setNavigationItem(false)
+        switchSearchMode(false)
     }
     
-    func setNavigationItem(willSearchMode: Bool) {
+    func switchSearchMode(willSearchMode: Bool) {
         if willSearchMode {
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
@@ -264,7 +319,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
                 searchBar!.frame.origin = CGPointMake(-150, 22)
                 searchBar!.delegate = self
                 searchBar!.showsCancelButton = false
-                searchBar!.placeholder = "無英斧士ギンジ"
+                searchBar!.placeholder = "例：無英斧士ギンジ、899"
                 searchBar!.barTintColor = UIColor.whiteColor()
                 searchBar!.tintColor = accentColor
                 searchBar!.searchBarStyle = UISearchBarStyle.Default
@@ -287,10 +342,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
             let navigationItem = navigationBar!.items[0] as UINavigationItem
-            navigationItem.leftBarButtonItems = defaultLeftButtons
+            navigationItem.leftBarButtonItems = self.defaultLeftButtons
             navigationItem.titleView = nil
-            navigationItem.rightBarButtonItems = defaultRightButtons
-            tableView!.reloadData()
+            navigationItem.rightBarButtonItems = self.defaultRightButtons
+            self.tableView!.reloadData()
         }
     }
     
@@ -305,11 +360,11 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         println("searchText: \(searchText)")
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "name contains[cd] %@", searchText)!)
-        if let no = searchText.toInt() {
-            predicates.append(NSPredicate(format: "unit == %d", no)!)
+        if let num = searchText.toInt() {
+            predicates.append(NSPredicate(format: "showNo == %d", num)!)
         }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
-        searchResultsList = (listUnits as NSArray).filteredArrayUsingPredicate(predicate) as [UnitsData]
+        filteredArray = (unitsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [Unit]
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -317,66 +372,50 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView!.reloadData()
     }
     
-    /*
-    // MARK: - UISearchDisplayDelegate methods
-    
-    func searchDisplayController(controller: UISearchDisplayController, shouldReloadTableForSearchString searchString: String!) -> Bool {
-        if searchString != "" {
-            filterContaintsWithSearchText(searchString)
-            tableView!.reloadData()
-            return true
-        } else {
-            return false
-        }
-    }
-    */
-    
     // MARK: - UnitsConditionMenuDelegate methods
     
     func condMenuWillClose() {
-        var insetTop: CGFloat = 0
-        let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
-        insetTop += stuBarHeight
-        if let navBarHeight = self.navigationController?.navigationBar.frame.size.height {
-            insetTop += navBarHeight
-        }
-        insetTop += navigationBar.bounds.height
-        UIView.animateWithDuration(0.3, delay: 0, options: .CurveEaseOut,
-            animations: {() in
-                self.tableView.contentInset.top = insetTop
-                self.tableView.scrollIndicatorInsets.top = insetTop
-            }, completion: nil)
     }
     
     func listConditioning(#condIndex: [Bool], raceIndex: [Bool]) {
-        var predicates = [NSPredicate] ()
-        
-        // 属性条件
-        if condIndex != [false, false, false, false, false, false] {
-            var energyArray = [NSPredicate]()
-            for i in 0..<condIndex.count {
-                if condIndex[i] == true {
-                    energyArray.append(NSPredicate(format: "element == %d", i + 1)!)
-                }
-            }
-            let energyPre = NSCompoundPredicate(type: .OrPredicateType, subpredicates: energyArray)
-            predicates.append(energyPre)
-        }
-        
-        // 種族条件
-        if raceIndex != [] {
+        isLoading = true
+        let showHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        showHud.labelText = "検索中だぼん"
+        dispatch_async_global {
+            var predicates = [NSPredicate] ()
             
+            // 属性条件
+            if condIndex != [false, false, false, false, false, false] {
+                var energyArray = [NSPredicate]()
+                for i in 0..<condIndex.count {
+                    if condIndex[i] == true {
+                        energyArray.append(NSPredicate(format: "element == %d", i + 1)!)
+                    }
+                }
+                let energyPre = NSCompoundPredicate(type: .OrPredicateType, subpredicates: energyArray)
+                predicates.append(energyPre)
+            }
+            
+            // 種族条件
+            if raceIndex != [] {
+                
+            }
+            
+            if predicates != [] {
+                let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
+                println(predicate)
+                //            list = (listUnits as NSArray).filteredArrayUsingPredicate(predicate) as [UnitsData]
+                self.currentArray = (self.unitsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [Unit]
+            } else {
+                //            list = listUnits
+                self.currentArray = self.unitsTable!.rows
+            }
+            
+            self.dispatch_async_main {
+                self.reloadList()
+            }
         }
         
-        if predicates != [] {
-            let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
-            println(predicate)
-            list = (listUnits as NSArray).filteredArrayUsingPredicate(predicate) as [UnitsData]
-        } else {
-            list = listUnits
-        }
-        
-        listSortAndReload()
     }
     
     
@@ -386,10 +425,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     {
         if !isSearchMode {
             // 通常時
-            return list.count
+            return currentArray.count
         } else {
             // 検索時
-            return searchResultsList.count
+            return filteredArray.count
         }
     }
     
@@ -398,27 +437,15 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
         if !isSearchMode {
             // 通常時
-            cell.setCell(list[indexPath.row])
+            cell.setCell(currentArray[indexPath.row])
         } else {
             // 検索時
-            cell.setCell(searchResultsList[indexPath.row])
+            cell.setCell(filteredArray[indexPath.row])
         }
         return cell
     }
     
     
     // MARK: - UITableViewDelegate method
-    /*
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as UnitsCell
-        var bounds = cell.bounds
-        bounds.size.width = tableView.bounds.width
-        cell.bounds = bounds
-        
-        cell.setNeedsLayout()
-        cell.layoutIfNeeded()
-        return cell.contentView.bounds.height
-    }
-    */
     
 }

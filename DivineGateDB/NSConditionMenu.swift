@@ -21,6 +21,7 @@ class NSConditionMenu: NSObject {
     let sourceView: UIView!
     var delegate: NSConditionMenuDelegate?
     let condMenuContainerView = UIView()
+    let outsideView = UIView()
     var isMenuOpen: Bool = false
     var animator: UIDynamicAnimator!
     
@@ -72,9 +73,16 @@ class NSConditionMenu: NSObject {
         var hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
         hideGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Up
         condMenuContainerView.addGestureRecognizer(hideGestureRecognizer)
+        
+        var tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
+        outsideView.addGestureRecognizer(tapOutsideGestureRecognizer)
     }
     
     func setUpMenuView() {
+        // tapOutsideGestureRecognizer
+        outsideView.frame = CGRectZero
+        sourceView.addSubview(outsideView)
+        
         // Configure condtion menu container
         condMenuContainerView.frame = CGRectMake(0, sourceView.frame.origin.y - menuHeight, sourceView.frame.width, menuHeight)
         condMenuContainerView.backgroundColor = UIColor.clearColor()
@@ -418,15 +426,11 @@ class NSConditionMenu: NSObject {
     }
     
     func decidePanelDisabled() -> Int {
-        var enables = 5
-        if countIndex != [false, false, false, false, false] {
-            let count = countIndex.reverse()
-            for bool in count {
-                if !bool {
-                    enables--
-                } else {
-                    return enables
-                }
+        var enables = 0
+        for bool in countIndex {
+            enables++
+            if bool {
+                break
             }
         }
         return enables
@@ -510,7 +514,18 @@ class NSConditionMenu: NSObject {
         }
     }
     
+    func tapOutsideGesture(gesture: UITapGestureRecognizer) {
+        delegate?.condMenuWillClose()
+        toggleMenu(false)
+        if valueChanged {
+            valueChanged = !valueChanged
+            delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelIndex: panelIndex, typeIndex: typeIndex)
+        }
+    }
+    
     func toggleMenu(shouldOpen: Bool) {
+        toggleOutsideView(shouldOpen)
+        
         animator.removeAllBehaviors()
         isMenuOpen = shouldOpen
         let gravityDirectionY: CGFloat = shouldOpen ? 10 : -10
@@ -530,6 +545,21 @@ class NSConditionMenu: NSObject {
         let menuViewBehavior = UIDynamicItemBehavior(items: [condMenuContainerView])
         menuViewBehavior.elasticity = 0.1
         animator.addBehavior(menuViewBehavior)
+    }
+    
+    func toggleOutsideView(shouldOpen: Bool) {
+        if shouldOpen {
+            outsideView.frame = sourceView.frame
+            UIView.animateWithDuration(0.3, animations: {() in
+                self.outsideView.backgroundColor = UIColor(red: 15/255, green: 15/255, blue: 12/255, alpha: 0.7)
+            })
+        } else {
+            UIView.animateWithDuration(0.3, animations: {() in
+                self.outsideView.backgroundColor = UIColor.clearColor()
+                }, completion: {Bool in
+                    self.outsideView.frame = CGRectZero
+            })
+        }
     }
     
     func toggleMenu() {

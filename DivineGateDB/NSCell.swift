@@ -23,7 +23,7 @@ class NSCell: UITableViewCell {
     @IBOutlet weak var type: UILabel!
     @IBOutlet weak var value: UILabel!
     @IBOutlet weak var critical: UILabel!
-    @IBOutlet weak var crt: UILabel!
+    @IBOutlet weak var crtLabel: UILabel!
     
     
     let elementColor: [UIColor?] = [nil,                    // 0
@@ -36,7 +36,7 @@ class NSCell: UITableViewCell {
         UIColor(red: 1, green: 0.8, blue: 0.8, alpha: 0.4)    // 7 回復
     ]
     
-    let iconImage: [UIImage?] = [
+    let panelImage: [UIImage?] = [
         UIImage(named: "panel_source.png"),    // 0
         UIImage(named: "flame.png"),    // 1 炎
         UIImage(named: "aqua.png"),    // 2 水
@@ -60,230 +60,72 @@ class NSCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        /*
         name.preferredMaxLayoutWidth = self.frame.width - 118
         detail.preferredMaxLayoutWidth = self.frame.width - 50
         boost.preferredMaxLayoutWidth = self.frame.width - 50
+        */
     }
     
     // MARK: - main setting
     
-    func setCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.attackNS(NS)
-        default :
-            break
+    func setCell(ns: NS, plusIs: Bool, crtIs: Bool, averageIs: Bool) {
+        name.text = ns.name
+        engy1.image = panelImage[Int(ns.panel[0])]
+        engy2.image = panelImage[Int(ns.panel[1])]
+        engy3.image = panelImage[Int(ns.panel[2])]
+        engy4.image = panelImage[Int(ns.panel[3])]
+        engy5.image = panelImage[Int(ns.panel[4])]
+        if ns.element != 0 {
+            value.textColor = elementColor[Int(ns.element)]
+            type.textColor = elementColor[Int(ns.element)]
         }
-        detail.sizeToFit()
-        
-    }
-    
-    func setStatisticsCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.statisticsNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    func setOneCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.oneAttackNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    func setOneStatisticsCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.oneStatisticsNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    func setPlusCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.attackPlusNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-        
-    }
-    
-    func setStatisticsPlusCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.statisticsPlusNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    func setOnePlusCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.oneAttackPlusNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    func setOneStatisticsPlusCell(NS: NSData) {
-        self.fixedData(NS)
-        switch  NS.target {
-        case 0:
-            self.healNS(NS)
-        case 1, 2:
-            self.oneStatisticsPlusNS(NS)
-        default :
-            break
-        }
-        detail.sizeToFit()
-    }
-    
-    // MARK: function
-    
-    func fixedData(NS: NSData) {
-        name.text = NS.name
-        engy1.image = iconImage[Int(NS.panel[0])]
-        engy2.image = iconImage[Int(NS.panel[1])]
-        engy3.image = iconImage[Int(NS.panel[2])]
-        engy4.image = iconImage[Int(NS.panel[3])]
-        engy5.image = iconImage[Int(NS.panel[4])]
-        if NS.element != 0 {
-            value.textColor = elementColor[Int(NS.element)]
-            type.textColor = elementColor[Int(NS.element)]
-        }
-        if NS.boost == "" {
-            boost.text = NS.boost
+        if ns.boost == "" {
+            boost.text = ns.boost
         } else {
-            boost.text = NSString(format: "■BOOST:%@", NS.boost)
+            boost.text = NSString(format: "■BOOST:%@", ns.boost)
         }
-        let iconName = NSString(format: "%03d-icon.png", NS.unit)
-        if let iconImage = UIImage(named: iconName) {
-            icon.image = iconImage
+        let iconName = NSString(format: "%03d-icon.png", ns.No)
+        if let panelImage = UIImage(named: iconName) {
+            icon.image = panelImage
         } else {
             icon.image = UIImage(named: "empty-icon.png")
         }
-    }
-    
-    // MARK: healNS
-    
-    func healNS(NS: NSData) {
-        // 回復詳細文生成
-        detail.text = detailHealString(NS)
-        type.text = "HEAL"
-        value.text = NSString(format: "%.0f%%", NS.leverage * 100)
-        critical.text = nil
-        crt.text = nil
-    }
-    
-    // MARK: attackNS
-    
-    func attackNS(NS: NSData) {
-        self.attackFixed(NS)
-    }
-    
-    func statisticsNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "c"
-        // ダメージ期待値計算処理
-    }
-    
-    func oneAttackNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "/\(NS.panels())"
-    }
-    
-    func oneStatisticsNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "c/\(NS.panels())"
-    }
-    
-    func attackPlusNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "+"
-    }
-    
-    func statisticsPlusNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "+c"
-        // ダメージ期待値計算処理
-    }
-    
-    func oneAttackPlusNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "+/\(NS.panels())"
-    }
-    
-    func oneStatisticsPlusNS(NS: NSData) {
-        self.attackFixed(NS)
-        let txt = type.text
-        type.text = txt! + "+c/\(NS.panels())"
-    }
-    
-    
-    func attackFixed(NS: NSData) {
-        // 攻撃力期待値詳細文生成
-        detail.text = detailDamageString(NS)
-        // ダメージ計算処理
-        value.text = NSString(format: "%.0f", NS.value!)
-        let tage = ["ATK", "ALL\nATK"]
-        type.text = tage[Int(NS.target) - 1]
-        critical.text = NSString(format: "%.0f%%", NS.critical() * 100)
-        crt.text = "CRT"
+        switch ns.target {
+        case    1, 2:   // 攻撃NS
+            // 攻撃力期待値詳細文生成
+            detail.text = detailDamageString(ns)
+            // ダメージ計算処理
+            value.text = NSString(format: "%.0f", ns.value!)
+            let tage = ["ATK", "ALL\nATK"]
+            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : ""))
+            type.text = typeText
+            critical.text = NSString(format: "%.0f%%", ns.critical * 100)
+            crtLabel.text = "CRT"
+        case    0:  // 回復NS
+            // 回復詳細文生成
+            detail.text = detailHealString(ns)
+            type.text = NSString(format: "HEAL%@", averageIs ? "/\(ns.panels.description)" : "")
+            value.text = NSString(format: "%.0f%%", ns.value! * 100)
+            critical.text = nil
+            crtLabel.text = nil
+        default :
+            break
+        }
     }
     
     // MARK: detail
     
-    func detailDamageString(NS: NSData) -> String {
+    func detailDamageString(ns: NS) -> String {
         var string: String?
-        if NS.detail == "" {
+        if ns.detail == "" {
             let element: [String] = ["?", "炎", "水", "風", "光", "闇", "無"]
             var target = ""
             var leverage = ""
-            switch  NS.target {
+            switch  ns.target {
             case    1:  // 単体
                 target = "単"
-                switch  NS.leverage {
+                switch  ns.leverage {
                 case    1:
                     leverage = "小"
                 case    1.6:
@@ -303,7 +145,7 @@ class NSCell: UITableViewCell {
                 }
             case    2:  // 全体
                 target = "全"
-                switch  NS.leverage {
+                switch  ns.leverage {
                 case    1:
                     leverage = "小"
                 case    1.6:
@@ -325,22 +167,22 @@ class NSCell: UITableViewCell {
                 target = "?"
             }
             var critical = ""
-            if NS.crt != 0 {
-                critical = NSString(format: "(CRT+%.0f%%)", NS.crt * 100)
+            if ns.crt != 0 {
+                critical = NSString(format: "(CRT+%.0f%%)", ns.crt * 100)
             }
-            string = "敵\(target)体に\(element[Int(NS.element)])属性の\(leverage)ダメージを与える\(critical)"
+            string = "敵\(target)体に\(element[Int(ns.element)])属性の\(leverage)ダメージを与える\(critical)"
         } else {
-            string = NS.detail
+            string = ns.detail
         }
         return  string!
     }
     
-    func detailHealString(NS: NSData) -> String {
+    func detailHealString(ns: NS) -> String {
         var string: String?
-        if NS.detail == "" {
-            string = NSString(format: "HPを%.0f%%回復する", NS.leverage * 100)
+        if ns.detail == "" {
+            string = NSString(format: "HPを%.0f%%回復する", ns.leverage * 100)
         } else {
-            string = NS.detail
+            string = ns.detail
         }
         return  string!
     }

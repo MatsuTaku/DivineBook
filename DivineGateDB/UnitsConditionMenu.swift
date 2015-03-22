@@ -20,6 +20,7 @@ class UnitsConditionMenu: NSObject {
     let toolBarHeight: CGFloat = 44 // If you use toolBar
     let sourceView: UIView!
     let condMenuContainerView = UIView()
+    let outsideView = UIView()
     let scrollView = UIScrollView()
     let condMenuSubView = UIView()
     var isMenuOpen: Bool = false
@@ -69,13 +70,19 @@ class UnitsConditionMenu: NSObject {
         var hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
         hideGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Up
         condMenuContainerView.addGestureRecognizer(hideGestureRecognizer)
+        
+        var tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
+        outsideView.addGestureRecognizer(tapOutsideGestureRecognizer)
     }
     
     func setUpMenuView() {
+        // tapOutsideGestureRecognizer
+        outsideView.frame = CGRectZero
+        sourceView.addSubview(outsideView)
+        
         // Configure condtion menu container
         condMenuContainerView.frame = CGRectMake(0, sourceView.frame.origin.y - menuHeight, sourceView.frame.width, menuHeight)
         condMenuContainerView.backgroundColor = UIColor.clearColor()
-        
         sourceView.addSubview(condMenuContainerView)
         
         // Add blur View
@@ -291,7 +298,18 @@ class UnitsConditionMenu: NSObject {
         }
     }
     
+    func tapOutsideGesture(gesture: UITapGestureRecognizer) {
+        delegate?.condMenuWillClose()
+        toggleMenu(false)
+        if valueChanged {
+            valueChanged = !valueChanged
+            delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
+        }
+    }
+    
     func toggleMenu(shouldOpen: Bool) {
+        toggleOutsideView(shouldOpen)
+        
         animator.removeAllBehaviors()
         isMenuOpen = shouldOpen
         let gravityDirectionY: CGFloat = shouldOpen ? 10 : -10
@@ -311,6 +329,14 @@ class UnitsConditionMenu: NSObject {
         let menuViewBehavior = UIDynamicItemBehavior(items: [condMenuContainerView])
         menuViewBehavior.elasticity = 0.1
         animator.addBehavior(menuViewBehavior)
+    }
+    
+    func toggleOutsideView(shouldOpen: Bool) {
+        outsideView.frame = shouldOpen ? sourceView.frame : CGRectZero
+        let viewColor = shouldOpen ? UIColor(red: 15/255, green: 15/255, blue: 12/255, alpha: 0.7) : UIColor.clearColor()
+        UIView.animateWithDuration(0.3, animations: {() in
+            self.outsideView.backgroundColor = viewColor
+        })
     }
     
     func toggleMenu() {
