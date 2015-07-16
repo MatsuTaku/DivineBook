@@ -2,5 +2,6 @@ DivineGateDB.xcworkspace/
 Podfile.lock
 Pods/
 podfile
-units.csv
-ns.csv
+DivineGateDB/*.csv
+DivineGateDB/*-icon.png
+DivineGateDB/units_icon/

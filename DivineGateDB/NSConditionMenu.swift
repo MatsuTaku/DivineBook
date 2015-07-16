@@ -62,8 +62,8 @@ class NSConditionMenu: NSObject {
     ]
     
     init(sourceView: UIView) {
-        super.init()
         self.sourceView = sourceView
+        super.init()
         
         self.setUpMenuView()
         
@@ -551,7 +551,7 @@ class NSConditionMenu: NSObject {
         if shouldOpen {
             outsideView.frame = sourceView.frame
             UIView.animateWithDuration(0.3, animations: {() in
-                self.outsideView.backgroundColor = UIColor(red: 15/255, green: 15/255, blue: 12/255, alpha: 0.7)
+                self.outsideView.backgroundColor = UIColor(red: 15/255, green: 15/255, blue: 12/255, alpha: 0.5)
             })
         } else {
             UIView.animateWithDuration(0.3, animations: {() in

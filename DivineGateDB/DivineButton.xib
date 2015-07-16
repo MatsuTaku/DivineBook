@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="XhD-6w-cnA">
+            <rect key="frame" x="0.0" y="0.0" width="123" height="24"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="17"/>
+            <size key="titleShadowOffset" width="0.0" height="1"/>
+            <state key="normal" title="ボタン" backgroundImage="buttonBack">
+                <color key="titleColor" red="0.77797202799999998" green="0.69394667840000002" blue="0.3454709353" alpha="1" colorSpace="calibratedRGB"/>
+                <color key="titleShadowColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="0.81000000000000005" colorSpace="custom" customColorSpace="sRGB"/>
+            </state>
+            <state key="selected" backgroundImage="buttonBack_on"/>
+            <point key="canvasLocation" x="124.5" y="263"/>
+        </button>
+    </objects>
+    <resources>
+        <image name="buttonBack" width="21" height="19"/>
+        <image name="buttonBack_on" width="19" height="19"/>
+    </resources>
+</document>

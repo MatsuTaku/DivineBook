@@ -35,7 +35,7 @@ class Unit: NSObject {
         HP
         ATK
         */
-        No = (data["No"] as Int)
+        No = (data["No"] as! Int)
         if let unitName = data["Name"] as? String {
             name = unitName
         } else if let unitName = (data["Name"] as? Int)?.description {
@@ -43,7 +43,7 @@ class Unit: NSObject {
         } else {
             name = ""
         }
-        let typeStr = data["Type"] as String
+        let typeStr = data["Type"] as! String
         switch typeStr {
         case    "炎":
             element = 1
@@ -68,11 +68,11 @@ class Unit: NSObject {
             races.append(race2)
         }
         race = races
-        cost = data["COST"] as Int
-        rare = data["Rare"] as Int
-        lv = data["MaxLv"] as Int
-        hp = data["HP"] as Double
-        atk = data["ATK"] as Double
+        cost = data["COST"] as! Int
+        rare = data["Rare"] as! Int
+        lv = data["MaxLv"] as! Int
+        hp = data["HP"] as! Double
+        atk = data["ATK"] as! Double
         
         println("Did set \(No):\(name)")
     }
@@ -89,6 +89,18 @@ class Unit: NSObject {
     
     func showNo() -> Int {
         return No
+    }
+    
+    func race1() -> String {
+        return race[0]
+    }
+    
+    func race2() -> String {
+        if race.count >= 2 {
+            return race[1]
+        } else {
+            return ""
+        }
     }
    
 }

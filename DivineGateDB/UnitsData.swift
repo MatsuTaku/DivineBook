@@ -47,13 +47,13 @@ class UnitsData: NSManagedObject {
         HP
         ATK
         */
-        unit = (data["No"] as Int)
+        unit = (data["No"] as! Int)
         if let unitName = data["Name"] as? String {
             name = unitName
         } else if let unitName = (data["Name"] as? Int)?.description {
             name = unitName
         }
-        let stype = data["Type"] as String
+        let stype = data["Type"] as! String
         switch stype {
         case    "炎":
             element = 1

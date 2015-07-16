@@ -40,8 +40,8 @@ class NS: NSObject {
         Boost
         Detail
         */
-        No = data["No"] as Int
-        number = data["Number"] as Int
+        No = data["No"] as! Int
+        number = data["Number"] as! Int
         
         if let srcUnitsName = data["Unit'sName"] as? String {
             unitsName = srcUnitsName
@@ -71,7 +71,7 @@ class NS: NSObject {
             boost = ""
         }
         
-        let srcPanel = data["Panel"] as [String]
+        let srcPanel = data["Panel"] as! [String]
         var panelNo = [Int]()
         for nowPanel in srcPanel {
             switch nowPanel {
@@ -98,80 +98,91 @@ class NS: NSObject {
         }
         panel = panelNo
         
-        let srcTarget = data["Target"] as String
-        switch srcTarget {
-        case    "単体":
-            target = 1
-        case    "全体":
-            target = 2
-        case    "回復":
-            target = 0
-        default :
+        if let srcTarget = data["Target"] as? String {
+            switch srcTarget {
+            case    "単体":
+                target = 1
+            case    "全体":
+                target = 2
+            case    "回復":
+                target = 0
+            default :
+                target = -1
+            }
+        } else {
             target = -1
         }
         
-        let srcType = data["Type"] as String
-        switch srcType {
-        case    "炎":
-            element = 1
-        case    "水":
-            element = 2
-        case    "風":
-            element = 3
-        case    "光":
-            element = 4
-        case    "闇":
-            element = 5
-        case    "無":
-            element = 6
-        default :
+        if let srcType = data["Type"] as? String {
+            switch srcType {
+            case    "炎":
+                element = 1
+            case    "水":
+                element = 2
+            case    "風":
+                element = 3
+            case    "光":
+                element = 4
+            case    "闇":
+                element = 5
+            case    "無":
+                element = 6
+            case    "回":
+                element = 7
+            default :
+                element = 0
+            }
+        } else {
             element = 0
         }
         
-        let srcLeverage = data["Leverage"] as String
-        if target == 0 {
-            // 回復NS
-            let healStrings = srcLeverage.componentsSeparatedByString("%")
-            let healVolume: Double = (healStrings[0] as NSString).doubleValue / 100
-            leverage = healVolume
-        } else if target == 1 {
-            // 単体攻撃
-            switch srcLeverage {
-            case    "小":
-                leverage = 1
-            case    "中":
-                leverage = 1.6
-            case    "大":
-                leverage = 2.3
-            case    "特大":
-                leverage = 3.0
-            case    "超特大":
-                leverage = 4.5
-            case    "絶大":
-                leverage = 6.0
-            case    "超絶大":
-                leverage = 8.0
-            default :
-                leverage = 0
-            }
-        } else if target == 2 {
-            // 全体攻撃
-            switch srcLeverage {
-            case    "小":
-                leverage = 1
-            case    "中":
-                leverage = 1.6
-            case    "大":
-                leverage = 1.8
-            case    "特大":
-                leverage = 2.5
-            case    "超特大":
-                leverage = 2.8
-            case    "絶大":
-                leverage = 3.0
-            case    "超絶大":
-                leverage = 4.0
-            default :
+        if let srcLeverage = data["Leverage"] as? String {
+            if target == 0 {
+                // 回復NS
+                let healStrings = srcLeverage.componentsSeparatedByString("%")
+                let healVolume: Double = (healStrings[0] as NSString).doubleValue / 100
+                leverage = healVolume
+            } else if target == 1 {
+                // 単体攻撃
+                switch srcLeverage {
+                case    "小":
+                    leverage = 1
+                case    "中":
+                    leverage = 1.6
+                case    "大":
+                    leverage = 2.3
+                case    "特大":
+                    leverage = 3.0
+                case    "超特大":
+                    leverage = 4.5
+                case    "絶大":
+                    leverage = 6.0
+                case    "超絶大":
+                    leverage = 8.0
+                default :
+                    leverage = 0
+                }
+            } else if target == 2 {
+                // 全体攻撃
+                switch srcLeverage {
+                case    "小":
+                    leverage = 1
+                case    "中":
+                    leverage = 1.6
+                case    "大":
+                    leverage = 1.8
+                case    "特大":
+                    leverage = 2.5
+                case    "超特大":
+                    leverage = 2.8
+                case    "絶大":
+                    leverage = 3.0
+                case    "超絶大":
+                    leverage = 4.0
+                default :
+                    leverage = 0
+                }
+            } else {
                 leverage = 0
             }
         } else {
@@ -198,14 +209,18 @@ class NS: NSObject {
             // 攻撃NS
             attack = atk * leverage
             let list = [0.02, 0.04, 0.07, 0.10, 0.13]
-            critical = list[panels - 1] + crt
+            if panels > 0 {
+                critical = list[panels - 1] + crt
+            } else {
+                critical = 0
+            }
         } else {
             // 回復NS
             attack = 1
             critical = 0
         }
         
-        println("Did set \(No):\(name)")
+        println("Did set \(No)-\(number):\(name)")
     }
     
     func condition() -> [Int] {

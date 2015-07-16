@@ -24,9 +24,10 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         // Do any additional setup after loading the view.
         
         // Setup views
-        let unitsViewController = storyboard?.instantiateViewControllerWithIdentifier("Units") as UnitsViewController
-        let nsViewController = storyboard?.instantiateViewControllerWithIdentifier("NS") as NSViewController
-        controllerArray = [unitsViewController, nsViewController]
+        let unitsViewController = storyboard?.instantiateViewControllerWithIdentifier("Units") as! UnitsViewController
+        let nsViewController = storyboard?.instantiateViewControllerWithIdentifier("NS") as! NSViewController
+        let lsViewController = storyboard?.instantiateViewControllerWithIdentifier("LS") as! LSViewController
+        controllerArray = [unitsViewController, nsViewController, lsViewController]
         let index = segmentedController.selectedSegmentIndex
         let viewController = controllerArray[index]
         self.addChildViewController(viewController)
@@ -73,8 +74,8 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         let toViewController = controllerArray[toIndex]
         currentViewController.willMoveToParentViewController(nil)
         self.addChildViewController(toViewController)
-        self.transitionFromViewController(currentViewController, toViewController: toViewController, duration: 0.2,
-            options: (toIndex < currentIndex ? .TransitionFlipFromLeft : .TransitionFlipFromRight),
+        let options: UIViewAnimationOptions = (toIndex < currentIndex ? .TransitionFlipFromLeft : .TransitionFlipFromRight)
+        self.transitionFromViewController(currentViewController, toViewController: toViewController, duration: 0.2, options: options,
             animations: {() in
                 // 動的アニメーション
             }, completion: {Bool in

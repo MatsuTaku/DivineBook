@@ -8,12 +8,22 @@
 
 import UIKit
 
-class UnitStatusViewController: UIViewController {
+class UnitStatusViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var unitNo: Int!
+    var unit: Unit?
+    var ns: [NS]?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        unit = UnitsTable(units: [unitNo]).rows.first
+        ns = NSTable(units: [unitNo]).rows
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,5 +41,17 @@ class UnitStatusViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    
+    // MARK: - UITableViewDataSource methods
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! UITableViewCell
+        return cell
+    }
 
 }

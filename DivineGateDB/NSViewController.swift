@@ -40,6 +40,8 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     var isAveMode: Bool = true
     var sortIndex: Int = 0  // 2: ATK, 3: Panels, 4: CRT, 0,1: Unit
     
+    var changedValueInSearch: Bool = false
+    
     var isLoading: Bool = false
     
     let accentColor = UIColor(red: 0.7, green: 0.1, blue: 0.8, alpha: 1)
@@ -143,6 +145,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         tableView.estimatedRowHeight = 60   // xib上の高さ
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.bounds = self.view.bounds
+        tableView.layoutMargins = UIEdgeInsetsZero
         
         var inset = tableView.contentInset
         let stuBarHeight: CGFloat = UIApplication.sharedApplication().statusBarFrame.size.height
@@ -232,6 +235,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 // TableViewの更新
                 self.tableView!.reloadData()
                 println("NSTableView reloaded!!")
+                ((self.navigationBar!.items[0] as! UINavigationItem) as UINavigationItem).title = NSString(format: "%dskills", self.currentArray.count) as String
             }
         }
     }
@@ -246,7 +250,14 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func changeValue() {
-        for ns in currentArray {
+        var array = [NS]()
+        if !isSearchMode {
+            array = currentArray
+        } else {
+            changedValueInSearch = true
+            array = filteredArray
+        }
+        for ns in array {
             // change value method
             ns.changeValue(plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         }
@@ -314,7 +325,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         currentArray.sort { (h: NS, b: NS) in
             h.value != b.value ? h.value > b.value
                 : h.panels != b.panels ? h.panels < b.panels
-                : h.No != b.No ? h.No < b.No
+                : h.No != b.No ? h.No > b.No
                 : h.number < b.number
         }
     }
@@ -323,7 +334,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         currentArray.sort {(h: NS, b: NS) in
             h.panels != b.panels ? h.panels < b.panels
                 : h.value != b.value ? h.value > b.value
-                : h.No != b.No ? h.No < b.No
+                : h.No != b.No ? h.No > b.No
                 : h.number < b.number
         }
     }
@@ -331,7 +342,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     func sortInCRT() {
         currentArray.sort {(h: NS, b: NS) in
             h.critical != b.critical ? h.critical > b.critical
-                : h.No != b.No ? h.No < b.No
+                : h.No != b.No ? h.No > b.No
                 : h.number < b.number
         }
     }
@@ -343,7 +354,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     
     func sortNS(sender: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: .ActionSheet)
-        let navItem = navigationBar!.items[0] as UINavigationItem
+        let navItem = navigationBar!.items[0] as! UINavigationItem
         let NoSort = UIAlertAction(title: "No順", style: .Default,
             handler: {(action: UIAlertAction!) in
                 println("sort[No↑]")
@@ -408,6 +419,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         if willSearchMode {
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
+            tableView!.reloadData()
             if searchBar == nil {
                 searchBar = UISearchBar()
                 searchBar!.frame.origin = CGPointMake(-150, 22)
@@ -424,7 +436,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 cancelSearchButton = UIBarButtonItem(title: "戻る", style: .Plain, target: self, action: "cancelSearchButtonTapped:")
             }
             
-            let navItem = navigationBar!.items[0] as UINavigationItem
+            let navItem = navigationBar!.items[0] as! UINavigationItem
             UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: nil,
                 animations: {
                     navItem.leftBarButtonItems = nil
@@ -432,15 +444,20 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                     navItem.rightBarButtonItems = [self.cancelSearchButton!]
                 }, completion: nil)
             searchBar!.becomeFirstResponder()
-            tableView!.reloadData()
         } else {
             println("search: \(willSearchMode)")
             isSearchMode = willSearchMode
-            let navItem = navigationBar!.items[0] as UINavigationItem
+            if changedValueInSearch {
+                changedValueInSearch = false
+                reloadList()
+            } else {
+                tableView.reloadData()
+            }
+            let navItem = navigationBar!.items[0] as! UINavigationItem
             navItem.leftBarButtonItems = self.defaultLeftButtons
             navItem.titleView = nil
             navItem.rightBarButtonItems = self.defaultRightButtons
-            self.tableView!.reloadData()
+            ((self.navigationBar!.items[0] as! UINavigationItem) as UINavigationItem).title = NSString(format: "%dskills", self.currentArray.count) as String
         }
     }
     
@@ -454,13 +471,13 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     func filterContaintsWithSearchText(searchText: String) {
         println("searchText: \(searchText)")
         var predicates = [NSPredicate]()
-        predicates.append(NSPredicate(format: "unitsName contains[cd] %@", searchText)!)
-        predicates.append(NSPredicate(format: "name contains[cd] %@", searchText)!)
+        predicates.append(NSPredicate(format: "unitsName contains[cd] %@", searchText))
+        predicates.append(NSPredicate(format: "name contains[cd] %@", searchText))
         if let num = searchText.toInt() {
-            predicates.append(NSPredicate(format: "showNo == %d", num)!)
+            predicates.append(NSPredicate(format: "showNo == %d", num))
         }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
-        filteredArray = (nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [NS]
+        filteredArray = (nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [NS]
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -501,7 +518,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 var energyArray = [NSPredicate]()
                 for i in 0..<condIndex.count {
                     if condIndex[i] == true {
-                        energyArray.append(NSPredicate(format: "element == %d", i + 1)!)
+                        energyArray.append(NSPredicate(format: "element == %d", i + 1))
                     }
                 }
                 let energyPre = NSCompoundPredicate(type: .OrPredicateType, subpredicates: energyArray)
@@ -534,7 +551,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
                 println(predicate)
                 //            list = (listNS as NSArray).filteredArrayUsingPredicate(predicate) as [NSData]
-                self.currentArray = (self.nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as [NS]
+                self.currentArray = (self.nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [NS]
             } else {
                 //            list = listNS
                 self.currentArray = self.nsTable!.rows
@@ -600,7 +617,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as NSCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as! NSCell
         let ns = !isSearchMode ? currentArray[indexPath.row] : filteredArray[indexPath.row]
         cell.setCell(ns, plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         

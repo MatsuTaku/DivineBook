@@ -83,9 +83,9 @@ class NSCell: UITableViewCell {
         if ns.boost == "" {
             boost.text = ns.boost
         } else {
-            boost.text = NSString(format: "■BOOST:%@", ns.boost)
+            boost.text = NSString(format: "■BOOST:%@", ns.boost) as String
         }
-        let iconName = NSString(format: "%03d-icon.png", ns.No)
+        let iconName = NSString(format: "%03d-icon.png", ns.No) as String
         if let panelImage = UIImage(named: iconName) {
             icon.image = panelImage
         } else {
@@ -96,17 +96,17 @@ class NSCell: UITableViewCell {
             // 攻撃力期待値詳細文生成
             detail.text = detailDamageString(ns)
             // ダメージ計算処理
-            value.text = NSString(format: "%.0f", ns.value!)
+            value.text = NSString(format: "%.0f", ns.value!) as String
             let tage = ["ATK", "ALL\nATK"]
-            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : ""))
+            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : "")) as String
             type.text = typeText
-            critical.text = NSString(format: "%.0f%%", ns.critical * 100)
+            critical.text = NSString(format: "%.0f%%", ns.critical * 100) as String
             crtLabel.text = "CRT"
         case    0:  // 回復NS
             // 回復詳細文生成
             detail.text = detailHealString(ns)
-            type.text = NSString(format: "HEAL%@", averageIs ? "/\(ns.panels.description)" : "")
-            value.text = NSString(format: "%.0f%%", ns.value! * 100)
+            type.text = NSString(format: "HEAL%@", averageIs ? "/\(ns.panels.description)" : "") as String
+            value.text = NSString(format: "%.0f%%", ns.value! * 100) as String
             critical.text = nil
             crtLabel.text = nil
         default :
@@ -168,7 +168,7 @@ class NSCell: UITableViewCell {
             }
             var critical = ""
             if ns.crt != 0 {
-                critical = NSString(format: "(CRT+%.0f%%)", ns.crt * 100)
+                critical = NSString(format: "(CRT%@%.0f%%)", ns.crt > 0 ? "+" : "", ns.crt * 100) as String
             }
             string = "敵\(target)体に\(element[Int(ns.element)])属性の\(leverage)ダメージを与える\(critical)"
         } else {
@@ -180,7 +180,7 @@ class NSCell: UITableViewCell {
     func detailHealString(ns: NS) -> String {
         var string: String?
         if ns.detail == "" {
-            string = NSString(format: "HPを%.0f%%回復する", ns.leverage * 100)
+            string = NSString(format: "HPを%.0f%%回復する", ns.leverage * 100) as String
         } else {
             string = ns.detail
         }

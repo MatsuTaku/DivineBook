@@ -59,8 +59,8 @@ class NSData: NSManagedObject {
         Boost
         Detail
         */
-        unit = data["Unit"] as Int
-        number = data["Number"] as Int
+        unit = data["Unit"] as! Int
+        number = data["Number"] as! Int
         if let srcUnitsName = data["Unit'sName"] as? String {
             unitsName = srcUnitsName
         } else if let srcUnitsName = (data["Unit'sName"] as? NSNumber)?.description {
@@ -86,7 +86,7 @@ class NSData: NSManagedObject {
             boost = ""
         }
         var p = [Int]()
-        let srcPanel = data["Panel"] as [String]
+        let srcPanel = data["Panel"] as! [String]
         for nowPanel in srcPanel {
             switch nowPanel {
             case    "炎":
@@ -112,7 +112,7 @@ class NSData: NSManagedObject {
             p.append(0)
         }
         panel = p
-        let srcTarget = data["Target"] as String
+        let srcTarget = data["Target"] as! String
         switch srcTarget {
         case    "単体":
             target = 1
@@ -123,7 +123,7 @@ class NSData: NSManagedObject {
         default :
             break
         }
-        let srcType = data["Type"] as String
+        let srcType = data["Type"] as! String
         switch srcType {
         case    "炎":
             element = 1
@@ -140,7 +140,7 @@ class NSData: NSManagedObject {
         default :
             break
         }
-        let srcLeverage = data["Leverage"] as String
+        let srcLeverage = data["Leverage"] as! String
         if target == 0 {   // 回復NS
             let healStrings = srcLeverage.componentsSeparatedByString("%")
             let healValue: Double = (healStrings[0] as NSString).doubleValue / 100
@@ -195,11 +195,11 @@ class NSData: NSManagedObject {
     
     func setAttack() {
         if target != 0 {
-            let appDel = UIApplication.sharedApplication().delegate as AppDelegate
+            let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
             let context = appDel.managedObjectContext!
             var request = NSFetchRequest(entityName: "UnitsData")
             request.predicate = NSPredicate(format: "unit = %d", unit)
-            var result = context.executeFetchRequest(request, error: nil) as [UnitsData]
+            var result = context.executeFetchRequest(request, error: nil) as! [UnitsData]
             
             if result.count > 0 {
                 attack = result[0].atk * leverage

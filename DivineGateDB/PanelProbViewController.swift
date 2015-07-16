@@ -33,6 +33,9 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var noneRate: UITextField!
     @IBOutlet weak var hartRate: UITextField!
     
+    var activeTextField = UITextField()
+    var toolBar: UIToolbar?
+    
     let sourceRates: [Double] = [7, 7, 7, 7, 7, 7, 8]
     var questsRates: [Double] = []
     var currentRates: [Double] = []
@@ -58,8 +61,23 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let center = NSNotificationCenter.defaultCenter()
+        center.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        center.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
     override func viewDidLayoutSubviews() {
         changeViewsRate()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        let center = NSNotificationCenter.defaultCenter()
+        center.removeObserver(self)
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,49 +96,101 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
     }
     */
     
+    
+    // MARK: - CalcPanelAppearancive methods
+    
     @IBAction func clearRates(sender: AnyObject) {
         questsRates = sourceRates
         currentRates = questsRates
         currentLevels = sourceLevels
-        flameRate.text = NSString(format: "%.0f", currentLevels[0] * 100)
-        aquaRate.text = NSString(format: "%.0f", currentLevels[1] * 100)
-        windRate.text = NSString(format: "%.0f", currentLevels[2] * 100)
-        lightRate.text = NSString(format: "%.0f", currentLevels[3] * 100)
-        darkRate.text = NSString(format: "%.0f", currentLevels[4] * 100)
-        noneRate.text = NSString(format: "%.0f", currentLevels[5] * 100)
-        hartRate.text = NSString(format: "%.0f", currentLevels[6] * 100)
+        flameRate.text = NSString(format: "%.0f", currentLevels[0] * 100) as String
+        aquaRate.text = NSString(format: "%.0f", currentLevels[1] * 100) as String
+        windRate.text = NSString(format: "%.0f", currentLevels[2] * 100) as String
+        lightRate.text = NSString(format: "%.0f", currentLevels[3] * 100) as String
+        darkRate.text = NSString(format: "%.0f", currentLevels[4] * 100) as String
+        noneRate.text = NSString(format: "%.0f", currentLevels[5] * 100) as String
+        hartRate.text = NSString(format: "%.0f", currentLevels[6] * 100) as String
         changeViewsAnimation()
     }
     
-    func percentArray() -> [Double] {
+    func percentArrayFromRates(rates: [Double]) -> [Double] {
+        var percents = [Double]()
         var mother: Double = 0
-        var percentArray: [Double] = [0, 0, 0, 0, 0, 0, 0]
-        for rate in currentRates {
+        for rate in rates {
             mother += rate
         }
-        for i in 0..<currentRates.count {
-            percentArray[i] = currentRates[i] / mother
+        for rate in rates {
+            percents.append(rate / mother)
         }
-        return percentArray
+        return percents
+    }
+    
+    func percentColors() -> [UIColor] {
+        var colors = [UIColor]()
+        let muchColor = UIColor(red: 1, green: 0.6, blue: 0.6, alpha: 1)
+        let fewColor = UIColor(red: 0.6, green: 0.6, blue: 1, alpha: 1)
+        let currentPercents = percentArrayFromRates(currentRates)
+        let defaultPercents = percentArrayFromRates(sourceRates)
+        for i in 0..<currentPercents.count {
+            if currentPercents[i] == defaultPercents[i] {
+                colors.append(UIColor.whiteColor())
+            } else {
+                colors.append(currentPercents[i] > defaultPercents[i] ? muchColor : fewColor)
+            }
+        }
+        return colors
+    }
+    
+    func rateColors() -> [UIColor] {
+        var colors = [UIColor]()
+        let nonActiveColor = UIColor(red: 161/255, green: 184/255, blue: 235/255, alpha: 1)
+        let activeColor = UIColor(red: 255/255, green: 216/255, blue: 179/255, alpha: 1)
+        for level in currentLevels {
+            if level == 1 {
+                colors.append(nonActiveColor)
+            } else {
+                colors.append(activeColor)
+            }
+        }
+        return colors
     }
     
     func changeViewsRate() {
-        flamePercent.text = NSString(format: "%.0f%%", percentArray()[0] * 100)
-        aquaPercent.text = NSString(format: "%.0f%%", percentArray()[1] * 100)
-        windPercent.text = NSString(format: "%.0f%%", percentArray()[2] * 100)
-        lightPercent.text = NSString(format: "%.0f%%", percentArray()[3] * 100)
-        darkPercent.text = NSString(format: "%.0f%%", percentArray()[4] * 100)
-        nonePercent.text = NSString(format: "%.0f%%", percentArray()[5] * 100)
-        hartPercent.text = NSString(format: "%.0f%%", percentArray()[6] * 100)
-        
         let mainWidth: CGFloat = energyBar.frame.width
-        flameWidth.constant = mainWidth * CGFloat(percentArray()[0])
-        aquaWidth.constant = mainWidth * CGFloat(percentArray()[1])
-        windWidth.constant = mainWidth * CGFloat(percentArray()[2])
-        lightWidth.constant = mainWidth * CGFloat(percentArray()[3])
-        darkWidth.constant = mainWidth * CGFloat(percentArray()[4])
-        noneWidth.constant = mainWidth * CGFloat(percentArray()[5])
-        hartWidth.constant = mainWidth * CGFloat(percentArray()[6])
+        let percents = percentArrayFromRates(currentRates)
+        flameWidth.constant = mainWidth * CGFloat(percents[0])
+        aquaWidth.constant = mainWidth * CGFloat(percents[1])
+        windWidth.constant = mainWidth * CGFloat(percents[2])
+        lightWidth.constant = mainWidth * CGFloat(percents[3])
+        darkWidth.constant = mainWidth * CGFloat(percents[4])
+        noneWidth.constant = mainWidth * CGFloat(percents[5])
+        hartWidth.constant = mainWidth * CGFloat(percents[6])
+        
+        flamePercent.text = NSString(format: "%.0f%%", percents[0] * 100) as String
+        aquaPercent.text = NSString(format: "%.0f%%", percents[1] * 100) as String
+        windPercent.text = NSString(format: "%.0f%%", percents[2] * 100) as String
+        lightPercent.text = NSString(format: "%.0f%%", percents[3] * 100) as String
+        darkPercent.text = NSString(format: "%.0f%%", percents[4] * 100) as String
+        nonePercent.text = NSString(format: "%.0f%%", percents[5] * 100) as String
+        hartPercent.text = NSString(format: "%.0f%%", percents[6] * 100) as String
+        
+        let pColors = percentColors()
+        flamePercent.textColor = pColors[0]
+        aquaPercent.textColor = pColors[1]
+        windPercent.textColor = pColors[2]
+        lightPercent.textColor = pColors[3]
+        darkPercent.textColor = pColors[4]
+        nonePercent.textColor = pColors[5]
+        hartPercent.textColor = pColors[6]
+        
+        let rColors = rateColors()
+        flameRate.textColor = rColors[0]
+        aquaRate.textColor = rColors[1]
+        windRate.textColor = rColors[2]
+        lightRate.textColor = rColors[3]
+        darkRate.textColor = rColors[4]
+        noneRate.textColor = rColors[5]
+        hartRate.textColor = rColors[6]
     }
     
     func changeViewsAnimation() {
@@ -131,11 +201,79 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
         }, completion: nil)
     }
     
+    
+    // MARK: - ShowingKeyboard methods
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let keyboardSize = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+            let screenSize = UIScreen.mainScreen().bounds.size
+            
+            let textFieldBottom = activeTextField.frame.origin.y + activeTextField.bounds.height + 8
+            let keyboardTop = screenSize.height - keyboardSize.height - toolBar!.bounds.height
+            
+            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
+            let curve = info[UIKeyboardAnimationCurveUserInfoKey] as! UInt
+            let options = UIViewAnimationOptions(curve)
+            
+            UIView.animateWithDuration(duration, delay: 0, options: options,
+                animations: {() in
+                    if textFieldBottom > keyboardTop {
+                        self.view.frame.origin.y = keyboardTop - textFieldBottom
+                    }
+                    self.toolBar!.frame.origin.y = keyboardTop - self.view.frame.origin.y
+                }, completion: nil)
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let info = notification.userInfo {
+            let screenSize = UIScreen.mainScreen().bounds.size
+            
+            let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
+            let curve = info[UIKeyboardAnimationCurveUserInfoKey] as! UInt
+            let options = UIViewAnimationOptions(curve)
+            
+            UIView.animateWithDuration(duration, delay: 0, options: options,
+                animations: {() in
+                    self.view.frame.origin.y = 0
+                    self.toolBar!.frame.origin.y = screenSize.height + self.toolBar!.bounds.height
+                }, completion: {Bool in
+                    if self.toolBar!.frame.origin.y >= screenSize.height {
+                        self.toolBar!.removeFromSuperview()
+                    }
+            })
+        }
+    }
+    
+    
     // MARK: - UITextFieldDelegate methods
     
+    func hideKeyboard(button: UIBarButtonItem) {
+        activeTextField.resignFirstResponder()
+    }
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        activeTextField = textField
+        
+        if toolBar == nil {
+            let screenSize = UIScreen.mainScreen().bounds.size
+            let barHeight: CGFloat = 44
+            toolBar = UIToolbar(frame: CGRectMake(0, screenSize.height - barHeight, screenSize.width, barHeight))
+            toolBar!.barTintColor = UIColor(red: 28/255, green: 28/255, blue: 28/255, alpha: 1)
+            toolBar!.tintColor = UIColor(red: 195/255, green: 8/255, blue: 234/255, alpha: 1)
+            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FlexibleSpace, target: nil, action: nil)
+            let closeButton = UIBarButtonItem(title: "完了", style: UIBarButtonItemStyle.Done, target: self, action: "hideKeyboard:")
+            toolBar!.items = [flexibleSpace, closeButton]
+        }
+        self.view.addSubview(toolBar!)
+        
+        return true
+    }
+    
     func changeEnergyRateFromValue(index: Int, rate: String) {
-        currentLevels[index - 1] = (rate as NSString).doubleValue / 100
-        currentRates[index - 1] = questsRates[index - 1] * currentLevels[index - 1]
+        currentLevels[index] = (rate as NSString).doubleValue / 100
+        currentRates[index] = questsRates[index] * currentLevels[index]
         
         changeViewsAnimation()
     }
@@ -143,23 +281,23 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(textField: UITextField) {
         switch textField {
         case    flameRate:
-            changeEnergyRateFromValue(1, rate: textField.text)
+            changeEnergyRateFromValue(0, rate: textField.text)
         case    aquaRate:
-            changeEnergyRateFromValue(2, rate: textField.text)
+            changeEnergyRateFromValue(1, rate: textField.text)
         case    windRate:
-            changeEnergyRateFromValue(3, rate: textField.text)
+            changeEnergyRateFromValue(2, rate: textField.text)
         case    lightRate:
-            changeEnergyRateFromValue(4, rate: textField.text)
+            changeEnergyRateFromValue(3, rate: textField.text)
         case    darkRate:
-            changeEnergyRateFromValue(5, rate: textField.text)
+            changeEnergyRateFromValue(4, rate: textField.text)
         case    noneRate:
-            changeEnergyRateFromValue(6, rate: textField.text)
+            changeEnergyRateFromValue(5, rate: textField.text)
         case    hartRate:
-            changeEnergyRateFromValue(7, rate: textField.text)
+            changeEnergyRateFromValue(6, rate: textField.text)
         default :
             break
         }
-        textField.text = NSString(format: "%3.0f", (textField.text as NSString).doubleValue)
+        textField.text = NSString(format: "%3.0f", (textField.text as NSString).doubleValue) as String
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

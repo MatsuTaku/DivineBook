@@ -21,7 +21,6 @@ class UnitsCell: UITableViewCell {
     @IBOutlet weak var atk: UILabel!
     @IBOutlet weak var plus: UILabel!
     
-    
     let elementColor: [UIColor?] = [nil,                    // 0
         UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 0.2), // 1 炎
         UIColor(red: 0.5, green: 0.5, blue: 1, alpha: 0.2), // 2 水
@@ -44,15 +43,17 @@ class UnitsCell: UITableViewCell {
     
     
     func setCell(unit: Unit) {
-        let iconName = NSString(format: "%03d-icon.png", unit.No)
+        let iconName = NSString(format: "%03d-icon.png", unit.No) as String
         if let iconImage = UIImage(named: iconName) {
             icon.image = iconImage
         } else {
             icon.image = UIImage(named: "empty-icon.png")
         }
-        number.text = NSString(format: "No. %d", unit.No)
+        number.text = NSString(format: "No. %d", unit.No) as String
         name.text = unit.name
-        race.text = unit.race.count == 1 ? unit.race[0] : unit.race[0] + "/" + unit.race[1]
+        //        race.text = unit.race.count == 1 ? unit.race[0] : unit.race[0] + "/" + unit.race[1]
+        let raceText = (unit.race as NSArray).componentsJoinedByString("/")
+        race.text = raceText
         var string = ""
         let star = "★"
         for _ in 0..<Int(unit.rare) {
@@ -60,10 +61,10 @@ class UnitsCell: UITableViewCell {
         }
         rare.text = string
         rare.textColor = elementColor[Int(unit.element)]
-        level.text = NSString(format: "Lv. %d", unit.lv)
-        hp.text = NSString(format: "HP %.0f", unit.hp)
-        atk.text = NSString(format: "ATK %.0f", unit.atk)
-        plus.text = NSString(format: "+換算 %.1f", unit.status())
+        level.text = NSString(format: "Lv. %d", unit.lv) as String
+        hp.text = NSString(format: "HP %.0f", unit.hp) as String
+        atk.text = NSString(format: "ATK %.0f", unit.atk) as String
+        plus.text = NSString(format: "+換算 %.1f", unit.status()) as String
     }
     
 }

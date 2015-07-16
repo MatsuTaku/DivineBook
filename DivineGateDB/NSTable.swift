@@ -12,18 +12,30 @@ import NTYCSVTable
 class NSTable: NSObject {
     
     var rows: [NS]
-    var emptyCount = 0
+//    var unitNo = [Int]()
     
-    override init() {
+    init(units: [Int]?) {
         if let path = NSBundle.mainBundle().pathForResource("ns", ofType: "csv") {
             let url = NSURL.fileURLWithPath(path)
             let table = NTYCSVTable(contentsOfURL: url)
-            
-            let units = UnitsTable()
+        
+            let unitTable = UnitsTable(units: units)
             
             var nsArray = [NS]()
             var index = -1
             for nsData in table.rows {
+                if let unitNo = units {
+                    var cont = true
+                    for no in unitNo {
+                        let dataNo = nsData["No"] as? Int
+                        if dataNo == no {
+                            cont = false
+                        }
+                    }
+                    if cont {
+                        continue
+                    }
+                }
                 var exist = false
                 for number in 1...2 {
                     if let isExist = nsData["Type\(number)"] as? String {
@@ -50,13 +62,13 @@ class NSTable: NSObject {
                         nsDict["Boost"] = nsData["Boost\(number)"]
                         nsDict["Detail"] = nsData["Detail\(number)"]
                         
-                        let no = nsDict["No"] as Int
+                        let no = nsDict["No"] as! Int
                         var atk: Double = 0
-                        if units.rows[index].No == no {
-                            atk = units.rows[index].atk
+                        if unitTable.rows[index].No == no {
+                            atk = unitTable.rows[index].atk
                         } else {
                             let predicate = NSPredicate(format: "showNo == %d", no)
-                            if let master = ((units.rows as NSArray).filteredArrayUsingPredicate(predicate!) as [Unit]).first {
+                            if let master = ((unitTable.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [Unit]).first {
                                 atk = master.atk
                             }
                         }
@@ -66,10 +78,39 @@ class NSTable: NSObject {
                 }
             }
             
-            rows = nsArray
+            // 標準回復NS追加
+            var healNSArray = [NS]()
+            let healValues: [String] = ["15%", "30%", "60%", "100%"]
+            for i in 1...4 {
+                var nsDict = [String: AnyObject]()
+                nsDict["No"] = 0
+                nsDict["Unit'sName"] = ""
+                nsDict["Number"] = i
+                nsDict["Name"] = "標準NS"
+                nsDict["Type"] = "回"
+                var panels = [String]()
+                for _ in 0..<i+1 {
+                    panels.append("回")
+                }
+                nsDict["Panel"] = panels
+                nsDict["Target"] = "回復"
+                nsDict["Leverage"] = healValues[i - 1]
+                nsDict["Critical"] = 0
+                nsDict["Boost"] = ""
+                nsDict["Detail"] = "標準回復NS（\(healValues[i-1])回復）"
+                let ns = NS(data: nsDict, atk: 0)
+                healNSArray.append(ns)
+            }
+            
+            rows = nsArray + healNSArray
+            
         } else {
             rows = []
         }
+    }
+    
+    convenience override init() {
+        self.init(units: nil)
     }
    
 }
