@@ -38,7 +38,7 @@ class NSTable: NSObject {
                 }
                 var exist = false
                 for number in 1...2 {
-                    if let isExist = nsData["Type\(number)"] as? String {
+                    if nsData["Type\(number)"] is String {
                         if !exist {
                             exist = true
                             index++

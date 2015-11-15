@@ -10,10 +10,10 @@ import UIKit
 
 protocol UnitsConditionMenuDelegate {
     func condMenuWillClose()
-    func listConditioning(#condIndex: [Bool], raceIndex: [Bool])
+    func listConditioning(condIndex condIndex: [Bool], raceIndex: [Bool])
 }
 
-class UnitsConditionMenu: NSObject {
+class UnitsConditionMenu: NSObject, UnitsConditionViewDelegate {
     
     var menuHeight: CGFloat = 265
     let navConHeight: CGFloat = 64  // If you use NavigationController
@@ -67,11 +67,11 @@ class UnitsConditionMenu: NSObject {
         animator = UIDynamicAnimator(referenceView: sourceView)
         
         // Add hide gesture recognizer
-        var hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
+        let hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
         hideGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Up
         condMenuContainerView.addGestureRecognizer(hideGestureRecognizer)
         
-        var tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
+        let tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
         outsideView.addGestureRecognizer(tapOutsideGestureRecognizer)
     }
     
@@ -80,13 +80,22 @@ class UnitsConditionMenu: NSObject {
         outsideView.frame = CGRectZero
         sourceView.addSubview(outsideView)
         
+        
         // Configure condtion menu container
         condMenuContainerView.frame = CGRectMake(0, sourceView.frame.origin.y - menuHeight, sourceView.frame.width, menuHeight)
         condMenuContainerView.backgroundColor = UIColor.clearColor()
         sourceView.addSubview(condMenuContainerView)
         
+        /*
+        // include UnitsConditionView
+        let view = UnitsConditionView(frame: condMenuContainerView.bounds)
+        view.delegate = self
+        condMenuContainerView.addSubview(view)
+        */
+
+        
         // Add blur View
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
         visualEffectView.frame = condMenuContainerView.bounds
         condMenuContainerView.addSubview(visualEffectView)
         
@@ -239,126 +248,126 @@ class UnitsConditionMenu: NSObject {
     func flameSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Flame: \(selected)")
+        print("Flame: \(selected)")
         condIndex[0] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func aquaSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Aqua: \(selected)")
+        print("Aqua: \(selected)")
         condIndex[1] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func windSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Wind: \(selected)")
+        print("Wind: \(selected)")
         condIndex[2] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func lightSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Light: \(selected)")
+        print("Light: \(selected)")
         condIndex[3] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func darkSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Dark: \(selected)")
+        print("Dark: \(selected)")
         condIndex[4] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func noneSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("None: \(selected)")
+        print("None: \(selected)")
         condIndex[5] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func humanSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("human: \(selected)")
+        print("human: \(selected)")
         raceIndex[0] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func dragonSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("dragon: \(selected)")
+        print("dragon: \(selected)")
         raceIndex[1] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func godSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("god: \(selected)")
+        print("god: \(selected)")
         raceIndex[2] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func devilSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("devil: \(selected)")
+        print("devil: \(selected)")
         raceIndex[3] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func fairySelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("fairy: \(selected)")
+        print("fairy: \(selected)")
         raceIndex[4] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func beastSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("beast: \(selected)")
+        print("beast: \(selected)")
         raceIndex[5] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func machineSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("machine: \(selected)")
+        print("machine: \(selected)")
         raceIndex[6] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
     func enhanceSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("enhance: \(selected)")
+        print("enhance: \(selected)")
         raceIndex[7] = selected
-        println("raceIndex: \(raceIndex)")
+        print("raceIndex: \(raceIndex)")
         valueChanged = true
     }
     
@@ -382,13 +391,56 @@ class UnitsConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func doneButtonPushed(sender: UIButton) {
-        delegate?.condMenuWillClose()
-        toggleMenu(false)
+    func clearButtonPushed() {
+        flame!.selected = false
+        aqua!.selected = false
+        wind!.selected = false
+        light!.selected = false
+        dark!.selected = false
+        none!.selected = false
+        human!.selected = false
+        dragon!.selected = false
+        god!.selected = false
+        devil!.selected = false
+        fairy!.selected = false
+        beast!.selected = false
+        machine!.selected = false
+        enhance!.selected = false
+        condIndex = [false, false, false, false, false, false]
+        raceIndex = [false, false, false, false, false, false, false, false]
+        valueChanged = true
+    }
+    
+    func sendListConditioning() {
         if valueChanged {
             valueChanged = !valueChanged
             delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
         }
+    }
+    
+    func doneButtonPushed(sender: UIButton) {
+        delegate?.condMenuWillClose()
+        sendListConditioning()
+        toggleMenu(false)
+    }
+    
+    func doneButtonPushed() {
+        delegate?.condMenuWillClose()
+        sendListConditioning()
+        toggleMenu(false)
+    }
+    
+    
+    // MARK: - UnitsConditionViewDelegate methods
+    
+    func selectedElement(selected: Bool, atIndex index: Int) {
+        condIndex[index] = selected
+        valueChanged = true
+    }
+    
+    func selectedRace(selected: Bool, atIndex index: Int) {
+        raceIndex[index] = selected
+        valueChanged = true
     }
     
     
@@ -397,21 +449,15 @@ class UnitsConditionMenu: NSObject {
     func handleGesture(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == .Up {
             delegate?.condMenuWillClose()
+            sendListConditioning()
             toggleMenu(false)
-            if valueChanged {
-                valueChanged = !valueChanged
-                delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
-            }
         }
     }
     
     func tapOutsideGesture(gesture: UITapGestureRecognizer) {
         delegate?.condMenuWillClose()
+        sendListConditioning()
         toggleMenu(false)
-        if valueChanged {
-            valueChanged = !valueChanged
-            delegate?.listConditioning(condIndex: condIndex, raceIndex: raceIndex)
-        }
     }
     
     func toggleMenu(shouldOpen: Bool) {

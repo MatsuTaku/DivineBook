@@ -108,7 +108,7 @@ class LSCell: UITableViewCell {
             if Shift {
                 shift += "シフト"
             }
-            var shiftType = Shift ? min(HP, ATK) : max(HP, ATK)
+            let shiftType = Shift ? min(HP, ATK) : max(HP, ATK)
             
             var value = ""
             let greeceNum = ["", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ"]

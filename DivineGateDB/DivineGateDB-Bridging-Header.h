@@ -12,6 +12,7 @@
 //#import "NTYCSVTable.h"
 //#import "NSString+NTYNonStringHandling.h"
 //#import <QuartzCore/QuartzCore.h>
+//#import <NCMB/NCMB.h>
 
 
 #endif

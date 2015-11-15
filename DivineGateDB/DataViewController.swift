@@ -27,14 +27,15 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         let unitsViewController = storyboard?.instantiateViewControllerWithIdentifier("Units") as! UnitsViewController
         let nsViewController = storyboard?.instantiateViewControllerWithIdentifier("NS") as! NSViewController
         let lsViewController = storyboard?.instantiateViewControllerWithIdentifier("LS") as! LSViewController
-        controllerArray = [unitsViewController, nsViewController, lsViewController]
+        let psViewController = storyboard?.instantiateViewControllerWithIdentifier("PS") as! PSViewController
+        controllerArray = [unitsViewController, nsViewController, lsViewController, psViewController]
         let index = segmentedController.selectedSegmentIndex
         let viewController = controllerArray[index]
         self.addChildViewController(viewController)
         contentsView.addSubview(viewController.view)
         viewController.didMoveToParentViewController(self)
         currentIndex = index
-        println(controllerArray[index])
+        print(controllerArray[index])
         
     }
     
@@ -65,7 +66,6 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
     
     @IBAction func changeSegmentIndex(sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
-        let viewController = controllerArray[index]
         changeViewController(index)
     }
     
@@ -82,7 +82,7 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
                 currentViewController.removeFromParentViewController()
                 toViewController.didMoveToParentViewController(self)
                 self.currentIndex = toIndex
-                println(self.controllerArray[self.currentIndex])
+                print(self.controllerArray[self.currentIndex])
         })
     }
     

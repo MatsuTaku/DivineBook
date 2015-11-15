@@ -1,18 +1,18 @@
 //
-//  LSViewController.swift
+//  PSViewController.swift
 //  DivineGateDB
 //
-//  Created by 松本拓真 on 2015/07/01.
+//  Created by 松本拓真 on 2015/08/24.
 //  Copyright (c) 2015年 TakumaMatsumoto. All rights reserved.
 //
 
 import UIKit
 import MBProgressHUD
 
-class LSViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class PSViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var tableView: UITableView!
     
     var sortButtons = [UIBarButtonItem]()
     var defaultLeftButtons = [UIBarButtonItem]()
@@ -20,9 +20,9 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     var searchBar: UISearchBar!
     var cancelSearchButton: UIBarButtonItem?
     
-    var lsTable: LSTable?
-    var currentArray = [LS]()
-    var filteredArray = [LS]()
+    var psTable: PSTable?
+    var currentArray = [PS]()
+    var filteredArray = [PS]()
     
     var isSearchMode: Bool = false
     var sortIndex: Int = 0
@@ -44,18 +44,18 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if lsTable == nil {
+        if psTable == nil {
             if !isLoading {
                 isLoading = true
                 //                SVProgressHUD.showWithMaskType(.Clear)
                 let showHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 showHUD.dimBackground = true
                 dispatch_async_global {
-                    self.lsTable = LSTable()
+                    self.psTable = PSTable()
                     self.dispatch_async_main {
-                        if self.lsTable != nil {
+                        if self.psTable != nil {
                             //                            SVProgressHUD.dismiss()
-                            self.currentArray = self.lsTable!.rows
+                            self.currentArray = self.psTable!.rows
                             self.reloadList()
                         } else {
                             self.isLoading = false
@@ -115,8 +115,8 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         tableView.dataSource = self
         tableView.delegate = self
         
-        let nib = UINib(nibName: "LSCell", bundle: nil)
-        tableView.registerNib(nib, forCellReuseIdentifier: "LSCell")
+        let nib = UINib(nibName: "PSCell", bundle: nil)
+        tableView.registerNib(nib, forCellReuseIdentifier: "PSCell")
         tableView.estimatedRowHeight = 44
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.bounds = self.view.bounds
@@ -148,7 +148,7 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func sortButtonMakeInTitle(title: String) -> UIBarButtonItem {
-        let sb = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Plain, target: self, action: "sortLS:")
+        let sb = UIBarButtonItem(title: title, style: UIBarButtonItemStyle.Plain, target: self, action: "sortPS:")
         return sb
     }
     
@@ -162,17 +162,16 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
             self.dispatch_async_main {
                 self.isLoading = false
                 self.tableView.reloadData()
-                print("LSTableView reloaded!")
+                print("psTableView reloaded!")
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                if let navigationItem: UINavigationItem = self.navigationBar!.items!.first {
-                    navigationItem.title = NSString(format: "%dskills", self.currentArray.count) as String
-                }
+                let navigationItem: UINavigationItem = self.navigationBar!.items!.first!
+                navigationItem.title = NSString(format: "%dskills", self.currentArray.count) as String
             }
         }
     }
     
     func toggleConditionMenu(button: UIBarButtonItem) {
-//        conditionMenu!.toggleMenu()
+        //        conditionMenu!.toggleMenu()
     }
     
     func sortAtIndex() {
@@ -187,13 +186,13 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     }
     
     func sortInNumUp() {
-        currentArray.sortInPlace { (h: LS, b: LS) in
+        currentArray.sortInPlace { (h: PS, b: PS) in
             h.No < b.No
         }
     }
     
     func sortInNumDown() {
-        currentArray.sortInPlace { (h: LS, b: LS) in
+        currentArray.sortInPlace { (h: PS, b: PS) in
             h.No > b.No
         }
     }
@@ -203,31 +202,30 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         reloadList()
     }
     
-    func sortLS(sender: UIButton) {
-        if let navigationItem: UINavigationItem = navigationBar!.items!.first {
-            let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: UIAlertControllerStyle.ActionSheet)
-            let numUpSort = UIAlertAction(title: "No順", style: .Default,
-                handler: {(action: UIAlertAction) in
-                    print("sort[↑No]")
-                    self.reloadListInSortAt(0)
-                    self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
-                    navigationItem.rightBarButtonItems = self.defaultRightButtons
-            })
-            let numDownSort = UIAlertAction(title: "No逆順", style: .Default,
-                handler: {(action: UIAlertAction) in
-                    print("sort[↓No]")
-                    self.reloadListInSortAt(1)
-                    self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
-                    navigationItem.rightBarButtonItems = self.defaultRightButtons
-            })
-            let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction) in
-                print("sort[Cancel!]")
-            })
-            actionSheet.addAction(numUpSort)
-            actionSheet.addAction(numDownSort)
-            actionSheet.addAction(cancel)
-            self.presentViewController(actionSheet, animated: true, completion: nil)
-        }
+    func sortPS(sender: UIButton) {
+        let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: UIAlertControllerStyle.ActionSheet)
+        let navigationItem: UINavigationItem = navigationBar!.items!.first!
+        let numUpSort = UIAlertAction(title: "No順", style: .Default,
+            handler: {(action: UIAlertAction) in
+                print("sort[↑No]")
+                self.reloadListInSortAt(0)
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+        })
+        let numDownSort = UIAlertAction(title: "No逆順", style: .Default,
+            handler: {(action: UIAlertAction) in
+                print("sort[↓No]")
+                self.reloadListInSortAt(1)
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+        })
+        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction) in
+            print("sort[Cancel!]")
+        })
+        actionSheet.addAction(numUpSort)
+        actionSheet.addAction(numDownSort)
+        actionSheet.addAction(cancel)
+        self.presentViewController(actionSheet, animated: true, completion: nil)
     }
     
     func searchButtonTapped(sender: UIBarButtonItem) {
@@ -294,7 +292,7 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
             predicates.append(NSPredicate(format: "showNo == %d", num))
         }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
-        filteredArray = (lsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [LS]
+        filteredArray = (psTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [PS]
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -318,7 +316,7 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("LSCell") as! LSCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("PSCell") as! PSCell
         if !isSearchMode {
             // 通常時
             cell.setCell(currentArray[indexPath.row])
@@ -328,5 +326,6 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         }
         return cell
     }
+
 
 }

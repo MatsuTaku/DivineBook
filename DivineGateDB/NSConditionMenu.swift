@@ -10,7 +10,7 @@ import UIKit
 
 protocol NSConditionMenuDelegate {
     func condMenuWillClose()
-    func listConditioning(#condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int)
+    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int)
 }
 
 class NSConditionMenu: NSObject {
@@ -58,7 +58,33 @@ class NSConditionMenu: NSObject {
         UIImage(named: "light.png"), // 4 光
         UIImage(named: "dark.png"),  // 5 闇
         UIImage(named: "none.png"),  // 6 無
-        UIImage(named: "hart.png"),  // 7 回復
+        UIImage(named: "hart.png")  // 7 回復
+    ]
+    let panelDisImage = [
+        nil, // 0 空
+        UIImage(named: "flame_dis.png"), // 1 炎
+        UIImage(named: "aqua_dis.png"),  // 2 水
+        UIImage(named: "wind_dis.png"),  // 3 風
+        UIImage(named: "light_dis.png"), // 4 光
+        UIImage(named: "dark_dis.png"),  // 5 闇
+        UIImage(named: "none_dis.png"),  // 6 無
+        UIImage(named: "hart_dis.png")  // 7 回復
+    ]
+    let countOnImage = [
+        nil, // 0
+        UIImage(named: "panel_on_one.png"), // 1
+        UIImage(named: "panel_on_two.png"),  // 2
+        UIImage(named: "panel_on_three.png"),  // 3
+        UIImage(named: "panel_on_four.png"), // 4
+        UIImage(named: "panel_on_five.png")  // 5
+    ]
+    let countOffImage = [
+        nil, // 0
+        UIImage(named: "panel_off_one.png"), // 1
+        UIImage(named: "panel_off_two.png"),  // 2
+        UIImage(named: "panel_off_three.png"),  // 3
+        UIImage(named: "panel_off_four.png"), // 4
+        UIImage(named: "panel_off_five.png")  // 5
     ]
     
     init(sourceView: UIView) {
@@ -70,11 +96,11 @@ class NSConditionMenu: NSObject {
         animator = UIDynamicAnimator(referenceView: sourceView)
         
         // Add hide gesture recognizer
-        var hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
+        let hideGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleGesture:")
         hideGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Up
         condMenuContainerView.addGestureRecognizer(hideGestureRecognizer)
         
-        var tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
+        let tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: "tapOutsideGesture:")
         outsideView.addGestureRecognizer(tapOutsideGestureRecognizer)
     }
     
@@ -90,7 +116,7 @@ class NSConditionMenu: NSObject {
         sourceView.addSubview(condMenuContainerView)
         
         // Add blur View
-        var visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
         visualEffectView.frame = condMenuContainerView.bounds
         condMenuContainerView.addSubview(visualEffectView)
         
@@ -109,32 +135,32 @@ class NSConditionMenu: NSObject {
         
         flame = UIButton(frame: CGRectMake(elementImagePadding, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         flame!.setImage(panelImage[1], forState: .Selected)
-        flame!.setImage(UIImage(named: "flame_dis.png"), forState: .Normal)
+        flame!.setImage(panelDisImage[1], forState: .Normal)
         flame!.addTarget(self, action: "flameSelected:", forControlEvents: .TouchUpInside)
         
         aqua = UIButton(frame: CGRectMake(elementImagePadding * 2 + elementImageWidth, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         aqua!.setImage(panelImage[2], forState: .Selected)
-        aqua!.setImage(UIImage(named: "aqua_dis.png"), forState: .Normal)
+        aqua!.setImage(panelDisImage[2], forState: .Normal)
         aqua!.addTarget(self, action: "aquaSelected:", forControlEvents: .TouchUpInside)
         
         wind = UIButton(frame: CGRectMake(elementImagePadding * 3 + elementImageWidth * 2, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         wind!.setImage(panelImage[3], forState: .Selected)
-        wind!.setImage(UIImage(named: "wind_dis.png"), forState: .Normal)
+        wind!.setImage(panelDisImage[3], forState: .Normal)
         wind!.addTarget(self, action: "windSelected:", forControlEvents: .TouchUpInside)
         
         light = UIButton(frame: CGRectMake(elementImagePadding * 4 + elementImageWidth * 3, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         light!.setImage(panelImage[4], forState: .Selected)
-        light!.setImage(UIImage(named: "light_dis.png"), forState: .Normal)
+        light!.setImage(panelDisImage[4], forState: .Normal)
         light!.addTarget(self, action: "lightSelected:", forControlEvents: .TouchUpInside)
         
         dark = UIButton(frame: CGRectMake(elementImagePadding * 5 + elementImageWidth * 4, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         dark!.setImage(panelImage[5], forState: .Selected)
-        dark!.setImage(UIImage(named: "dark_dis.png"), forState: .Normal)
+        dark!.setImage(panelDisImage[5], forState: .Normal)
         dark!.addTarget(self, action: "darkSelected:", forControlEvents: .TouchUpInside)
         
         none = UIButton(frame: CGRectMake(elementImagePadding * 6 + elementImageWidth * 5, labelFrame.origin.y + labelFrame.height + 6, elementImageWidth, elementImageWidth))
         none!.setImage(panelImage[6], forState: .Selected)
-        none!.setImage(UIImage(named: "none_dis.png"), forState: .Normal)
+        none!.setImage(panelDisImage[6], forState: .Normal)
         none!.addTarget(self, action: "noneSelected:", forControlEvents: .TouchUpInside)
         
         condMenuContainerView.addSubview(flame!)
@@ -156,28 +182,28 @@ class NSConditionMenu: NSObject {
         condMenuContainerView.addSubview(labelCount)
         
         count1 = UIButton(frame: CGRectMake(panelCountMargin, labelCount.frame.origin.y + labelCount.frame.height + 6, panelCountWidth, panelCountWidth))
-        count1!.setImage(UIImage(named: "panel_off_one.png"), forState: .Normal)
-        count1!.setImage(UIImage(named: "panel_on_one.png"), forState: .Selected)
+        count1!.setImage(countOffImage[1], forState: .Normal)
+        count1!.setImage(countOnImage[1], forState: .Selected)
         count1!.addTarget(self, action: "count1Selected:", forControlEvents: .TouchUpInside)
         
         count2 = UIButton(frame: CGRectMake(panelCountMargin + panelCountPadding + panelCountWidth, labelCount.frame.origin.y + labelCount.frame.height + 6, panelCountWidth, panelCountWidth))
-        count2!.setImage(UIImage(named: "panel_off_two.png"), forState: .Normal)
-        count2!.setImage(UIImage(named: "panel_on_two.png"), forState: .Selected)
+        count2!.setImage(countOffImage[2], forState: .Normal)
+        count2!.setImage(countOnImage[2], forState: .Selected)
         count2!.addTarget(self, action: "count2Selected:", forControlEvents: .TouchUpInside)
         
         count3 = UIButton(frame: CGRectMake(panelCountMargin + panelCountPadding * 2 + panelCountWidth * 2, labelCount.frame.origin.y + labelCount.frame.height + 6, panelCountWidth, panelCountWidth))
-        count3!.setImage(UIImage(named: "panel_off_three.png"), forState: .Normal)
-        count3!.setImage(UIImage(named: "panel_on_three.png"), forState: .Selected)
+        count3!.setImage(countOffImage[3], forState: .Normal)
+        count3!.setImage(countOnImage[3], forState: .Selected)
         count3!.addTarget(self, action: "count3Selected:", forControlEvents: .TouchUpInside)
         
         count4 = UIButton(frame: CGRectMake(panelCountMargin + panelCountPadding * 3 + panelCountWidth * 3, labelCount.frame.origin.y + labelCount.frame.height + 6, panelCountWidth, panelCountWidth))
-        count4!.setImage(UIImage(named: "panel_off_four.png"), forState: .Normal)
-        count4!.setImage(UIImage(named: "panel_on_four.png"), forState: .Selected)
+        count4!.setImage(countOffImage[4], forState: .Normal)
+        count4!.setImage(countOnImage[4], forState: .Selected)
         count4!.addTarget(self, action: "count4Selected:", forControlEvents: .TouchUpInside)
         
         count5 = UIButton(frame: CGRectMake(panelCountMargin + panelCountPadding * 4 + panelCountWidth * 4, labelCount.frame.origin.y + labelCount.frame.height + 6, panelCountWidth, panelCountWidth))
-        count5!.setImage(UIImage(named: "panel_off_five.png"), forState: .Normal)
-        count5!.setImage(UIImage(named: "panel_on_five.png"), forState: .Selected)
+        count5!.setImage(countOffImage[5], forState: .Normal)
+        count5!.setImage(countOnImage[5], forState: .Selected)
         count5!.addTarget(self, action: "count5Selected:", forControlEvents: .TouchUpInside)
         
         condMenuContainerView.addSubview(count1!)
@@ -279,63 +305,63 @@ class NSConditionMenu: NSObject {
     func flameSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Flame: \(selected)")
+        print("Flame: \(selected)")
         condIndex[0] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func aquaSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("aqua: \(selected)")
+        print("aqua: \(selected)")
         condIndex[1] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func windSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Wind: \(selected)")
+        print("Wind: \(selected)")
         condIndex[2] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func lightSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Light: \(selected)")
+        print("Light: \(selected)")
         condIndex[3] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func darkSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("Dark: \(selected)")
+        print("Dark: \(selected)")
         condIndex[4] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func noneSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("None: \(selected)")
+        print("None: \(selected)")
         condIndex[5] = selected
-        println("condIndex: \(condIndex)")
+        print("condIndex: \(condIndex)")
         valueChanged = true
     }
     
     func count1Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("count1: \(selected)")
+        print("count1: \(selected)")
         countIndex[0] = selected
-        println("countIndex: \(countIndex)")
+        print("countIndex: \(countIndex)")
         changePanelDisabled()
         valueChanged = true
     }
@@ -343,9 +369,9 @@ class NSConditionMenu: NSObject {
     func count2Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("count2: \(selected)")
+        print("count2: \(selected)")
         countIndex[1] = selected
-        println("countIndex: \(countIndex)")
+        print("countIndex: \(countIndex)")
         changePanelDisabled()
         valueChanged = true
     }
@@ -353,9 +379,9 @@ class NSConditionMenu: NSObject {
     func count3Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("count3: \(selected)")
+        print("count3: \(selected)")
         countIndex[2] = selected
-        println("countIndex: \(countIndex)")
+        print("countIndex: \(countIndex)")
         changePanelDisabled()
         valueChanged = true
     }
@@ -363,9 +389,9 @@ class NSConditionMenu: NSObject {
     func count4Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("count4: \(selected)")
+        print("count4: \(selected)")
         countIndex[3] = selected
-        println("countIndex: \(countIndex)")
+        print("countIndex: \(countIndex)")
         changePanelDisabled()
         valueChanged = true
     }
@@ -373,55 +399,55 @@ class NSConditionMenu: NSObject {
     func count5Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
-        println("count5: \(selected)")
+        print("count5: \(selected)")
         countIndex[4] = selected
-        println("countIndex: \(countIndex)")
+        print("countIndex: \(countIndex)")
         changePanelDisabled()
         valueChanged = true
     }
     func panel1Selected(sender: UIButton) {
         panelIndex[0] = (panelIndex[0] + 1) % 8
-        println("panel1: \(panelIndex[0])")
+        print("panel1: \(panelIndex[0])")
         sender.setImage(panelImage[panelIndex[0]], forState: .Normal)
-        println("panelIndex: \(panelIndex)")
+        print("panelIndex: \(panelIndex)")
         valueChanged = true
     }
     
     func panel2Selected(sender: UIButton) {
         panelIndex[1] = (panelIndex[1] + 1) % 8
-        println("panel1: \(panelIndex[1])")
+        print("panel1: \(panelIndex[1])")
         sender.setImage(panelImage[panelIndex[1]], forState: .Normal)
-        println("panelIndex: \(panelIndex)")
+        print("panelIndex: \(panelIndex)")
         valueChanged = true
     }
     
     func panel3Selected(sender: UIButton) {
         panelIndex[2] = (panelIndex[2] + 1) % 8
-        println("panel1: \(panelIndex[2])")
+        print("panel1: \(panelIndex[2])")
         sender.setImage(panelImage[panelIndex[2]], forState: .Normal)
-        println("panelIndex: \(panelIndex)")
+        print("panelIndex: \(panelIndex)")
         valueChanged = true
     }
     
     func panel4Selected(sender: UIButton) {
         panelIndex[3] = (panelIndex[3] + 1) % 8
-        println("panel1: \(panelIndex[3])")
+        print("panel1: \(panelIndex[3])")
         sender.setImage(panelImage[panelIndex[3]], forState: .Normal)
-        println("panelIndex: \(panelIndex)")
+        print("panelIndex: \(panelIndex)")
         valueChanged = true
     }
     
     func panel5Selected(sender: UIButton) {
         panelIndex[4] = (panelIndex[4] + 1) % 8
-        println("panel1: \(panelIndex[4])")
+        print("panel1: \(panelIndex[4])")
         sender.setImage(panelImage[panelIndex[4]], forState: .Normal)
-        println("panelIndex: \(panelIndex)")
+        print("panelIndex: \(panelIndex)")
         valueChanged = true
     }
     
     func changeTypeIndex(sender: UISegmentedControl) {
         typeIndex = sender.selectedSegmentIndex
-        println("typeIndex: \(typeIndex)")
+        print("typeIndex: \(typeIndex)")
         valueChanged = true
     }
     
@@ -486,7 +512,7 @@ class NSConditionMenu: NSObject {
         count5!.selected = false
         panel1!.setImage(panelImage[0], forState: .Normal)
         panel2!.setImage(panelImage[0], forState: .Normal)
-        panel3!.setImage(panelImage[0], forState: .Normal)
+            panel3!.setImage(panelImage[0], forState: .Normal)
         panel4!.setImage(panelImage[0], forState: .Normal)
         panel5!.setImage(panelImage[0], forState: .Normal)
         countIndex = [false, false, false, false, false]
@@ -499,8 +525,8 @@ class NSConditionMenu: NSObject {
     
     func doneButtonPushed(sender: UIButton) {
         delegate?.condMenuWillClose()
-        toggleMenu(false)
         sendListConditioning()
+        toggleMenu(false)
     }
     
     
@@ -509,18 +535,15 @@ class NSConditionMenu: NSObject {
     func handleGesture(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == .Up {
             delegate?.condMenuWillClose()
-            toggleMenu(false)
             sendListConditioning()
+            toggleMenu(false)
         }
     }
     
     func tapOutsideGesture(gesture: UITapGestureRecognizer) {
         delegate?.condMenuWillClose()
+        sendListConditioning()
         toggleMenu(false)
-        if valueChanged {
-            valueChanged = !valueChanged
-            delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelIndex: panelIndex, typeIndex: typeIndex)
-        }
     }
     
     func toggleMenu(shouldOpen: Bool) {

@@ -33,7 +33,7 @@ class UnitsTable: NSObject {
                         continue
                     }
                 }
-                if let race = unitData["Type"] as? String {
+                if unitData["Type"] is String {
                     let unit = Unit(data: unitData as! NSDictionary)
                     unitsArray.append(unit)
                 }

@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import SVProgressHUD
+//import SVProgressHUD
 import MBProgressHUD
 
 class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UnitsConditionMenuDelegate {
@@ -124,7 +124,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         
-        var nib = UINib(nibName: "UnitsCell", bundle: nil)
+        let nib = UINib(nibName: "UnitsCell", bundle: nil)
         tableView.registerNib(nib, forCellReuseIdentifier: "UnitCell")
         tableView.estimatedRowHeight = 55.0
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -175,9 +175,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.dispatch_async_main {
                 self.isLoading = false
                 self.tableView.reloadData()
-                println("UnitsTableView reloaded!")
+                print("UnitsTableView reloaded!")
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
-                (self.navigationBar!.items[0] as! UINavigationItem).title = NSString(format: "%dunits", self.currentArray.count) as String
+                let navItem = self.navigationBar!.items!.first!
+                navItem.title = NSString(format: "%dunits", self.currentArray.count) as String
             }
         }
     }
@@ -206,37 +207,37 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func sortInNumUp() {
-        currentArray.sort { (h: Unit, b: Unit) in
+        currentArray.sortInPlace { (h: Unit, b: Unit) in
             h.No < b.No
         }
     }
     
     func sortInNumDown() {
-        currentArray.sort { (h: Unit, b: Unit) in
+        currentArray.sortInPlace { (h: Unit, b: Unit) in
             h.No > b.No
         }
     }
     
     func sortInHp() {
-        currentArray.sort {(h: Unit, b: Unit) in
+        currentArray.sortInPlace {(h: Unit, b: Unit) in
             h.hp > b.hp
         }
     }
     
     func sortInAtk() {
-        currentArray.sort {(h: Unit, b: Unit) in
+        currentArray.sortInPlace {(h: Unit, b: Unit) in
             h.atk > b.atk
         }
     }
     
     func sortInStatus() {
-        currentArray.sort {(h: Unit, b: Unit) in
+        currentArray.sortInPlace {(h: Unit, b: Unit) in
             h.status() > b.status()
         }
     }
     
     func sortInSum() {
-        currentArray.sort {(h: Unit, b: Unit) in
+        currentArray.sortInPlace {(h: Unit, b: Unit) in
             h.sum() > b.sum()
         }
     }
@@ -248,51 +249,51 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func sortUnits(sender: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: UIAlertControllerStyle.ActionSheet)
-        let navigationItem = navigationBar!.items[0] as! UINavigationItem
+        let navigationItem: UINavigationItem = navigationBar!.items!.first!
         let numUpSort = UIAlertAction(title: "No順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[↑No]")
+            handler: {(action: UIAlertAction) in
+                print("sort[↑No]")
                 self.reloadListInSortAt(0)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
         })
         let numDownSort = UIAlertAction(title: "No逆順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[↓No]")
+            handler: {(action: UIAlertAction) in
+                print("sort[↓No]")
                 self.reloadListInSortAt(1)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
         })
         let hpSort = UIAlertAction(title: "HP順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[↓HP]")
+            handler: {(action: UIAlertAction) in
+                print("sort[↓HP]")
                 self.reloadListInSortAt(2)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
         })
         let atkSort = UIAlertAction(title: "ATK順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[↓ATK]")
+            handler: {(action: UIAlertAction) in
+                print("sort[↓ATK]")
                 self.reloadListInSortAt(3)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
         })
         let plusSort = UIAlertAction(title: "+換算順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[↓+換算]")
+            handler: {(action: UIAlertAction) in
+                print("sort[↓+換算]")
                 self.reloadListInSortAt(4)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
         })
         let sumSort = UIAlertAction(title: "HP+ATK順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[HP+ATK順]")
+            handler: {(action: UIAlertAction) in
+                print("sort[HP+ATK順]")
                 self.reloadListInSortAt(5)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
             })
-        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction!) in
-            println("sort[Cancel!]")
+        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction) in
+            print("sort[Cancel!]")
         })
         actionSheet.addAction(numUpSort)
         actionSheet.addAction(numDownSort)
@@ -313,8 +314,9 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func switchSearchMode(willSearchMode: Bool) {
+        let navigationItem: UINavigationItem = navigationBar!.items!.first!
         if willSearchMode {
-            println("search: \(willSearchMode)")
+            print("search: \(willSearchMode)")
             isSearchMode = willSearchMode
             if searchBar == nil {
                 searchBar = UISearchBar()
@@ -331,8 +333,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             if cancelSearchButton == nil {
                 cancelSearchButton = UIBarButtonItem(title: "戻る", style: .Plain, target: self, action: "cancelSearchButtonTapped:")
             }
-            let navigationItem = navigationBar!.items[0] as! UINavigationItem
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: nil,
+            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: [],
                 animations: {() in
                     navigationItem.leftBarButtonItems = nil
                     navigationItem.titleView = self.searchBar!
@@ -341,14 +342,13 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             searchBar!.becomeFirstResponder()
             tableView!.reloadData()
         } else {
-            println("search: \(willSearchMode)")
+            print("search: \(willSearchMode)")
             isSearchMode = willSearchMode
-            let navigationItem = navigationBar!.items[0] as! UINavigationItem
             navigationItem.leftBarButtonItems = self.defaultLeftButtons
             navigationItem.titleView = nil
             navigationItem.rightBarButtonItems = self.defaultRightButtons
             self.tableView!.reloadData()
-            (self.navigationBar!.items[0] as! UINavigationItem).title = NSString(format: "%dunits", self.currentArray.count) as String
+            navigationItem.title = NSString(format: "%dunits", self.currentArray.count) as String
         }
     }
     
@@ -360,10 +360,10 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func filterContaintsWithSearchText(searchText: String) {
-        println("searchText: \(searchText)")
+        print("searchText: \(searchText)")
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "name contains[cd] %@", searchText))
-        if let num = searchText.toInt() {
+        if let num = Int(searchText) {
             predicates.append(NSPredicate(format: "showNo == %d", num))
         }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
@@ -380,7 +380,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func condMenuWillClose() {
     }
     
-    func listConditioning(#condIndex: [Bool], raceIndex: [Bool]) {
+    func listConditioning(condIndex condIndex: [Bool], raceIndex: [Bool]) {
         isLoading = true
         let showHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         showHud.labelText = "検索中だぼん"
@@ -414,7 +414,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             if predicates != [] {
                 let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
-                println(predicate)
+                print(predicate)
                 //            list = (listUnits as! NSArray).filteredArrayUsingPredicate(predicate) as! [UnitsData]
                 self.currentArray = (self.unitsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [Unit]
             } else {
@@ -445,7 +445,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        var cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as! UnitsCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("UnitCell") as! UnitsCell
         if !isSearchMode {
             // 通常時
             cell.setCell(currentArray[indexPath.row])

@@ -195,18 +195,20 @@ class NSData: NSManagedObject {
     
     func setAttack() {
         if target != 0 {
+/*            MARK: COREDATA
             let appDel = UIApplication.sharedApplication().delegate as! AppDelegate
             let context = appDel.managedObjectContext!
-            var request = NSFetchRequest(entityName: "UnitsData")
+            let request = NSFetchRequest(entityName: "UnitsData")
             request.predicate = NSPredicate(format: "unit = %d", unit)
-            var result = context.executeFetchRequest(request, error: nil) as! [UnitsData]
+            var result = (try! context.executeFetchRequest(request)) as! [UnitsData]
             
             if result.count > 0 {
                 attack = result[0].atk * leverage
             } else {
-                println("unit isn't found!")
+                print("unit isn't found!")
             }
             value = attack
+*/
         } else {
             attack = 1
             value = leverage

@@ -9,8 +9,8 @@
 
 import UIKit
 import CoreData
-import CMPopTipView
-import SVProgressHUD
+//import CMPopTipView
+//import SVProgressHUD
 import MBProgressHUD
 
 class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, NSConditionMenuDelegate {
@@ -94,7 +94,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         if conditionMenu!.isMenuOpen {
             condMenuWillClose()
             conditionMenu!.toggleMenu(false)
-            SVProgressHUD.popActivity()
+//            SVProgressHUD.popActivity()
         }
         if isSearchMode {
             switchSearchMode(false)
@@ -234,8 +234,9 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 // TableViewの更新
                 self.tableView!.reloadData()
-                println("NSTableView reloaded!!")
-                ((self.navigationBar!.items[0] as! UINavigationItem) as UINavigationItem).title = NSString(format: "%dskills", self.currentArray.count) as String
+                print("NSTableView reloaded!!")
+                let navigationItem: UINavigationItem = self.navigationBar!.items!.first!
+                navigationItem.title = NSString(format: "%dskills", self.currentArray.count) as String
             }
         }
     }
@@ -267,8 +268,8 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         isPlusMode = !isPlusMode
         sender.selected = isPlusMode
         reloadList()
-        println("isPlusMode: \(isPlusMode)")
-        println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
+        print("isPlusMode: \(isPlusMode)")
+        print("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isPlusMode == true ? accentColor : UIColor.grayColor()
     }
     
@@ -276,8 +277,8 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         isCRTMode = !isCRTMode
         sender.selected = isCRTMode
         reloadList()
-        println("isCRTMode: \(isCRTMode)")
-        println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
+        print("isCRTMode: \(isCRTMode)")
+        print("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isCRTMode == true ? accentColor : UIColor.grayColor()
     }
     
@@ -285,8 +286,8 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         isAveMode = !isAveMode
         sender.selected = isAveMode
         reloadList()
-        println("isAveMode: \(isAveMode)")
-        println("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
+        print("isAveMode: \(isAveMode)")
+        print("Plus: \(isPlusMode), CRT: \(isCRTMode), Ave: \(isAveMode)")
         sender.tintColor = isAveMode == true ? accentColor : UIColor.grayColor()
     }
     
@@ -308,21 +309,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func sortInUnit() {
-        currentArray.sort {(h: NS, b: NS) in
+        currentArray.sortInPlace {(h: NS, b: NS) in
             h.No != b.No ? h.No < b.No
                 : h.number < b.number
         }
     }
     
     func sortInUnitDown() {
-        currentArray.sort {(h: NS, b: NS) in
+        currentArray.sortInPlace {(h: NS, b: NS) in
             h.No != b.No ? h.No > b.No
                 : h.number < b.number
         }
     }
     
     func sortInValue() {
-        currentArray.sort { (h: NS, b: NS) in
+        currentArray.sortInPlace { (h: NS, b: NS) in
             h.value != b.value ? h.value > b.value
                 : h.panels != b.panels ? h.panels < b.panels
                 : h.No != b.No ? h.No > b.No
@@ -331,7 +332,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func sortInPanels() {
-        currentArray.sort {(h: NS, b: NS) in
+        currentArray.sortInPlace {(h: NS, b: NS) in
             h.panels != b.panels ? h.panels < b.panels
                 : h.value != b.value ? h.value > b.value
                 : h.No != b.No ? h.No > b.No
@@ -340,7 +341,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func sortInCRT() {
-        currentArray.sort {(h: NS, b: NS) in
+        currentArray.sortInPlace {(h: NS, b: NS) in
             h.critical != b.critical ? h.critical > b.critical
                 : h.No != b.No ? h.No > b.No
                 : h.number < b.number
@@ -354,49 +355,49 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     
     func sortNS(sender: UIButton) {
         let actionSheet = UIAlertController(title: nil, message: "並べ替え条件を選択", preferredStyle: .ActionSheet)
-        let navItem = navigationBar!.items[0] as! UINavigationItem
+        let navItem: UINavigationItem = navigationBar!.items!.first!
         let NoSort = UIAlertAction(title: "No順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[No↑]")
+            handler: {(action: UIAlertAction) in
+                print("sort[No↑]")
                 self.reloadListInSortAt(0)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
         let NoDownSort = UIAlertAction(title: "No逆順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[No↓]")
+            handler: {(action: UIAlertAction) in
+                print("sort[No↓]")
                 self.reloadListInSortAt(1)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
         let ATKSort = UIAlertAction(title: "数値順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[ATK↓]")
+            handler: {(action: UIAlertAction) in
+                print("sort[ATK↓]")
                 self.reloadListInSortAt(2)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
         let PanelSort = UIAlertAction(title: "パネル数順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[Panels↑]")
+            handler: {(action: UIAlertAction) in
+                print("sort[Panels↑]")
                 self.reloadListInSortAt(3)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
         let CRTSort = UIAlertAction(title: "クリティカル率順", style: .Default,
-            handler: {(action: UIAlertAction!) in
-                println("sort[CRT↓]")
+            handler: {(action: UIAlertAction) in
+                print("sort[CRT↓]")
                 self.reloadListInSortAt(4)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
-        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction!) in
-            println("sort[Cancel!]")
+        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction) in
+            print("sort[Cancel!]")
         })
         actionSheet.addAction(NoSort)
         actionSheet.addAction(NoDownSort)
         actionSheet.addAction(ATKSort)
-//        actionSheet.addAction(PanelSort)
+        actionSheet.addAction(PanelSort)
         actionSheet.addAction(CRTSort)
         actionSheet.addAction(cancel)
         self.presentViewController(actionSheet, animated: true, completion: nil)
@@ -417,7 +418,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
 
     func switchSearchMode(willSearchMode: Bool) {
         if willSearchMode {
-            println("search: \(willSearchMode)")
+            print("search: \(willSearchMode)")
             isSearchMode = willSearchMode
             tableView!.reloadData()
             if searchBar == nil {
@@ -436,8 +437,8 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 cancelSearchButton = UIBarButtonItem(title: "戻る", style: .Plain, target: self, action: "cancelSearchButtonTapped:")
             }
             
-            let navItem = navigationBar!.items[0] as! UINavigationItem
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: nil,
+            let navItem: UINavigationItem = navigationBar!.items!.first!
+            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 3, options: [],
                 animations: {
                     navItem.leftBarButtonItems = nil
                     navItem.titleView = self.searchBar!
@@ -445,7 +446,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 }, completion: nil)
             searchBar!.becomeFirstResponder()
         } else {
-            println("search: \(willSearchMode)")
+            print("search: \(willSearchMode)")
             isSearchMode = willSearchMode
             if changedValueInSearch {
                 changedValueInSearch = false
@@ -453,11 +454,11 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             } else {
                 tableView.reloadData()
             }
-            let navItem = navigationBar!.items[0] as! UINavigationItem
+            let navItem: UINavigationItem = navigationBar!.items!.first!
             navItem.leftBarButtonItems = self.defaultLeftButtons
             navItem.titleView = nil
             navItem.rightBarButtonItems = self.defaultRightButtons
-            ((self.navigationBar!.items[0] as! UINavigationItem) as UINavigationItem).title = NSString(format: "%dskills", self.currentArray.count) as String
+            navItem.title = NSString(format: "%dskills", self.currentArray.count) as String
         }
     }
     
@@ -469,11 +470,11 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func filterContaintsWithSearchText(searchText: String) {
-        println("searchText: \(searchText)")
+        print("searchText: \(searchText)")
         var predicates = [NSPredicate]()
         predicates.append(NSPredicate(format: "unitsName contains[cd] %@", searchText))
         predicates.append(NSPredicate(format: "name contains[cd] %@", searchText))
-        if let num = searchText.toInt() {
+        if let num = Int(searchText) {
             predicates.append(NSPredicate(format: "showNo == %d", num))
         }
         let predicate = NSCompoundPredicate(type: .OrPredicateType, subpredicates: predicates)
@@ -506,7 +507,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     // 絞込処理
-    func listConditioning(#condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int) {
+    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int) {
         isLoading = true
         let showHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         showHud.labelText = "検索中だぼん"
@@ -549,7 +550,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             
             if predicates != [] {
                 let predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates)
-                println(predicate)
+                print(predicate)
                 //            list = (listNS as NSArray).filteredArrayUsingPredicate(predicate) as [NSData]
                 self.currentArray = (self.nsTable!.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [NS]
             } else {
@@ -596,12 +597,13 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         }
     }
     
-    
+    /*
     // MARK: - CMPopTipViewDelegate methods
     
     func popTipViewWasDismissedByUser(popTipView: CMPopTipView!) {
         
     }
+    */
     
     
     // MARK: - UITableViewDataSource
@@ -617,7 +619,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as! NSCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as! NSCell
         let ns = !isSearchMode ? currentArray[indexPath.row] : filteredArray[indexPath.row]
         cell.setCell(ns, plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         

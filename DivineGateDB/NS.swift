@@ -220,7 +220,7 @@ class NS: NSObject {
             critical = 0
         }
         
-        println("Did set \(No)-\(number):\(name)")
+        print("Did set \(No)-\(number):\(name)")
     }
     
     func condition() -> [Int] {
@@ -231,12 +231,12 @@ class NS: NSObject {
         return cond
     }
     
-    func changeValue(#plusIs: Bool, crtIs: Bool, averageIs: Bool) {
+    func changeValue(plusIs plusIs: Bool, crtIs: Bool, averageIs: Bool) {
         if target != 0 {
         value = Double(plusIs ? attack+99*5*leverage : attack) * Double(crtIs ? 1+critical/2 : 1) / Double(averageIs ? panels : 1)
         } else {
-            let healVolume = [0.15, 0.30, 0.60, 1.00]
-            let healCount = condition()[7]
+//            let healVolume = [0.15, 0.30, 0.60, 1.00]
+//            let healCount = condition()[7]
 //            value = Double((leverage + (healCount >= 2 ? healVolume[healCount - 2] : 0)) / (averageIs ? Double(panels) : 1))
             value = Double(leverage / (averageIs ? Double(panels) : 1))
         }

@@ -74,7 +74,7 @@ class Unit: NSObject {
         hp = data["HP"] as! Double
         atk = data["ATK"] as! Double
         
-        println("Did set \(No):\(name)")
+        print("Did set \(No):\(name)")
     }
     
     func status() -> Double {

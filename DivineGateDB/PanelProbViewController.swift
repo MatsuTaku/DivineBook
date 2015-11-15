@@ -214,7 +214,7 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
             
             let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
             let curve = info[UIKeyboardAnimationCurveUserInfoKey] as! UInt
-            let options = UIViewAnimationOptions(curve)
+            let options = UIViewAnimationOptions(rawValue: curve)
             
             UIView.animateWithDuration(duration, delay: 0, options: options,
                 animations: {() in
@@ -232,12 +232,12 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
             
             let duration = info[UIKeyboardAnimationDurationUserInfoKey] as! NSTimeInterval
             let curve = info[UIKeyboardAnimationCurveUserInfoKey] as! UInt
-            let options = UIViewAnimationOptions(curve)
+            let options = UIViewAnimationOptions(rawValue: curve)
             
             UIView.animateWithDuration(duration, delay: 0, options: options,
                 animations: {() in
                     self.view.frame.origin.y = 0
-                    self.toolBar!.frame.origin.y = screenSize.height + self.toolBar!.bounds.height
+                    self.toolBar!.frame.origin.y = screenSize.height
                 }, completion: {Bool in
                     if self.toolBar!.frame.origin.y >= screenSize.height {
                         self.toolBar!.removeFromSuperview()
@@ -281,23 +281,23 @@ class PanelProbViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(textField: UITextField) {
         switch textField {
         case    flameRate:
-            changeEnergyRateFromValue(0, rate: textField.text)
+            changeEnergyRateFromValue(0, rate: textField.text!)
         case    aquaRate:
-            changeEnergyRateFromValue(1, rate: textField.text)
+            changeEnergyRateFromValue(1, rate: textField.text!)
         case    windRate:
-            changeEnergyRateFromValue(2, rate: textField.text)
+            changeEnergyRateFromValue(2, rate: textField.text!)
         case    lightRate:
-            changeEnergyRateFromValue(3, rate: textField.text)
+            changeEnergyRateFromValue(3, rate: textField.text!)
         case    darkRate:
-            changeEnergyRateFromValue(4, rate: textField.text)
+            changeEnergyRateFromValue(4, rate: textField.text!)
         case    noneRate:
-            changeEnergyRateFromValue(5, rate: textField.text)
+            changeEnergyRateFromValue(5, rate: textField.text!)
         case    hartRate:
-            changeEnergyRateFromValue(6, rate: textField.text)
+            changeEnergyRateFromValue(6, rate: textField.text!)
         default :
             break
         }
-        textField.text = NSString(format: "%3.0f", (textField.text as NSString).doubleValue) as String
+        textField.text = NSString(format: "%3.0f", (textField.text! as NSString).doubleValue) as String
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {

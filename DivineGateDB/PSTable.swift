@@ -1,28 +1,28 @@
 //
-//  LSTable.swift
+//  PSTable.swift
 //  DivineGateDB
 //
-//  Created by 松本拓真 on 2015/06/28.
+//  Created by 松本拓真 on 2015/08/24.
 //  Copyright (c) 2015年 TakumaMatsumoto. All rights reserved.
 //
 
 import UIKit
 import NTYCSVTable
 
-class LSTable: NSObject {
+class PSTable: NSObject {
     
-    var rows: [LS]
+    var rows: [PS]
     
     init(units: [Int]?) {
-        if let path = NSBundle.mainBundle().pathForResource("ls", ofType: "csv") {
+        if let path = NSBundle.mainBundle().pathForResource("ps", ofType: "csv") {
             let url = NSURL.fileURLWithPath(path)
             let table = NTYCSVTable(contentsOfURL: url)
             
-            var lsArray = [LS]()
-            for lsData in table.rows {
+            var psArray = [PS]()
+            for psData in table.rows {
                 if let unitNo = units {
                     var cont = true
-                    let dataNo = lsData["No"] as? Int
+                    let dataNo = psData["No"] as? Int
                     for no in unitNo {
                         if dataNo == no {
                             cont = false
@@ -32,15 +32,12 @@ class LSTable: NSObject {
                         continue
                     }
                 }
-                if lsData["Name"] is String {
-                    let ls = LS(data: lsData as! NSDictionary)
-                    lsArray.append(ls)
-                } else if lsData["Target1"] is String {
-                    let ls = LS(data: lsData as! NSDictionary)
-                    lsArray.append(ls)
+                if psData["Name"] is String {
+                    let ps = PS(data: psData as! NSDictionary)
+                    psArray.append(ps)
                 }
             }
-            rows = lsArray
+            rows = psArray
         } else {
             rows = []
         }

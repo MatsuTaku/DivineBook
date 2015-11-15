@@ -98,7 +98,10 @@ class NSCell: UITableViewCell {
             // ダメージ計算処理
             value.text = NSString(format: "%.0f", ns.value!) as String
             let tage = ["ATK", "ALL\nATK"]
-            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : "")) as String
+            //            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : "")) as String
+            let typeText = NSString(format: "%@%@",
+                tage[ns.target-1],
+                (averageIs ? "/\(ns.panels.description)" : "") ) as String
             type.text = typeText
             critical.text = NSString(format: "%.0f%%", ns.critical * 100) as String
             crtLabel.text = "CRT"
