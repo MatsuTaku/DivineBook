@@ -19,12 +19,14 @@ class NSCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var detail: UILabel!
     @IBOutlet weak var boost: UILabel!
-    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var icon: IconImageView!
     @IBOutlet weak var type: UILabel!
     @IBOutlet weak var value: UILabel!
     @IBOutlet weak var critical: UILabel!
     @IBOutlet weak var crtLabel: UILabel!
     
+    @IBOutlet weak var iconWidth: NSLayoutConstraint!
+    var defaultIconWidth: CGFloat!
     
     let elementColor: [UIColor?] = [nil,                    // 0
         UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 0.4),   // 1 炎
@@ -50,6 +52,7 @@ class NSCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        defaultIconWidth = iconWidth.constant
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
@@ -69,7 +72,7 @@ class NSCell: UITableViewCell {
     
     // MARK: - main setting
     
-    func setCell(ns: NS, plusIs: Bool, crtIs: Bool, averageIs: Bool) {
+    func setCell(ns: NS, showIcon: Bool, plusIs: Bool, crtIs: Bool, averageIs: Bool) {
         name.text = ns.name
         engy1.image = panelImage[Int(ns.panel[0])]
         engy2.image = panelImage[Int(ns.panel[1])]
@@ -85,11 +88,12 @@ class NSCell: UITableViewCell {
         } else {
             boost.text = NSString(format: "■BOOST:%@", ns.boost) as String
         }
-        let iconName = NSString(format: "%03d-icon.png", ns.No) as String
-        if let panelImage = UIImage(named: iconName) {
-            icon.image = panelImage
+        if showIcon && ns.No >= 1 {
+            icon.hidden = false
+            iconWidth.constant = defaultIconWidth
+            icon.setIcon(ns.No, touchable: true)
         } else {
-            icon.image = UIImage(named: "empty-icon.png")
+            hideIcon()
         }
         switch ns.target {
         case    1, 2:   // 攻撃NS
@@ -98,7 +102,6 @@ class NSCell: UITableViewCell {
             // ダメージ計算処理
             value.text = NSString(format: "%.0f", ns.value!) as String
             let tage = ["ATK", "ALL\nATK"]
-            //            let typeText = NSString(format: "%@%@%@%@", tage[ns.target-1],(plusIs ? "+" : ""), (crtIs ? "c" : ""), (averageIs ? "/\(ns.panels.description)" : "")) as String
             let typeText = NSString(format: "%@%@",
                 tage[ns.target-1],
                 (averageIs ? "/\(ns.panels.description)" : "") ) as String
@@ -143,6 +146,8 @@ class NSCell: UITableViewCell {
                     leverage = "絶大"
                 case    8:
                     leverage = "超絶大"
+                case    10:
+                    leverage = "極大"
                 default :
                     leverage = "?"
                 }
@@ -163,6 +168,8 @@ class NSCell: UITableViewCell {
                     leverage = "絶大"
                 case    4:
                     leverage = "超絶大"
+                case    5:
+                    leverage = "極大"
                 default :
                     leverage = "?"
                 }
@@ -188,6 +195,27 @@ class NSCell: UITableViewCell {
             string = ns.detail
         }
         return  string!
+    }
+    
+    func setEmptyCell() {
+        name.text = "Empty"
+        engy1.image = panelImage[0]
+        engy2.image = panelImage[0]
+        engy3.image = panelImage[0]
+        engy4.image = panelImage[0]
+        engy5.image = panelImage[0]
+        detail.text = nil
+        boost.text = nil
+        hideIcon()
+        type.text = nil
+        value.text = nil
+        critical.text = nil
+        crtLabel.text = nil
+    }
+    
+    func hideIcon() {
+        icon.hidden = true
+        iconWidth.constant = 0
     }
     
 }

@@ -37,7 +37,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     var isSearchMode: Bool = false
     var isPlusMode: Bool = false
     var isCRTMode: Bool = true
-    var isAveMode: Bool = true
+    var isAveMode: Bool = false
     var sortIndex: Int = 0  // 2: ATK, 3: Panels, 4: CRT, 0,1: Unit
     
     var changedValueInSearch: Bool = false
@@ -60,14 +60,19 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         conditionMenu = NSConditionMenu(sourceView: self.view)
         conditionMenu!.delegate = self
         
+        loadProfile()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    func loadProfile() {
         if nsTable == nil {
             if !isLoading {
                 isLoading = true
-//                SVProgressHUD.showWithStatus("少しだけ待ってぼん", maskType: .Clear)
+                //                SVProgressHUD.showWithStatus("少しだけ待ってぼん", maskType: .Clear)
                 let showHud: MBProgressHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 showHud.dimBackground = true
                 showHud.labelText = "少しだけ待ってぼん"
@@ -75,24 +80,22 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                     self.nsTable = NSTable()
                     self.dispatch_async_main {
                         if self.nsTable != nil {
-//                            SVProgressHUD.dismiss()
+                            //                            SVProgressHUD.dismiss()
                             self.currentArray = self.nsTable!.rows
                             self.reloadList()
                         } else {
                             self.isLoading = false
-//                            SVProgressHUD.showErrorWithStatus("ERROR!")
+                            //                            SVProgressHUD.showErrorWithStatus("ERROR!")
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                         }
                     }
                 }
             }
-        }
-    }
+        }    }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         if conditionMenu!.isMenuOpen {
-            condMenuWillClose()
             conditionMenu!.toggleMenu(false)
 //            SVProgressHUD.popActivity()
         }
@@ -167,11 +170,11 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
         let searchButton = UIBarButtonItem(barButtonSystemItem: .Search, target: self, action: "searchButtonTapped:")
         defaultLeftButtons = [conditionButton, searchButton]
         
-        sortButtons.insert(sortButtonMakeInTitle("No順"), atIndex: 0)
-        sortButtons.insert(sortButtonMakeInTitle("No逆順"), atIndex: 1)
-        sortButtons.insert(sortButtonMakeInTitle("数値順"), atIndex: 2)
-        sortButtons.insert(sortButtonMakeInTitle("パネル数順"), atIndex: 3)
-        sortButtons.insert(sortButtonMakeInTitle("CRT順"), atIndex: 4)
+        sortButtons.insert(sortButtonMakeInTitle("No↑"), atIndex: 0)
+        sortButtons.insert(sortButtonMakeInTitle("No↓"), atIndex: 1)
+        sortButtons.insert(sortButtonMakeInTitle("計算値↓"), atIndex: 2)
+        sortButtons.insert(sortButtonMakeInTitle("パネル数↓"), atIndex: 3)
+        sortButtons.insert(sortButtonMakeInTitle("CRT↓"), atIndex: 4)
         
         // ※３ボタンを下部Viewに移行し、長押し処理を追加 {
         /*
@@ -370,9 +373,9 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
-        let ATKSort = UIAlertAction(title: "数値順", style: .Default,
+        let ATKSort = UIAlertAction(title: "計算値順", style: .Default,
             handler: {(action: UIAlertAction) in
-                print("sort[ATK↓]")
+                print("sort[Value↓]")
                 self.reloadListInSortAt(2)
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
@@ -391,8 +394,9 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 self.defaultRightButtons[0] = self.sortButtons[self.sortIndex]
                 navItem.rightBarButtonItems = self.defaultRightButtons
         })
-        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel, handler: {(actin: UIAlertAction) in
-            print("sort[Cancel!]")
+        let cancel = UIAlertAction(title: "キャンセル", style: .Cancel,
+            handler: {(actin: UIAlertAction) in
+                print("sort[Cancel!]")
         })
         actionSheet.addAction(NoSort)
         actionSheet.addAction(NoDownSort)
@@ -507,7 +511,7 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     }
     
     // 絞込処理
-    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int) {
+    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelSearchIndex: Int, panelIndex: [Int], typeIndex: Int) {
         isLoading = true
         let showHud = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         showHud.labelText = "検索中だぼん"
@@ -527,25 +531,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             }
             
             // 対象条件
-            var typePre: NSPredicate?
             if typeIndex != 0 {
                 switch typeIndex {
                 case    0:  // ALL
                     break
                 case    1:  // ATK
-                    typePre = NSPredicate(format: "target == %d OR target == %d", 1, 2)
+                    predicates.append(NSPredicate(format: "target == %d OR target == %d", 1, 2))
                 case    2:  // ATK:単体
-                    typePre = NSPredicate(format: "target == %d", 1)
+                    predicates.append(NSPredicate(format: "target == %d", 1))
                 case    3:  // ATK:全体
-                    typePre = NSPredicate(format: "target == %d", 2)
+                    predicates.append(NSPredicate(format: "target == %d", 2))
                 case    4:  // HEAL
-                    typePre = NSPredicate(format: "target == %d", 0)
+                    predicates.append(NSPredicate(format: "target == %d", 0))
                 default :
                     break
                 }
-            }
-            if typePre != nil {
-                predicates.append(typePre!)
             }
             
             if predicates != [] {
@@ -560,7 +560,6 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             
             // パネル数条件
             if countIndex != [false, false, false, false, false] {
-                //            var li = [NSData]()
                 var list = [NS]()
                 for ns in self.currentArray {
                     if countIndex[ns.panels - 1] {
@@ -579,9 +578,16 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
                 }
                 for ns in self.currentArray {
                     var isMatch: Bool = true
+                    let nsCond = ns.condition()
                     for i in 1..<cond.count {   // 1..<8    0=empty
-                        if ns.condition()[i] < cond[i] {
-                            isMatch = false
+                        if panelSearchIndex == 0 {
+                            if nsCond[i] < cond[i] {
+                                isMatch = false
+                            }
+                        } else {
+                            if nsCond[i] > cond[i] {
+                                isMatch = false
+                            }
                         }
                     }
                     if isMatch {
@@ -596,14 +602,6 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
             }
         }
     }
-    
-    /*
-    // MARK: - CMPopTipViewDelegate methods
-    
-    func popTipViewWasDismissedByUser(popTipView: CMPopTipView!) {
-        
-    }
-    */
     
     
     // MARK: - UITableViewDataSource
@@ -621,11 +619,21 @@ class NSViewController:  UIViewController, UITableViewDataSource, UITableViewDel
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("NSCell") as! NSCell
         let ns = !isSearchMode ? currentArray[indexPath.row] : filteredArray[indexPath.row]
-        cell.setCell(ns, plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
+        cell.setCell(ns, showIcon: true, plusIs: isPlusMode, crtIs: isCRTMode, averageIs: isAveMode)
         
         return cell
     }
     
     // MARK: - UITableViewDelegate method
+    
+    
+    // MARK: - Segue method
+    
+    func iconTapped(sender: IconImageView) {
+        if let toViewController = self.storyboard!.instantiateViewControllerWithIdentifier("UnitStatus") as? UnitStatusViewController {
+            toViewController.unitNo = sender.number
+            self.navigationController?.showViewController(toViewController, sender: nil)
+        }
+    }
     
 }

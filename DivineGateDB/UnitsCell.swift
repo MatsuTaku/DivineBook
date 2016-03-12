@@ -11,7 +11,7 @@ import CoreData
 
 class UnitsCell: UITableViewCell {
     
-    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var icon: IconImageView!
     @IBOutlet weak var number: UILabel!
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var rare: UILabel!
@@ -43,12 +43,7 @@ class UnitsCell: UITableViewCell {
     
     
     func setCell(unit: Unit) {
-        let iconName = NSString(format: "%03d-icon.png", unit.No) as String
-        if let iconImage = UIImage(named: iconName) {
-            icon.image = iconImage
-        } else {
-            icon.image = UIImage(named: "empty-icon.png")
-        }
+        icon.setIcon(unit.No, touchable: false)
         number.text = NSString(format: "No. %d", unit.No) as String
         name.text = unit.name
         //        race.text = unit.race.count == 1 ? unit.race[0] : unit.race[0] + "/" + unit.race[1]
@@ -66,5 +61,18 @@ class UnitsCell: UITableViewCell {
         atk.text = NSString(format: "ATK %.0f", unit.atk) as String
         plus.text = NSString(format: "+換算 %.1f", unit.status()) as String
     }
+    
+    func setEmptyCell() {
+        icon.image = UIImage(named: "empty-icon.png")
+        number.text = nil
+        name.text = "Empty"
+        race.text = nil
+        rare.text = nil
+        level.text = nil
+        hp.text = nil
+        atk.text = nil
+        plus.text = nil
+    }
+
     
 }

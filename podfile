@@ -6,13 +6,11 @@ use_frameworks!
 target 'DivineGateDB' do
     
 pod 'NTYCSVTable'
-#pod 'RAMAnimatedTabBarController', :git => 'https://github.com/Ramotion/animated-tab-bar'
+pod 'MBProgressHUD'
+pod 'SDWebImage'
 #pod 'RAMAnimatedTabBarController'
 #pod 'SVProgressHUD'
-pod 'MBProgressHUD'
-#pod 'CMPopTipView'
 #pod 'PageMenu', :git => 'https://github.com/uacaps/PageMenu.git'
-#pod 'NCMB', :git => 'https://github.com/NIFTYCloud-mbaas/ncmb_ios.git'
 
 end
 

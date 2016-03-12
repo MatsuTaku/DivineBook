@@ -12,7 +12,8 @@ class LSCell: UITableViewCell {
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var detail: UILabel!
-    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var icon: IconImageView!
+    @IBOutlet weak var iconWidth: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,15 +26,13 @@ class LSCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setCell(ls: LS) {
+    func setCell(ls: LS, showIcon: Bool) {
         name.text = nameString(ls)
         detail.text = detailString(ls)
-        
-        let iconName = NSString(format: "%03d-icon.png", ls.No) as String
-        if let iconImage = UIImage(named: iconName) {
-            icon.image = iconImage
+        if showIcon {
+            icon.setIcon(ls.No, touchable: true)
         } else {
-            icon.image = UIImage(named: "empty-icon.png")
+            hideIcon()
         }
     }
     
@@ -70,7 +69,7 @@ class LSCell: UITableViewCell {
                 case "神":    // 神
                     targetStr += "ゴッド"
                 case "魔物":    // 魔物
-                    targetStr += "デモン"
+                    targetStr += "デモ"
                 case "妖精":    // 妖精
                     targetStr += "スピリ"
                 case "獣":    // 獣
@@ -188,6 +187,17 @@ class LSCell: UITableViewCell {
             string  = ls.detail
         }
         return string!
+    }
+    
+    func setEmptyCell() {
+        name.text = "Empty"
+        detail.text = nil
+        hideIcon()
+    }
+    
+    func hideIcon() {
+        icon.hidden = true
+        iconWidth.constant = 0
     }
     
 }

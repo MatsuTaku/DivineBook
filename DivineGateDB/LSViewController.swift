@@ -321,10 +321,10 @@ class LSViewController: UIViewController, UITableViewDataSource, UITableViewDele
         let cell = tableView.dequeueReusableCellWithIdentifier("LSCell") as! LSCell
         if !isSearchMode {
             // 通常時
-            cell.setCell(currentArray[indexPath.row])
+            cell.setCell(currentArray[indexPath.row], showIcon: true)
         } else {
             // 検索時
-            cell.setCell(filteredArray[indexPath.row])
+            cell.setCell(filteredArray[indexPath.row], showIcon: true)
         }
         return cell
     }

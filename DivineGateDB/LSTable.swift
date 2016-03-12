@@ -32,10 +32,7 @@ class LSTable: NSObject {
                         continue
                     }
                 }
-                if lsData["Name"] is String {
-                    let ls = LS(data: lsData as! NSDictionary)
-                    lsArray.append(ls)
-                } else if lsData["Target1"] is String {
+                if lsData["Name"] is String || lsData["Target1"] is String {
                     let ls = LS(data: lsData as! NSDictionary)
                     lsArray.append(ls)
                 }

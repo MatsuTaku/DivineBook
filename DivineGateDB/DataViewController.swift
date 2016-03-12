@@ -15,7 +15,7 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
     @IBOutlet weak var contentsView: UIView!
     @IBOutlet weak var segmentedController: UISegmentedControl!
     
-    var controllerArray: [UIViewController]!
+    var controllerArray = [UIViewController]()
     var currentIndex: Int!
 
     override func viewDidLoad() {
@@ -24,11 +24,18 @@ class DataViewController: UIViewController, UISearchBarDelegate, UITextFieldDele
         // Do any additional setup after loading the view.
         
         // Setup views
-        let unitsViewController = storyboard?.instantiateViewControllerWithIdentifier("Units") as! UnitsViewController
-        let nsViewController = storyboard?.instantiateViewControllerWithIdentifier("NS") as! NSViewController
-        let lsViewController = storyboard?.instantiateViewControllerWithIdentifier("LS") as! LSViewController
-        let psViewController = storyboard?.instantiateViewControllerWithIdentifier("PS") as! PSViewController
-        controllerArray = [unitsViewController, nsViewController, lsViewController, psViewController]
+        if let unitsViewController = storyboard?.instantiateViewControllerWithIdentifier("Units") as? UnitsViewController {
+            controllerArray.append(unitsViewController)
+        }
+        if let nsViewController = storyboard?.instantiateViewControllerWithIdentifier("NS") as? NSViewController {
+            controllerArray.append(nsViewController)
+        }
+        if let lsViewController = storyboard?.instantiateViewControllerWithIdentifier("LS") as? LSViewController {
+            controllerArray.append(lsViewController)
+        }
+        if let psViewController = storyboard?.instantiateViewControllerWithIdentifier("PS") as? PSViewController {
+            controllerArray.append(psViewController)
+        }
         let index = segmentedController.selectedSegmentIndex
         let viewController = controllerArray[index]
         self.addChildViewController(viewController)

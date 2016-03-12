@@ -137,12 +137,13 @@ class NS: NSObject {
         }
         
         if let srcLeverage = data["Leverage"] as? String {
-            if target == 0 {
+            switch target  {
+            case    0:
                 // 回復NS
                 let healStrings = srcLeverage.componentsSeparatedByString("%")
                 let healVolume: Double = (healStrings[0] as NSString).doubleValue / 100
                 leverage = healVolume
-            } else if target == 1 {
+            case    1:
                 // 単体攻撃
                 switch srcLeverage {
                 case    "小":
@@ -159,10 +160,12 @@ class NS: NSObject {
                     leverage = 6.0
                 case    "超絶大":
                     leverage = 8.0
+                case    "極大":
+                    leverage = 10.0
                 default :
                     leverage = 0
                 }
-            } else if target == 2 {
+            case    2:
                 // 全体攻撃
                 switch srcLeverage {
                 case    "小":
@@ -179,10 +182,12 @@ class NS: NSObject {
                     leverage = 3.0
                 case    "超絶大":
                     leverage = 4.0
+                case    "極大":
+                    leverage = 5.0
                 default :
                     leverage = 0
                 }
-            } else {
+            default:
                 leverage = 0
             }
         } else {
@@ -233,7 +238,7 @@ class NS: NSObject {
     
     func changeValue(plusIs plusIs: Bool, crtIs: Bool, averageIs: Bool) {
         if target != 0 {
-        value = Double(plusIs ? attack+99*5*leverage : attack) * Double(crtIs ? 1+critical/2 : 1) / Double(averageIs ? panels : 1)
+            value = Double(plusIs ? attack+99*5*leverage : attack) * Double(crtIs ? 1+critical/2 : 1) / Double(averageIs ? panels : 1)
         } else {
 //            let healVolume = [0.15, 0.30, 0.60, 1.00]
 //            let healCount = condition()[7]

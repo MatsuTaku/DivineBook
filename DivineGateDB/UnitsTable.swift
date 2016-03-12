@@ -12,7 +12,6 @@ import NTYCSVTable
 class UnitsTable: NSObject {
     
     var rows: [Unit]
-//    var unitNo = [Int]()
     
     init(units: [Int]?) {
         if let path = NSBundle.mainBundle().pathForResource("units", ofType: "csv") {
@@ -21,9 +20,9 @@ class UnitsTable: NSObject {
             
             var unitsArray = [Unit]()
             for unitData in table.rows {
-                if let unitNo = units {
+                if let units = units {
                     var cont = true
-                    for no in unitNo {
+                    for no in units {
                         let dataNo = unitData["No"] as? Int
                         if dataNo == no {
                             cont = false

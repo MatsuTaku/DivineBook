@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -15,17 +16,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LS名LS名LS名LS名LS名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HzR-rJ-J6Q">
-                        <rect key="frame" x="8" y="1" width="166" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="20" id="d8l-ru-RiO"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="14"/>
-                        <color key="textColor" red="0.73492132870000004" green="0.20449082169999999" blue="0.71181162590000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <nil key="highlightedColor"/>
-                        <color key="shadowColor" white="0.20000000000000001" alpha="0.5" colorSpace="calibratedWhite"/>
-                        <size key="shadowOffset" width="0.0" height="1"/>
-                    </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wqj-1w-gLh">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.10000000000000001" colorSpace="calibratedRGB"/>
@@ -40,44 +30,31 @@
                             <constraint firstAttribute="height" constant="1" id="vmM-24-zaf"/>
                         </constraints>
                     </imageView>
-                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="XXt-m5-4Pw">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LS名LS名LS名LS名LS名" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HzR-rJ-J6Q">
+                        <rect key="frame" x="8" y="1" width="166" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="d8l-ru-RiO"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="14"/>
+                        <color key="textColor" red="0.73492132870000004" green="0.20449082169999999" blue="0.71181162590000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                        <color key="shadowColor" white="0.20000000000000001" alpha="0.5" colorSpace="calibratedWhite"/>
+                        <size key="shadowOffset" width="0.0" height="1"/>
+                    </label>
+                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="XXt-m5-4Pw" customClass="IconImageView" customModule="DivineGateDB" customModuleProvider="target">
                         <rect key="frame" x="279" y="1" width="41" height="41"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="52" id="6g5-Ww-NJC"/>
-                            <constraint firstAttribute="width" constant="53" id="B4B-rA-Ixm"/>
-                            <constraint firstAttribute="width" secondItem="XXt-m5-4Pw" secondAttribute="height" multiplier="1:1" id="Ff4-Pc-GVP"/>
+                            <constraint firstAttribute="width" constant="41" id="SPf-8r-XDR"/>
                             <constraint firstAttribute="height" constant="41" id="WCM-Xm-P9h"/>
-                            <constraint firstAttribute="height" constant="53" id="mpZ-fq-PfO"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="6g5-Ww-NJC"/>
-                                <exclude reference="B4B-rA-Ixm"/>
-                                <exclude reference="mpZ-fq-PfO"/>
-                            </mask>
-                        </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NS説明NS説明NS説明NS説明NS説明NS説明" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mut-Mp-XEG">
                         <rect key="frame" x="8" y="23" width="265" height="17"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="13" id="Isb-hJ-hTE"/>
-                            <constraint firstAttribute="height" constant="21" id="SDj-W1-kzQ"/>
-                            <constraint firstAttribute="height" constant="18" id="XmZ-Bq-b3Y"/>
-                            <constraint firstAttribute="height" constant="20" id="f8x-so-qSa"/>
-                        </constraints>
                         <fontDescription key="fontDescription" name="HiraKakuProN-W6" family="Hiragino Kaku Gothic ProN" pointSize="12"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <color key="shadowColor" white="0.20337084790000001" alpha="0.5" colorSpace="calibratedWhite"/>
                         <size key="shadowOffset" width="0.0" height="1"/>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="XmZ-Bq-b3Y"/>
-                                <exclude reference="f8x-so-qSa"/>
-                                <exclude reference="Isb-hJ-hTE"/>
-                                <exclude reference="SDj-W1-kzQ"/>
-                            </mask>
-                        </variation>
                     </label>
                 </subviews>
                 <constraints>
@@ -85,42 +62,30 @@
                     <constraint firstAttribute="trailing" secondItem="Wqj-1w-gLh" secondAttribute="trailing" id="4sa-XB-nOp"/>
                     <constraint firstItem="HzR-rJ-J6Q" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="5H7-SD-rPB"/>
                     <constraint firstItem="Mut-Mp-XEG" firstAttribute="top" secondItem="HzR-rJ-J6Q" secondAttribute="bottom" constant="2" id="6YY-F4-zem"/>
-                    <constraint firstItem="Wqj-1w-gLh" firstAttribute="top" secondItem="Mut-Mp-XEG" secondAttribute="bottom" constant="2" id="6yn-VU-Sr9"/>
                     <constraint firstAttribute="trailing" secondItem="9Ns-3i-LFo" secondAttribute="trailing" id="84w-Fw-32M"/>
-                    <constraint firstItem="Wqj-1w-gLh" firstAttribute="top" secondItem="XXt-m5-4Pw" secondAttribute="bottom" id="Ap2-VM-LVK"/>
                     <constraint firstItem="XXt-m5-4Pw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Wqj-1w-gLh" secondAttribute="bottom" id="Bgp-KE-bJz"/>
                     <constraint firstItem="XXt-m5-4Pw" firstAttribute="width" secondItem="XXt-m5-4Pw" secondAttribute="height" multiplier="1:1" id="CYy-b3-KJK"/>
-                    <constraint firstItem="XXt-m5-4Pw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9Ns-3i-LFo" secondAttribute="bottom" id="H7g-iI-YiE"/>
                     <constraint firstItem="Mut-Mp-XEG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="HNN-1W-HnL"/>
                     <constraint firstItem="9Ns-3i-LFo" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Reb-OD-lrB"/>
                     <constraint firstItem="9Ns-3i-LFo" firstAttribute="top" secondItem="XXt-m5-4Pw" secondAttribute="bottom" id="ene-Yk-1rj"/>
                     <constraint firstItem="9Ns-3i-LFo" firstAttribute="top" secondItem="Mut-Mp-XEG" secondAttribute="bottom" constant="2" id="iOA-5B-fR4"/>
                     <constraint firstItem="Wqj-1w-gLh" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="jAE-bI-CkS"/>
                     <constraint firstItem="Wqj-1w-gLh" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="lyD-aU-Ecs"/>
-                    <constraint firstItem="9Ns-3i-LFo" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="uz6-dm-qJJ"/>
                     <constraint firstAttribute="bottom" secondItem="9Ns-3i-LFo" secondAttribute="bottom" id="xZQ-D9-mcc"/>
                     <constraint firstItem="XXt-m5-4Pw" firstAttribute="leading" secondItem="Mut-Mp-XEG" secondAttribute="trailing" constant="6" id="yCB-AQ-9C4"/>
-                    <constraint firstAttribute="bottom" secondItem="Wqj-1w-gLh" secondAttribute="bottom" id="ycl-al-9gd"/>
                     <constraint firstAttribute="trailing" secondItem="XXt-m5-4Pw" secondAttribute="trailing" id="zf8-GY-KDU"/>
-                    <constraint firstItem="9Ns-3i-LFo" firstAttribute="top" secondItem="XXt-m5-4Pw" secondAttribute="bottom" constant="2" id="zhv-aN-ZPB"/>
-                    <constraint firstItem="HzR-rJ-J6Q" firstAttribute="top" secondItem="9Ns-3i-LFo" secondAttribute="bottom" id="zmc-rz-KBm"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
-                        <exclude reference="6yn-VU-Sr9"/>
-                        <exclude reference="Ap2-VM-LVK"/>
-                        <exclude reference="ycl-al-9gd"/>
-                        <exclude reference="zmc-rz-KBm"/>
-                        <exclude reference="uz6-dm-qJJ"/>
-                        <exclude reference="zhv-aN-ZPB"/>
-                        <exclude reference="H7g-iI-YiE"/>
+                        <exclude reference="CYy-b3-KJK"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.098039215690000001" green="0.098039215690000001" blue="0.098039215690000001" alpha="0.5" colorSpace="calibratedRGB"/>
             <connections>
                 <outlet property="detail" destination="Mut-Mp-XEG" id="jRK-RK-cof"/>
-                <outlet property="icon" destination="XXt-m5-4Pw" id="lfp-b3-VqH"/>
+                <outlet property="icon" destination="XXt-m5-4Pw" id="zBS-X8-1A2"/>
+                <outlet property="iconWidth" destination="SPf-8r-XDR" id="aiG-Qg-dDI"/>
                 <outlet property="name" destination="HzR-rJ-J6Q" id="0kY-mG-mna"/>
             </connections>
         </tableViewCell>

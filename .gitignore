@@ -1,7 +1,9 @@
 DivineGateDB.xcworkspace/
 *.csv
-[0-9][0-9][0-9]-icon.png
-[0-9][0-9][0-9][0-9]-icon.png
+*[0-9][0-9][0-9]-icon.png
+*[0-9][0-9][0-9][0-9]-icon.png
+*[0-9][0-9][0-9].png
+*[0-9][0-9][0-9][0-9].png
 
 # Mac
 .DS_Store

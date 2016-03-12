@@ -20,34 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set UIAppearances
         let themeColor = UIColor(red: 255/255, green: 200/255, blue: 150/255, alpha: 1)
-        let accentColor = UIColor(red: 195/255, green: 9/255, blue: 234/255, alpha: 1)
+//        let accentColor = UIColor(red: 195/255, green: 9/255, blue: 234/255, alpha: 1)
         UITabBar.appearance().tintColor = themeColor
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         UINavigationBar.appearance().tintColor = themeColor
         UITextField.appearance().keyboardAppearance = UIKeyboardAppearance.Dark
-        
-        /*
-        // NCMB Setup module
-        NCMB.setApplicationKey("6eb5da8c1be9615bba98526038d9cc0b0a19baecc74f587349e2f9f7f147a8e6", clientKey: "5e7b121add8fe8cd26c1aaec4bcbc58f905e27736b847a8f57592b04864c481f")
-        if NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1 {
-            //iOS8でのデバイストークン取得
-            let userNotificationTypes = (UIUserNotificationType.Alert |
-                UIUserNotificationType.Badge |
-                UIUserNotificationType.Sound);
-            
-            let settings = UIUserNotificationSettings(forTypes: userNotificationTypes, categories: nil)
-            application.registerUserNotificationSettings(settings)
-            application.registerForRemoteNotifications()
-        } else {
-            //iOS7以前でのデバイストークン取得
-            var types:UIRemoteNotificationType = UIRemoteNotificationType.Badge | UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound
-            UIApplication.sharedApplication().registerForRemoteNotificationTypes(types)
-        }
-        
-        // アプリ起動時のプッシュ通知
-        if let remoteNotification = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-            println("Remote Notification \(remoteNotification)")
-        }
-        */
         
         return true
     }

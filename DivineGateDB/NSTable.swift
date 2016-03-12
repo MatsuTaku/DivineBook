@@ -12,7 +12,6 @@ import NTYCSVTable
 class NSTable: NSObject {
     
     var rows: [NS]
-//    var unitNo = [Int]()
     
     init(units: [Int]?) {
         if let path = NSBundle.mainBundle().pathForResource("ns", ofType: "csv") {
@@ -22,12 +21,12 @@ class NSTable: NSObject {
             let unitTable = UnitsTable(units: units)
             
             var nsArray = [NS]()
-            var index = -1
+            var index = 0
             for nsData in table.rows {
-                if let unitNo = units {
+                if let units = units {
+                    let dataNo = nsData["No"] as? Int
                     var cont = true
-                    for no in unitNo {
-                        let dataNo = nsData["No"] as? Int
+                    for no in units {
                         if dataNo == no {
                             cont = false
                         }
@@ -36,11 +35,11 @@ class NSTable: NSObject {
                         continue
                     }
                 }
-                var exist = false
+                var exist = true
                 for number in 1...2 {
                     if nsData["Type\(number)"] is String {
-                        if !exist {
-                            exist = true
+                        if exist {
+                            exist = false
                             index++
                         }
                         var nsDict = [String: AnyObject]()
@@ -64,8 +63,8 @@ class NSTable: NSObject {
                         
                         let no = nsDict["No"] as! Int
                         var atk: Double = 0
-                        if unitTable.rows[index].No == no {
-                            atk = unitTable.rows[index].atk
+                        if unitTable.rows[index - 1].No == no {
+                            atk = unitTable.rows[index - 1].atk
                         } else {
                             let predicate = NSPredicate(format: "showNo == %d", no)
                             if let master = ((unitTable.rows as NSArray).filteredArrayUsingPredicate(predicate) as! [Unit]).first {
@@ -77,32 +76,35 @@ class NSTable: NSObject {
                     }
                 }
             }
+            rows = nsArray
             
-            // 標準回復NS追加
-            var healNSArray = [NS]()
-            let healValues: [String] = ["15%", "30%", "60%", "100%"]
-            for i in 1...4 {
-                var nsDict = [String: AnyObject]()
-                nsDict["No"] = 0
-                nsDict["Unit'sName"] = ""
-                nsDict["Number"] = i
-                nsDict["Name"] = "標準NS"
-                nsDict["Type"] = "回"
-                var panels = [String]()
-                for _ in 0..<i+1 {
-                    panels.append("回")
+            if units == nil {
+                // 標準回復NS追加
+                var healNSArray = [NS]()
+                let healValues: [String] = ["15%", "30%", "60%", "100%"]
+                let healStrings: [String] = ["ヒール：スモール", "ヒール：ミドル", "ヒール：ラージ", "ヒール：フル"]
+                for i in 0..<4 {
+                    var nsDict = [String: AnyObject]()
+                    nsDict["No"] = 0
+                    nsDict["Unit'sName"] = ""
+                    nsDict["Number"] = i + 1
+                    nsDict["Name"] = healStrings[i]
+                    nsDict["Type"] = "回"
+                    var panels = [String]()
+                    for _ in 0...i+1 {
+                        panels.append("回")
+                    }
+                    nsDict["Panel"] = panels
+                    nsDict["Target"] = "回復"
+                    nsDict["Leverage"] = healValues[i]
+                    nsDict["Critical"] = 0
+                    nsDict["Boost"] = ""
+                    nsDict["Detail"] = "標準回復NS（\(healValues[i])回復）"
+                    let ns = NS(data: nsDict, atk: 0)
+                    healNSArray.append(ns)
                 }
-                nsDict["Panel"] = panels
-                nsDict["Target"] = "回復"
-                nsDict["Leverage"] = healValues[i - 1]
-                nsDict["Critical"] = 0
-                nsDict["Boost"] = ""
-                nsDict["Detail"] = "標準回復NS（\(healValues[i-1])回復）"
-                let ns = NS(data: nsDict, atk: 0)
-                healNSArray.append(ns)
+                rows += healNSArray
             }
-            
-            rows = nsArray + healNSArray
             
         } else {
             rows = []

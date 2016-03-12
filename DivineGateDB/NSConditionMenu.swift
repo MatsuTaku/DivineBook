@@ -10,17 +10,17 @@ import UIKit
 
 protocol NSConditionMenuDelegate {
     func condMenuWillClose()
-    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelIndex: [Int], typeIndex: Int)
+    func listConditioning(condIndex condIndex: [Bool], countIndex: [Bool], panelSearchIndex: Int, panelIndex: [Int], typeIndex: Int)
 }
 
 class NSConditionMenu: NSObject {
     
-    var menuHeight: CGFloat = 320
+    var menuHeight: CGFloat = 330
     let navConHeight: CGFloat = 64  // If you use NavigationController
     let toolBarHeight: CGFloat = 44 // If you use toolBar
     let sourceView: UIView!
     var delegate: NSConditionMenuDelegate?
-    let condMenuContainerView = UIView()
+    var condMenuContainerView = UIView()
     let outsideView = UIView()
     var isMenuOpen: Bool = false
     var animator: UIDynamicAnimator!
@@ -30,8 +30,28 @@ class NSConditionMenu: NSObject {
     var condIndex: [Bool] = [false, false, false, false, false, false]
     var countIndex: [Bool] = [false, false, false, false, false]
     var panelIndex: [Int] = [0, 0, 0, 0, 0]   // 8進数で選択中のパネル条件を格納(5桁)
+    var panelSearchIndex: Int = 0
     var typeIndex: Int = 0
     
+    @IBOutlet weak var flame: UIButton!
+    @IBOutlet weak var aqua: UIButton!
+    @IBOutlet weak var wind: UIButton!
+    @IBOutlet weak var light: UIButton!
+    @IBOutlet weak var dark: UIButton!
+    @IBOutlet weak var none: UIButton!
+    @IBOutlet weak var count1: UIButton!
+    @IBOutlet weak var count2: UIButton!
+    @IBOutlet weak var count3: UIButton!
+    @IBOutlet weak var count4: UIButton!
+    @IBOutlet weak var count5: UIButton!
+    @IBOutlet weak var segConPanel: UISegmentedControl!
+    @IBOutlet weak var panel1: UIButton!
+    @IBOutlet weak var panel2: UIButton!
+    @IBOutlet weak var panel3: UIButton!
+    @IBOutlet weak var panel4: UIButton!
+    @IBOutlet weak var panel5: UIButton!
+    @IBOutlet weak var segConType: UISegmentedControl!
+    /*
     var flame: UIButton?
     var aqua: UIButton?
     var wind: UIButton?
@@ -43,12 +63,14 @@ class NSConditionMenu: NSObject {
     var count3: UIButton?
     var count4: UIButton?
     var count5: UIButton?
+    var segConPanel: UISegmentedControl?
     var panel1: UIButton?
     var panel2: UIButton?
     var panel3: UIButton?
     var panel4: UIButton?
     var panel5: UIButton?
     var segConType: UISegmentedControl?
+    */
     
     let panelImage = [
         UIImage(named: "empty.png"), // 0 空
@@ -110,11 +132,18 @@ class NSConditionMenu: NSObject {
         sourceView.addSubview(outsideView)
         
         // Configure condtion menu container
+        if let view = UINib(nibName: "NSConditionMenu", bundle: nil).instantiateWithOwner(self, options: nil).first as? UIView {
+            condMenuContainerView = view
+            condMenuContainerView.frame = CGRectMake(0, sourceView.frame.origin.y - menuHeight, sourceView.bounds.width, menuHeight)
+            sourceView.addSubview(condMenuContainerView)
+        }
+        /*
         condMenuContainerView.frame = CGRectMake(0, sourceView.frame.origin.y - menuHeight, sourceView.frame.width, menuHeight)
         condMenuContainerView.backgroundColor = UIColor.clearColor()
         
         sourceView.addSubview(condMenuContainerView)
-        
+        */
+        /*
         // Add blur View
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Dark))
         visualEffectView.frame = condMenuContainerView.bounds
@@ -216,12 +245,20 @@ class NSConditionMenu: NSObject {
         let panelImageWidth: CGFloat = 45
         let panelImagePadding: CGFloat = 10
         let panelImageMargin: CGFloat = (sourceView.frame.width - panelImageWidth * 5 - panelImagePadding * 4)/2
-        let labelPanel = UILabel(frame: CGRectMake(10, count1!.frame.origin.y + count1!.frame.height + 8, sourceView.frame.width - 20, 14))
+        let labelPanel = UILabel(frame: CGRectMake(140, count1!.frame.origin.y + count1!.frame.height + 8, sourceView.frame.width - 280, 14))
         labelPanel.text = "パネル"
         labelPanel.font = UIFont.systemFontOfSize(14)
         labelPanel.textColor = UIColor.whiteColor()
         labelPanel.textAlignment = NSTextAlignment.Center
         condMenuContainerView.addSubview(labelPanel)
+        
+        let segConPanelItems = ["Include", "Included"]
+        segConPanel = UISegmentedControl(items: segConPanelItems)
+        segConPanel!.frame = CGRectMake(labelPanel.frame.origin.x + labelPanel.bounds.size.width + 10, labelPanel.frame.origin.y - 3, 120, 20)
+        segConPanel!.tintColor = UIColor.whiteColor()
+        segConPanel!.selectedSegmentIndex = 0
+        segConPanel!.addTarget(self, action: "changePanelIndex:", forControlEvents: .ValueChanged)
+        condMenuContainerView.addSubview(segConPanel!)
         
         panel1 = UIButton(frame: CGRectMake(panelImageMargin, labelPanel.frame.origin.y + labelPanel.frame.height + 6, panelImageWidth, panelImageWidth))
         panel1!.setImage(panelImage[panelIndex[0]], forState: .Normal)
@@ -264,11 +301,10 @@ class NSConditionMenu: NSObject {
         
         let segConItems = ["ALL", "ATK", "単体", "全体", "HEAL"]
         segConType = UISegmentedControl(items: segConItems)
-        segConType!.frame.origin.y = labelType.frame.origin.y + labelType.frame.height + 6
         segConType!.frame = CGRectMake(10, labelType.frame.origin.y + labelType.frame.height + 6, sourceView.frame.width - 20, 29)
         segConType!.tintColor = UIColor.whiteColor()
         segConType!.selectedSegmentIndex = 0
-        segConType!.addTarget(self, action: "changeTypeIndex:", forControlEvents: UIControlEvents.ValueChanged)
+        segConType!.addTarget(self, action: "changeTypeIndex:", forControlEvents: .ValueChanged)
         condMenuContainerView.addSubview(segConType!)
         
         // ボトムボタン
@@ -290,19 +326,21 @@ class NSConditionMenu: NSObject {
         buttonDone.setTitleColor(UIColor.lightTextColor(), forState: .Highlighted)
         buttonDone.addTarget(self, action: "doneButtonPushed:", forControlEvents: .TouchUpInside)
         buttonDone.titleLabel!.font = UIFont.boldSystemFontOfSize(UIFont.buttonFontSize())
-        
+        */
+        /*
         condMenuContainerView.addSubview(buttonClear)
         condMenuContainerView.addSubview(buttonDone)
         
         let border = UIView(frame: CGRectMake(10, buttonClear.frame.origin.y - 4, sourceView.frame.width - 20, 1))
         border.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.6)
         condMenuContainerView.addSubview(border)
+        */
     }
     
     
     // MARK: - action methods
     
-    func flameSelected(sender: UIButton) {
+    @IBAction func flameSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("Flame: \(selected)")
@@ -311,7 +349,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func aquaSelected(sender: UIButton) {
+    @IBAction func aquaSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("aqua: \(selected)")
@@ -320,7 +358,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func windSelected(sender: UIButton) {
+    @IBAction func windSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("Wind: \(selected)")
@@ -329,7 +367,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func lightSelected(sender: UIButton) {
+    @IBAction func lightSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("Light: \(selected)")
@@ -338,7 +376,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func darkSelected(sender: UIButton) {
+    @IBAction func darkSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("Dark: \(selected)")
@@ -347,7 +385,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func noneSelected(sender: UIButton) {
+    @IBAction func noneSelected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("None: \(selected)")
@@ -356,7 +394,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func count1Selected(sender: UIButton) {
+    @IBAction func count1Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("count1: \(selected)")
@@ -366,7 +404,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func count2Selected(sender: UIButton) {
+    @IBAction func count2Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("count2: \(selected)")
@@ -376,7 +414,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func count3Selected(sender: UIButton) {
+    @IBAction func count3Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("count3: \(selected)")
@@ -386,7 +424,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func count4Selected(sender: UIButton) {
+    @IBAction func count4Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("count4: \(selected)")
@@ -396,7 +434,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func count5Selected(sender: UIButton) {
+    @IBAction func count5Selected(sender: UIButton) {
         let selected = !sender.selected
         sender.selected = selected
         print("count5: \(selected)")
@@ -405,7 +443,15 @@ class NSConditionMenu: NSObject {
         changePanelDisabled()
         valueChanged = true
     }
-    func panel1Selected(sender: UIButton) {
+    
+    @IBAction func changePanelIndex(sender: UISegmentedControl) {
+        panelSearchIndex = sender.selectedSegmentIndex
+        print("panelSearchIndex: \(panelSearchIndex)")
+        changePanelDisabled()
+        valueChanged = true
+    }
+    
+    @IBAction func panel1Selected(sender: UIButton) {
         panelIndex[0] = (panelIndex[0] + 1) % 8
         print("panel1: \(panelIndex[0])")
         sender.setImage(panelImage[panelIndex[0]], forState: .Normal)
@@ -413,7 +459,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func panel2Selected(sender: UIButton) {
+    @IBAction func panel2Selected(sender: UIButton) {
         panelIndex[1] = (panelIndex[1] + 1) % 8
         print("panel1: \(panelIndex[1])")
         sender.setImage(panelImage[panelIndex[1]], forState: .Normal)
@@ -421,7 +467,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func panel3Selected(sender: UIButton) {
+    @IBAction func panel3Selected(sender: UIButton) {
         panelIndex[2] = (panelIndex[2] + 1) % 8
         print("panel1: \(panelIndex[2])")
         sender.setImage(panelImage[panelIndex[2]], forState: .Normal)
@@ -429,7 +475,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func panel4Selected(sender: UIButton) {
+    @IBAction func panel4Selected(sender: UIButton) {
         panelIndex[3] = (panelIndex[3] + 1) % 8
         print("panel1: \(panelIndex[3])")
         sender.setImage(panelImage[panelIndex[3]], forState: .Normal)
@@ -437,7 +483,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func panel5Selected(sender: UIButton) {
+    @IBAction func panel5Selected(sender: UIButton) {
         panelIndex[4] = (panelIndex[4] + 1) % 8
         print("panel1: \(panelIndex[4])")
         sender.setImage(panelImage[panelIndex[4]], forState: .Normal)
@@ -445,7 +491,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func changeTypeIndex(sender: UISegmentedControl) {
+    @IBAction func changeTypeIndex(sender: UISegmentedControl) {
         typeIndex = sender.selectedSegmentIndex
         print("typeIndex: \(typeIndex)")
         valueChanged = true
@@ -468,21 +514,23 @@ class NSConditionMenu: NSObject {
         panel3!.enabled = true
         panel4!.enabled = true
         panel5!.enabled = true
-        switch decidePanelDisabled() {
-        case    1:
-            panel2!.enabled = false
-            fallthrough
-        case    2:
-            panel3!.enabled = false
-            fallthrough
-        case    3:
-            panel4!.enabled = false
-            fallthrough
-        case    4:
-            panel5!.enabled = false
-            fallthrough
-        default :
-            break
+        if panelSearchIndex == 0 {
+            switch decidePanelDisabled() {
+            case    1:
+                panel2!.enabled = false
+                fallthrough
+            case    2:
+                panel3!.enabled = false
+                fallthrough
+            case    3:
+                panel4!.enabled = false
+                fallthrough
+            case    4:
+                panel5!.enabled = false
+                fallthrough
+            default :
+                break
+            }
         }
     }
 
@@ -490,14 +538,18 @@ class NSConditionMenu: NSObject {
         if valueChanged {
             valueChanged = !valueChanged
             var panel = [0, 0, 0, 0, 0]
-            for i in 0..<decidePanelDisabled() {
-                panel[i] = panelIndex[i]
+            if panelSearchIndex == 0 {
+                for i in 0..<decidePanelDisabled() {
+                    panel[i] = panelIndex[i]
+                }
+            } else {
+                panel = panelIndex
             }
-            delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelIndex: panel, typeIndex: typeIndex)
+            delegate?.listConditioning(condIndex: condIndex, countIndex: countIndex, panelSearchIndex: panelSearchIndex, panelIndex: panel, typeIndex: typeIndex)
         }
     }
     
-    func clearButtonPushed(sender: UIButton) {
+    @IBAction func clearButtonPushed(sender: UIButton) {
         flame!.selected = false
         aqua!.selected = false
         wind!.selected = false
@@ -516,6 +568,8 @@ class NSConditionMenu: NSObject {
         panel4!.setImage(panelImage[0], forState: .Normal)
         panel5!.setImage(panelImage[0], forState: .Normal)
         countIndex = [false, false, false, false, false]
+        segConPanel!.selectedSegmentIndex = 0
+        panelSearchIndex = 0
         panelIndex = [0, 0, 0, 0, 0]
         segConType!.selectedSegmentIndex = 0
         typeIndex = 0
@@ -523,7 +577,7 @@ class NSConditionMenu: NSObject {
         valueChanged = true
     }
     
-    func doneButtonPushed(sender: UIButton) {
+    @IBAction func doneButtonPushed(sender: UIButton) {
         delegate?.condMenuWillClose()
         sendListConditioning()
         toggleMenu(false)
@@ -534,19 +588,20 @@ class NSConditionMenu: NSObject {
     
     func handleGesture(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == .Up {
-            delegate?.condMenuWillClose()
-            sendListConditioning()
             toggleMenu(false)
         }
     }
     
     func tapOutsideGesture(gesture: UITapGestureRecognizer) {
-        delegate?.condMenuWillClose()
-        sendListConditioning()
         toggleMenu(false)
     }
     
     func toggleMenu(shouldOpen: Bool) {
+        if (!shouldOpen) {
+            delegate?.condMenuWillClose()
+            sendListConditioning()
+        }
+        
         toggleOutsideView(shouldOpen)
         
         animator.removeAllBehaviors()

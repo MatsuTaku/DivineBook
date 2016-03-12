@@ -12,7 +12,8 @@ class PSCell: UITableViewCell {
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var detail: UILabel!
-    @IBOutlet weak var icon: UIImageView!
+    @IBOutlet weak var icon: IconImageView!
+    @IBOutlet weak var iconWidth: NSLayoutConstraint!
     
     let elementColor: [UIColor?] = [nil,                    // 0
         UIColor(red: 1, green: 0.5, blue: 0.5, alpha: 0.4),   // 1 炎
@@ -39,15 +40,25 @@ class PSCell: UITableViewCell {
         super.layoutSubviews()
     }
     
-    func setCell(ps: PS) {
+    func setCell(ps: PS, showIcon: Bool) {
         name.text = ps.name
         detail.text = ps.detail
-        let iconName = NSString(format: "@03d-icon.png", ps.No) as String
-        if let iconImage = UIImage(named: iconName) {
-            icon.image = iconImage
+        if showIcon {
+            icon.setIcon(ps.No, touchable: true)
         } else {
-            icon.image = UIImage(named: "empty-image.png")
+            hideIcon()
         }
+    }
+    
+    func setEmptyCell() {
+        name.text = "Empty"
+        detail.text = nil
+        hideIcon()
+    }
+    
+    func hideIcon() {
+        icon.hidden = true
+        iconWidth.constant = 0
     }
     
 }

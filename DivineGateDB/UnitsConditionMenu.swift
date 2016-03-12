@@ -13,7 +13,7 @@ protocol UnitsConditionMenuDelegate {
     func listConditioning(condIndex condIndex: [Bool], raceIndex: [Bool])
 }
 
-class UnitsConditionMenu: NSObject, UnitsConditionViewDelegate {
+class UnitsConditionMenu: NSObject {
     
     var menuHeight: CGFloat = 265
     let navConHeight: CGFloat = 64  // If you use NavigationController

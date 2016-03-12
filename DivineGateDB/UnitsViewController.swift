@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-//import SVProgressHUD
 import MBProgressHUD
 
 class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UnitsConditionMenuDelegate {
@@ -47,26 +46,32 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         conditionMenu = UnitsConditionMenu(sourceView: self.view)
         conditionMenu!.delegate = self
         
+        loadProfile()
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+    }
+    
+    func loadProfile() {
         if unitsTable == nil {
             if !isLoading {
                 isLoading = true
-//                SVProgressHUD.showWithMaskType(.Clear)
+                //                SVProgressHUD.showWithMaskType(.Clear)
                 let showHUD = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 showHUD.dimBackground = true
                 dispatch_async_global {
                     self.unitsTable = UnitsTable()
                     self.dispatch_async_main {
                         if self.unitsTable != nil {
-//                            SVProgressHUD.dismiss()
+                            //                            SVProgressHUD.dismiss()
                             self.currentArray = self.unitsTable!.rows
                             self.reloadList()
                         } else {
                             self.isLoading = false
-//                            SVProgressHUD.showErrorWithStatus("ERROR!")
+                            //                            SVProgressHUD.showErrorWithStatus("ERROR!")
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                         }
                     }
@@ -151,12 +156,13 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         let searchButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchButtonTapped:")
         defaultLeftButtons = [conditionButton, searchButton]
         
-        sortButtons.insert(sortButtonMakeInTitle("No順"), atIndex: 0)
-        sortButtons.insert(sortButtonMakeInTitle("No逆順"), atIndex: 1)
-        sortButtons.insert(sortButtonMakeInTitle("HP順"), atIndex: 2)
-        sortButtons.insert(sortButtonMakeInTitle("ATK順"), atIndex: 3)
-        sortButtons.insert(sortButtonMakeInTitle("+換算順"), atIndex: 4)
-        sortButtons.insert(sortButtonMakeInTitle("HP+ATK順"), atIndex: 5)
+        sortButtons.insert(sortButtonMakeInTitle("No↑"), atIndex: 0)
+        sortButtons.insert(sortButtonMakeInTitle("No↓"), atIndex: 1)
+        sortButtons.insert(sortButtonMakeInTitle("HP↓"), atIndex: 2)
+        sortButtons.insert(sortButtonMakeInTitle("ATK↓"), atIndex: 3)
+        sortButtons.insert(sortButtonMakeInTitle("+換算値↓"), atIndex: 4)
+        sortButtons.insert(sortButtonMakeInTitle("HP+ATK↓"), atIndex: 5)
+        sortButtons.insert(sortButtonMakeInTitle("RARE↓"), atIndex: 6)
         defaultRightButtons = [sortButtons[sortIndex]]
     }
     
@@ -201,6 +207,8 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
             sortInStatus()
         case    5:
             sortInSum()
+        case 6:
+            sortInRare()
         default :
             break
         }
@@ -239,6 +247,13 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     func sortInSum() {
         currentArray.sortInPlace {(h: Unit, b: Unit) in
             h.sum() > b.sum()
+        }
+    }
+    
+    func sortInRare() {
+        currentArray.sortInPlace {(h: Unit, b: Unit) in
+            h.rare != b.rare ? h.rare > b.rare :
+            h.No > b.No
         }
     }
     
@@ -287,8 +302,15 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         })
         let sumSort = UIAlertAction(title: "HP+ATK順", style: .Default,
             handler: {(action: UIAlertAction) in
-                print("sort[HP+ATK順]")
+                print("sort[↓HP+ATK]")
                 self.reloadListInSortAt(5)
+                self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
+                navigationItem.rightBarButtonItems = self.defaultRightButtons
+            })
+        let rareSort = UIAlertAction(title: "レアリティ順", style: .Default,
+            handler: {(action: UIAlertAction) in
+                print("sort[↓レアリティ]")
+                self.reloadListInSortAt(6)
                 self.defaultRightButtons = [self.sortButtons[self.sortIndex]]
                 navigationItem.rightBarButtonItems = self.defaultRightButtons
             })
@@ -297,6 +319,7 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
         })
         actionSheet.addAction(numUpSort)
         actionSheet.addAction(numDownSort)
+        actionSheet.addAction(rareSort)
         actionSheet.addAction(hpSort)
         actionSheet.addAction(atkSort)
         actionSheet.addAction(plusSort)
@@ -458,5 +481,26 @@ class UnitsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     // MARK: - UITableViewDelegate method
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("pushUnitsStatusView", sender: self)
+    }
+    
+    
+    // MARK: - segue method
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "pushUnitsStatusView" {
+            let viewController = segue.destinationViewController as! UnitStatusViewController
+            let indexPath = tableView.indexPathForSelectedRow!
+            if !isSearchMode {
+                viewController.unitNo = currentArray[indexPath.row].No
+            } else {
+                viewController.unitNo = filteredArray[indexPath.row].No
+            }
+            
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        }
+    }
     
 }

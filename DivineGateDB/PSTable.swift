@@ -26,6 +26,7 @@ class PSTable: NSObject {
                     for no in unitNo {
                         if dataNo == no {
                             cont = false
+                            break
                         }
                     }
                     if cont {

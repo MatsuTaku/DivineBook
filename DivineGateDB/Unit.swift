@@ -35,7 +35,7 @@ class Unit: NSObject {
         HP
         ATK
         */
-        No = (data["No"] as! Int)
+        No = data["No"] as! Int
         if let unitName = data["Name"] as? String {
             name = unitName
         } else if let unitName = (data["Name"] as? Int)?.description {

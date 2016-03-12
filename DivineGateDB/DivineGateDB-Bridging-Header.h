@@ -9,10 +9,5 @@
 #ifndef DivineGateDB_DivineGateDB_Bridging_Header_h
 #define DivineGateDB_DivineGateDB_Bridging_Header_h
 
-//#import "NTYCSVTable.h"
-//#import "NSString+NTYNonStringHandling.h"
-//#import <QuartzCore/QuartzCore.h>
-//#import <NCMB/NCMB.h>
-
 
 #endif
