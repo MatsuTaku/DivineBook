@@ -2759,7 +2759,6 @@
 		F1C1A8DE1C246C4A0035BFA4 /* 1787-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1C1A8D91C246C4A0035BFA4 /* 1787-icon.png */; };
 		F1C1A8DF1C246C4A0035BFA4 /* 1788-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1C1A8DA1C246C4A0035BFA4 /* 1788-icon.png */; };
 		F1C6D20C1A3B680500E68897 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20B1A3B680500E68897 /* AppDelegate.swift */; };
-		F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C6D20D1A3B680500E68897 /* ViewController.swift */; };
 		F1C6D2111A3B680500E68897 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D20F1A3B680500E68897 /* Main.storyboard */; };
 		F1C6D2131A3B680500E68897 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D2121A3B680500E68897 /* Images.xcassets */; };
 		F1C6D2161A3B680500E68897 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1C6D2141A3B680500E68897 /* LaunchScreen.xib */; };
@@ -5941,7 +5940,6 @@
 		F1C6D2061A3B680500E68897 /* DivineGateDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivineGateDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1C6D20A1A3B680500E68897 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F1C6D20B1A3B680500E68897 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F1C6D20D1A3B680500E68897 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F1C6D2101A3B680500E68897 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F1C6D2121A3B680500E68897 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		F1C6D2151A3B680500E68897 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -6749,7 +6747,8 @@
 			children = (
 				F1C6D2391A3B6C7900E68897 /* UnitsViewController.swift */,
 				F1FDAF921A3DB845001427E4 /* UnitStatusViewController.swift */,
-				F1E290BD1AB344CE00D60DEE /* SubClass */,
+				F116C0AC1A9DD6D600369562 /* UnitsConditionMenu.swift */,
+				F18468501B8ADF790063AED8 /* UnitsConditionMenu.xib */,
 			);
 			name = Units;
 			sourceTree = "<group>";
@@ -6758,7 +6757,8 @@
 			isa = PBXGroup;
 			children = (
 				F1C6D23F1A3B71AB00E68897 /* NSViewController.swift */,
-				F1E290BE1AB344D800D60DEE /* SubClass */,
+				F1A1577E1A9068100061E9BA /* NSConditionMenu.swift */,
+				F1D76B5F1C63B2AC008C95D0 /* NSConditionMenu.xib */,
 			);
 			name = NS;
 			sourceTree = "<group>";
@@ -9447,18 +9447,17 @@
 		F1C6D2081A3B680500E68897 /* DivineGateDB */ = {
 			isa = PBXGroup;
 			children = (
-				F1C6D22B1A3B684D00E68897 /* Data */,
-				F1858BFB1AB127E2006DC30E /* View */,
-				F1F25A9C1AA60B0D00FAA8B9 /* CSVFile */,
-				F13D16DB1A6FC48300FD67A4 /* Images */,
 				F1C6D20B1A3B680500E68897 /* AppDelegate.swift */,
-				F1C6D20D1A3B680500E68897 /* ViewController.swift */,
 				F1C6D20F1A3B680500E68897 /* Main.storyboard */,
 				F1C6D2121A3B680500E68897 /* Images.xcassets */,
 				F1C6D2141A3B680500E68897 /* LaunchScreen.xib */,
 				F1C6D2091A3B680500E68897 /* Supporting Files */,
 				F13D16EB1A7125EA00FD67A4 /* DivineGateDB.xcdatamodeld */,
 				F1A66B241A7A94D800FF7F8E /* DivineGateDB-Bridging-Header.h */,
+				F1C6D22B1A3B684D00E68897 /* Data */,
+				F1858BFB1AB127E2006DC30E /* View */,
+				F1F25A9C1AA60B0D00FAA8B9 /* CSVFile */,
+				F13D16DB1A6FC48300FD67A4 /* Images */,
 			);
 			path = DivineGateDB;
 			sourceTree = "<group>";
@@ -9999,24 +9998,6 @@
 			name = units_icon;
 			sourceTree = "<group>";
 		};
-		F1E290BD1AB344CE00D60DEE /* SubClass */ = {
-			isa = PBXGroup;
-			children = (
-				F116C0AC1A9DD6D600369562 /* UnitsConditionMenu.swift */,
-				F18468501B8ADF790063AED8 /* UnitsConditionMenu.xib */,
-			);
-			name = SubClass;
-			sourceTree = "<group>";
-		};
-		F1E290BE1AB344D800D60DEE /* SubClass */ = {
-			isa = PBXGroup;
-			children = (
-				F1A1577E1A9068100061E9BA /* NSConditionMenu.swift */,
-				F1D76B5F1C63B2AC008C95D0 /* NSConditionMenu.xib */,
-			);
-			name = SubClass;
-			sourceTree = "<group>";
-		};
 		F1E435731C4BDB7600B89286 /* units_image */ = {
 			isa = PBXGroup;
 			children = (
@@ -10063,12 +10044,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1C6D2251A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDB" */;
 			buildPhases = (
-				914C3F90084909FBAC0A314F /* Check Pods Manifest.lock */,
+				914C3F90084909FBAC0A314F /* 📦 Check Pods Manifest.lock */,
 				F1C6D2021A3B680500E68897 /* Sources */,
 				F1C6D2031A3B680500E68897 /* Frameworks */,
 				F1C6D2041A3B680500E68897 /* Resources */,
-				FD48F321B730AF70704DA6BF /* Embed Pods Frameworks */,
-				2E26F4B64208A5D0836244EB /* Copy Pods Resources */,
+				FD48F321B730AF70704DA6BF /* 📦 Embed Pods Frameworks */,
+				2E26F4B64208A5D0836244EB /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -10083,12 +10064,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1C6D2281A3B680500E68897 /* Build configuration list for PBXNativeTarget "DivineGateDBTests" */;
 			buildPhases = (
-				D0DBA13C3A15796509CE325A /* Check Pods Manifest.lock */,
+				D0DBA13C3A15796509CE325A /* 📦 Check Pods Manifest.lock */,
 				F1C6D2171A3B680500E68897 /* Sources */,
 				F1C6D2181A3B680500E68897 /* Frameworks */,
 				F1C6D2191A3B680500E68897 /* Resources */,
-				2C1478C4483F884D825D765F /* Embed Pods Frameworks */,
-				559EFE0C94B0B0228ED5623F /* Copy Pods Resources */,
+				2C1478C4483F884D825D765F /* 📦 Embed Pods Frameworks */,
+				559EFE0C94B0B0228ED5623F /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -13286,14 +13267,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2C1478C4483F884D825D765F /* Embed Pods Frameworks */ = {
+		2C1478C4483F884D825D765F /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13301,14 +13282,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DivineGateDBTests/Pods-DivineGateDBTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2E26F4B64208A5D0836244EB /* Copy Pods Resources */ = {
+		2E26F4B64208A5D0836244EB /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13316,14 +13297,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DivineGateDB/Pods-DivineGateDB-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		559EFE0C94B0B0228ED5623F /* Copy Pods Resources */ = {
+		559EFE0C94B0B0228ED5623F /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13331,14 +13312,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-DivineGateDBTests/Pods-DivineGateDBTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		914C3F90084909FBAC0A314F /* Check Pods Manifest.lock */ = {
+		914C3F90084909FBAC0A314F /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13346,14 +13327,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D0DBA13C3A15796509CE325A /* Check Pods Manifest.lock */ = {
+		D0DBA13C3A15796509CE325A /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13361,14 +13342,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		FD48F321B730AF70704DA6BF /* Embed Pods Frameworks */ = {
+		FD48F321B730AF70704DA6BF /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -13405,7 +13386,6 @@
 				F1BE43081B3F28E000C16AAF /* LSCell.swift in Sources */,
 				F1240ECE1B634BDD0054FD9B /* PS.swift in Sources */,
 				F1FDAF8C1A3DB36C001427E4 /* NSCell.swift in Sources */,
-				F1C6D20E1A3B680500E68897 /* ViewController.swift in Sources */,
 				F1A1577F1A9068100061E9BA /* NSConditionMenu.swift in Sources */,
 				F1D768FA1C627EDA008C95D0 /* NameClass.swift in Sources */,
 				F1A4C2861ABD8BE200AE9794 /* ToolTableViewController.swift in Sources */,
