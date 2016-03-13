@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UnitStatusViewController" customModule="DivineGateDB" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0WG-Td-hjn">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="0.10980392156862745" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="0WG-Td-hjn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8qf-mT-sFL">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
+                <constraint firstItem="0WG-Td-hjn" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Ba7-k5-dAf"/>
+                <constraint firstAttribute="trailing" secondItem="0WG-Td-hjn" secondAttribute="trailing" id="NV6-Pp-wBG"/>
+                <constraint firstAttribute="bottom" secondItem="0WG-Td-hjn" secondAttribute="bottom" id="bER-pW-Toh"/>
+            </constraints>
+            <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="0WG-Td-hjn"/>
+                </mask>
+                <mask key="constraints">
+                    <exclude reference="8qf-mT-sFL"/>
+                    <exclude reference="Ba7-k5-dAf"/>
+                    <exclude reference="NV6-Pp-wBG"/>
+                    <exclude reference="bER-pW-Toh"/>
+                </mask>
+            </variation>
+            <variation key="widthClass=compact">
+                <mask key="subviews">
+                    <include reference="0WG-Td-hjn"/>
+                </mask>
+                <mask key="constraints">
+                    <include reference="8qf-mT-sFL"/>
+                    <include reference="Ba7-k5-dAf"/>
+                    <include reference="NV6-Pp-wBG"/>
+                    <include reference="bER-pW-Toh"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

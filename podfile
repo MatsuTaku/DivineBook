@@ -1,0 +1,20 @@
+# Uncomment this line to define a global platform for your project
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0.2'
+use_frameworks!
+
+target 'DivineGateDB' do
+    
+pod 'NTYCSVTable'
+pod 'MBProgressHUD'
+pod 'SDWebImage'
+#pod 'RAMAnimatedTabBarController'
+#pod 'SVProgressHUD'
+#pod 'PageMenu', :git => 'https://github.com/uacaps/PageMenu.git'
+
+end
+
+target 'DivineGateDBTests' do
+
+end
+

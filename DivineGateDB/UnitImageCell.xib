@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" shouldIndentWhileEditing="NO" rowHeight="283" id="KGk-i7-Jjw" customClass="UnitImageCell" customModule="DivineGateDB" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="283"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="282"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="001.png" translatesAutoresizingMaskIntoConstraints="NO" id="g3Q-I6-5bR">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="282"/>
+                        <color key="tintColor" red="0.73492132870000004" green="0.20449082169999999" blue="0.71181162590000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="g3Q-I6-5bR" secondAttribute="height" multiplier="16:9" id="NES-b1-DGO"/>
+                            <constraint firstAttribute="width" secondItem="g3Q-I6-5bR" secondAttribute="height" multiplier="17:15" id="Req-Vd-80U"/>
+                            <constraint firstAttribute="height" constant="180" id="aLP-Jn-aMi"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="NES-b1-DGO"/>
+                                <exclude reference="aLP-Jn-aMi"/>
+                            </mask>
+                        </variation>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="g3Q-I6-5bR" secondAttribute="bottom" id="8Lz-pu-iXY"/>
+                    <constraint firstAttribute="bottom" secondItem="g3Q-I6-5bR" secondAttribute="bottom" id="Hgk-Q6-rP4"/>
+                    <constraint firstItem="g3Q-I6-5bR" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IfX-8Y-02Z"/>
+                    <constraint firstItem="g3Q-I6-5bR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="Uqo-qk-NNr"/>
+                    <constraint firstItem="g3Q-I6-5bR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="aSs-Ft-DGU"/>
+                    <constraint firstItem="g3Q-I6-5bR" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="qWc-Dp-D8x"/>
+                    <constraint firstItem="g3Q-I6-5bR" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="tC3-vj-41w"/>
+                    <constraint firstAttribute="trailing" secondItem="g3Q-I6-5bR" secondAttribute="trailing" id="tU0-g6-6vO"/>
+                    <constraint firstAttribute="trailing" secondItem="g3Q-I6-5bR" secondAttribute="trailing" id="znd-OQ-Gz0"/>
+                </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="8Lz-pu-iXY"/>
+                        <exclude reference="IfX-8Y-02Z"/>
+                        <exclude reference="qWc-Dp-D8x"/>
+                        <exclude reference="tC3-vj-41w"/>
+                        <exclude reference="znd-OQ-Gz0"/>
+                    </mask>
+                </variation>
+            </tableViewCellContentView>
+            <color key="backgroundColor" red="0.10980392156862745" green="0.10980392156862745" blue="0.10980392156862745" alpha="0.5" colorSpace="calibratedRGB"/>
+            <connections>
+                <outlet property="unitImageView" destination="g3Q-I6-5bR" id="jHs-or-9c4"/>
+            </connections>
+            <point key="canvasLocation" x="210" y="315.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="001.png" width="548" height="480"/>
+    </resources>
+</document>
